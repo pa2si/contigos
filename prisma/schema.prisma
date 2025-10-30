@@ -1,0 +1,43 @@
+// Contigos - Fair Household Calculator Database Schema
+// This schema defines the models for income and expense tracking
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Enum for who paid for an expense
+enum Payer {
+  Partner1
+  Partner2
+  Gemeinschaftskonto
+}
+
+// Settings model - Singleton pattern (only one record should exist)
+model Settings {
+  id                 Int   @id @default(1) // Force single record
+  p1_einkommen       Float @default(2215)
+  p2_einkommen       Float @default(1600)
+  restgeld_vormonat  Float @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("settings")
+}
+
+// Expense model for individual household expenses
+model Expense {
+  id           Int      @id @default(autoincrement())
+  beschreibung String
+  betrag       Float
+  bezahlt_von  Payer
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("expenses")
+}
