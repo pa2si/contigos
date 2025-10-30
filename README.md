@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Contigos - Fair Household Calculator
 
-## Getting Started
+A Next.js 16 web application for couples to calculate fair financial contributions to a shared household account based on income ratios.
 
-First, run the development server:
+## 🚀 Tech Stack
+
+- **Next.js 16** with App Router
+- **React 19.2** 
+- **Tailwind CSS** for styling
+- **Supabase** for database
+- **Prisma** as ORM
+- **TypeScript** for type safety
+
+## 📋 Features
+
+- **Fair Distribution**: Calculate contributions based on income ratios
+- **Expense Tracking**: Add, edit, and delete household expenses
+- **Real-time Calculations**: Instant updates as you change values
+- **Shared Account Management**: Track what goes into the joint account
+- **Previous Month Balance**: Consider leftover money from previous months
+
+## 🏗️ Development Status
+
+This project is currently under development. See [PROJECT_SPEC.md](./PROJECT_SPEC.md) for detailed requirements and specifications.
+
+## 🛠️ Setup
 
 ```bash
+# Clone the repository
+git clone https://github.com/pa2si/contigos.git
+cd contigos
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.local.example .env.local
+# Edit .env.local with your Supabase credentials
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📖 How It Works
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Enter Incomes**: Input both partners' monthly incomes
+2. **Add Expenses**: List all household expenses with who paid
+3. **Calculate Contributions**: The app calculates fair transfers to the joint account
+4. **Track Balances**: See what each partner has left for personal use
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🤝 Contributing
 
-## Learn More
+This is a personal project, but feel free to open issues for suggestions or improvements.
 
-To learn more about Next.js, take a look at the following resources:
+## 📄 License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT License - see LICENSE file for details.
