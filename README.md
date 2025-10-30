@@ -1,3 +1,8 @@
+to do:
+
+- add exta income per partner
+- make the Einstellungen be closable window
+
 # Contigos - Fair Household Calculator
 
 A Next.js 16 web application for couples to calculate fair financial contributions to a shared household account based on income ratios.
