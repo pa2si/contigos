@@ -334,7 +334,7 @@ export default function HomePage() {
         <div className='text-center mb-8'>
           <h1 className='text-4xl font-bold text-gray-900 mb-2'>Contigos</h1>
           <p className='text-gray-600'>
-            Faire Haushaltskosten-Berechnung für Paare
+            Calculacion de gastos compartidos mensuales
           </p>
         </div>
 
@@ -345,11 +345,10 @@ export default function HomePage() {
             <div className='mt-2 text-lg font-medium text-blue-700'>
               Gemeinsames Einkommen:{' '}
               <span className='font-bold'>
-                {/* Direkte Berechnung hier für sofortiges Feedback */}
+                {/* Korrekte Summierung beider Einkommen */}
                 {(
-                  Number(settings.p1_einkommen) ||
-                  0 + Number(settings.p2_einkommen) ||
-                  0
+                  Number(settings.p1_einkommen || 0) +
+                  Number(settings.p2_einkommen || 0)
                 ).toLocaleString('de-DE', {
                   style: 'currency',
                   currency: 'EUR',
