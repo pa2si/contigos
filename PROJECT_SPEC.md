@@ -1,28 +1,34 @@
 # Contigos - Fair Household Calculator
 
 ## Project Overview
+
 A full-stack web application for couples to calculate fair financial contributions to a shared household account based on income ratios and detailed expense tracking.
 
 ## Tech Stack Requirements
 
 ### Framework
+
 - **Next.js 16+** with App Router
 - **React 19.2** with latest features
 
 ### Styling
+
 - **Tailwind CSS** for modern, responsive UI/UX
 
 ### Database
+
 - **Supabase** (PostgreSQL)
 - Project name: "contigos"
 
 ### ORM
+
 - **Prisma** for database operations
 - All data fetched live from database (no hardcoded values)
 
 ## Database Schema (prisma/schema.prisma)
 
 ### Enums
+
 ```prisma
 enum Payer {
   Partner1
@@ -34,6 +40,7 @@ enum Payer {
 ### Models
 
 #### Settings Model (Singleton Pattern)
+
 - Only one record should exist in this table
 - Fields:
   - `p1_einkommen` (Float, default: 2215)
@@ -41,6 +48,7 @@ enum Payer {
   - `restgeld_vormonat` (Float, default: 0)
 
 #### Expense Model
+
 - Fields:
   - `beschreibung` (String)
   - `betrag` (Float)
@@ -49,6 +57,7 @@ enum Payer {
 ## Frontend Requirements (app/page.tsx)
 
 ### Component Type
+
 - **Client Component** (`'use client'`)
 - Use React Hooks: `useState`, `useEffect`, `useMemo`
 - Real-time calculations on value changes
@@ -56,12 +65,14 @@ enum Payer {
 ### UI Sections
 
 #### 1. Eingaben (Settings Input)
+
 - Three number input fields:
   - Partner 1 Einkommen
   - Partner 2 Einkommen
   - Restgeld Vormonat
 
 #### 2. Ausgabenliste (Expense List)
+
 - Dynamic list showing all Expense entries
 - Each row contains:
   - Input: `beschreibung` (text)
@@ -73,16 +84,19 @@ enum Payer {
 #### 3. Ergebnisse (Results) - Card Design
 
 ##### KARTE 1: AKTION (Highlighted)
+
 - Partner 1 überweist auf GK: `[FINALE_ÜBERWEISUNG_P1]`
 - Partner 2 überweist auf GK: `[FINALE_ÜBERWEISUNG_P2]`
 
 ##### KARTE 2: KONTROLLE GK
+
 - Bedarf Gemeinschaftskonto: `[Bedarf_GK]`
 - Restgeld Vormonat: `[restgeld_vormonat]`
 - Benötigte neue Einzahlung: `[Kontrolle_EinzahlungNötig]`
 - Summe der Überweisungen: `[Kontrolle_SummeÜberweisungen]`
 
 ##### KARTE 3: ZUSAMMENFASSUNG
+
 - Verbleibt zur freien Verfügung (P1): `[Verbleibt_P1]`
 - Verbleibt zur freien Verfügung (P2): `[Verbleibt_P2]`
 
@@ -127,15 +141,17 @@ enum Payer {
 ## CRUD Requirements
 
 ### Functionality Needed
+
 - **Loading**: Fetch all data on page load
 - **Settings**: Update income values and previous month remainder
-- **Expenses**: 
+- **Expenses**:
   - Create new expense entries
   - Edit existing entries (description, amount, payer)
   - Delete expense entries
 - **Extra Income**: Add additional income entries that affect percentage distribution
 
 ### API Endpoints Required
+
 - `GET /api/settings` - Fetch settings
 - `PUT /api/settings` - Update settings
 - `GET /api/expenses` - Fetch all expenses
@@ -157,11 +173,13 @@ enum Payer {
 10. **Testing and Polish**
 
 ## Git Strategy
+
 - Repository name: "contigos"
 - Regular commits for each major milestone
 - Clear commit messages describing changes
 
 ## Key Features
+
 - Real-time calculations
 - Responsive design
 - Fair contribution calculation based on income ratios

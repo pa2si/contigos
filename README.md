@@ -5,7 +5,7 @@ A Next.js 16 web application for couples to calculate fair financial contributio
 ## 🚀 Tech Stack
 
 - **Next.js 16** with App Router
-- **React 19.2** 
+- **React 19.2**
 - **Tailwind CSS** for styling
 - **Supabase** for database
 - **Prisma** as ORM

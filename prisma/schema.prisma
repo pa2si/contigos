@@ -24,6 +24,8 @@ model Settings {
   p1_einkommen       Float @default(2215)
   p2_einkommen       Float @default(1600)
   restgeld_vormonat  Float @default(0)
+  comida_betrag      Float @default(1200)
+  ahorros_betrag     Float @default(0)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 

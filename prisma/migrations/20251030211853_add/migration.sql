@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "settings" ADD COLUMN     "ahorros_betrag" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN     "comida_betrag" DOUBLE PRECISION NOT NULL DEFAULT 1200;
