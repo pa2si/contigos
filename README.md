@@ -2,6 +2,7 @@ to do:
 
 - add exta income per partner
 - make the Einstellungen be closable window
+- extract calculation logic from page.tsx
 
 # Contigos - Fair Household Calculator
 
