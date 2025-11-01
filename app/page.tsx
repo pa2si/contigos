@@ -32,6 +32,9 @@ import TabLayout from '@/components/TabLayout';
 import PrivateExpenses from '@/components/PrivateExpenses';
 
 export default function HomePage() {
+  // Local loading state for data fetching
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+
   // Combined data management hook (prevents infinite loops)
   const {
     settings,
@@ -135,17 +138,20 @@ export default function HomePage() {
 
   // Load data on component mount (only once)
   useEffect(() => {
-    loadData();
-    // Load private expenses
-    const loadPrivateExpenses = async () => {
+    const loadAllData = async () => {
       try {
+        await loadData();
+        // Load private expenses
         const expenses = await ApiService.getPrivateExpenses();
         setPrivateExpenses(expenses);
       } catch (error) {
-        console.error('Error loading private expenses:', error);
+        console.error('Error loading data:', error);
+      } finally {
+        setIsDataLoaded(true);
       }
     };
-    loadPrivateExpenses();
+
+    loadAllData();
   }, [loadData]);
 
   // Event handlers
@@ -231,6 +237,69 @@ export default function HomePage() {
       isDestructive: true,
     });
   };
+
+  // Show loading skeleton while data is being fetched
+  if (!isDataLoaded) {
+    return (
+      <div className='min-h-screen bg-gray-50 p-6'>
+        <div className='max-w-4xl mx-auto'>
+          {/* Header */}
+          <div className='text-center mb-8'>
+            <h1 className='text-4xl font-bold text-gray-900 mb-2'>Contigos</h1>
+            <p className='text-gray-600'>
+              Calculacion de gastos compartidos mensuales
+            </p>
+          </div>
+
+          {/* Loading Skeleton */}
+          <div className='space-y-6'>
+            {/* Settings Skeleton */}
+            <div className='bg-white rounded-lg shadow-md p-6 animate-pulse'>
+              <div className='flex items-center gap-3 mb-4'>
+                <div className='h-6 w-6 bg-gray-200 rounded'></div>
+                <div className='h-6 bg-gray-200 rounded w-32'></div>
+              </div>
+              <div className='h-4 bg-gray-200 rounded w-48'></div>
+            </div>
+
+            {/* Summary Cards Skeleton */}
+            <div className='bg-linear-to-r from-blue-500 to-green-500 text-white rounded-lg shadow-lg p-6 animate-pulse'>
+              <div className='h-6 bg-white/20 rounded w-64 mb-4 mx-auto'></div>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                <div className='text-center p-4 bg-white/20 rounded-lg'>
+                  <div className='h-4 bg-white/30 rounded w-32 mb-2 mx-auto'></div>
+                  <div className='h-8 bg-white/30 rounded w-24 mb-1 mx-auto'></div>
+                  <div className='h-3 bg-white/30 rounded w-20 mx-auto'></div>
+                </div>
+                <div className='text-center p-4 bg-white/20 rounded-lg'>
+                  <div className='h-4 bg-white/30 rounded w-32 mb-2 mx-auto'></div>
+                  <div className='h-8 bg-white/30 rounded w-24 mb-1 mx-auto'></div>
+                  <div className='h-3 bg-white/30 rounded w-20 mx-auto'></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Available Amounts Skeleton */}
+            <div className='bg-white rounded-lg shadow-md p-6 animate-pulse'>
+              <div className='h-6 bg-gray-200 rounded w-48 mb-4'></div>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                <div className='text-center p-6 bg-blue-50 rounded-lg border-2 border-blue-200'>
+                  <div className='h-4 bg-blue-200 rounded w-24 mb-2 mx-auto'></div>
+                  <div className='h-8 bg-blue-200 rounded w-20 mb-2 mx-auto'></div>
+                  <div className='h-3 bg-blue-200 rounded w-32 mx-auto'></div>
+                </div>
+                <div className='text-center p-6 bg-green-50 rounded-lg border-2 border-green-200'>
+                  <div className='h-4 bg-green-200 rounded w-24 mb-2 mx-auto'></div>
+                  <div className='h-8 bg-green-200 rounded w-20 mb-2 mx-auto'></div>
+                  <div className='h-3 bg-green-200 rounded w-32 mx-auto'></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className='min-h-screen bg-gray-50 p-6'>

@@ -51,6 +51,20 @@ export function formatCurrencyFixed(
 }
 
 /**
+ * Format currency with loading state support
+ */
+export function formatCurrencyOrLoading(
+  amount: number | null,
+  isLoading: boolean = false,
+  decimals: number = 2
+): string {
+  if (isLoading || amount === null) {
+    return '--- €';
+  }
+  return formatCurrencyFixed(amount, decimals);
+}
+
+/**
  * Format percentage values for display
  */
 export function formatPercentage(
