@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   useSettingsOperations,
   useExpensesOperations,
@@ -15,8 +15,6 @@ import {
   parseNumber,
   validateExpenseForm,
   validateIncomeForm,
-  confirmExpenseDeletion,
-  confirmIncomeDeletion,
 } from '@/lib/utils';
 
 // Import our new components
@@ -25,6 +23,7 @@ import IncomeManagement from '@/components/IncomeManagement';
 import ControlSection from '@/components/ControlSection';
 import Summary from '@/components/Summary';
 import ExpenseManagement from '@/components/ExpenseManagement';
+import ConfirmationModal from '@/components/ConfirmationModal';
 
 export default function HomePage() {
   // Combined data management hook (prevents infinite loops)
@@ -84,6 +83,21 @@ export default function HomePage() {
     isFormValid: isIncomeFormValid,
   } = useIncomeForm();
 
+  // Modal state for confirmations
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => void;
+    isDestructive: boolean;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: () => {},
+    isDestructive: false,
+  });
+
   // UI state is now managed by individual components
 
   // Financial calculations
@@ -127,13 +141,21 @@ export default function HomePage() {
   };
 
   const handleDeleteExpense = async (expenseId: number) => {
-    if (!confirmExpenseDeletion()) return;
-
-    try {
-      await deleteExpense(expenseId);
-    } catch (error) {
-      console.error('Error deleting expense:', error);
-    }
+    setConfirmModal({
+      isOpen: true,
+      title: 'Ausgabe löschen',
+      message: 'Möchten Sie diese Ausgabe wirklich löschen?',
+      onConfirm: async () => {
+        try {
+          await deleteExpense(expenseId);
+          setConfirmModal((prev) => ({ ...prev, isOpen: false }));
+        } catch (error) {
+          console.error('Error deleting expense:', error);
+          setConfirmModal((prev) => ({ ...prev, isOpen: false }));
+        }
+      },
+      isDestructive: true,
+    });
   };
 
   // Income handlers
@@ -153,13 +175,21 @@ export default function HomePage() {
   };
 
   const handleDeleteIncome = async (incomeId: number) => {
-    if (!confirmIncomeDeletion()) return;
-
-    try {
-      await deleteIncome(incomeId);
-    } catch (error) {
-      console.error('Error deleting income:', error);
-    }
+    setConfirmModal({
+      isOpen: true,
+      title: 'Einkommensposition löschen',
+      message: 'Möchten Sie diese Einkommensposition wirklich löschen?',
+      onConfirm: async () => {
+        try {
+          await deleteIncome(incomeId);
+          setConfirmModal((prev) => ({ ...prev, isOpen: false }));
+        } catch (error) {
+          console.error('Error deleting income:', error);
+          setConfirmModal((prev) => ({ ...prev, isOpen: false }));
+        }
+      },
+      isDestructive: true,
+    });
   };
 
   // Loading state
@@ -231,6 +261,20 @@ export default function HomePage() {
           onResetExpenseForm={resetExpenseForm}
           onDeleteExpense={handleDeleteExpense}
           isExpenseFormValid={isExpenseFormValid}
+        />
+
+        {/* Confirmation Modal */}
+        <ConfirmationModal
+          isOpen={confirmModal.isOpen}
+          title={confirmModal.title}
+          message={confirmModal.message}
+          onConfirm={confirmModal.onConfirm}
+          onCancel={() =>
+            setConfirmModal((prev) => ({ ...prev, isOpen: false }))
+          }
+          confirmText='Löschen'
+          cancelText='Abbrechen'
+          isDestructive={confirmModal.isDestructive}
         />
       </div>
     </div>

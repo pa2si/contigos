@@ -100,20 +100,6 @@ export function validateIncomeForm(form: {
 }
 
 /**
- * Confirmation dialog for expense deletion
- */
-export function confirmExpenseDeletion(): boolean {
-  return confirm('Möchten Sie diese Ausgabe wirklich löschen?');
-}
-
-/**
- * Confirmation dialog for income deletion
- */
-export function confirmIncomeDeletion(): boolean {
-  return confirm('Möchten Sie diese Einkommensposition wirklich löschen?');
-}
-
-/**
  * Check if two amounts are equal within a small tolerance (for floating point comparison)
  */
 export function amountsAreEqual(
