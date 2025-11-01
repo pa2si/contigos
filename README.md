@@ -1,6 +1,5 @@
-to do:
-
-- add exta income per partner
+- check continuaity, meaning Parter is always partner or did we use at some point person?
+- make possible to delete 0 in input fields
 
 # Contigos - Fair Household Calculator
 
