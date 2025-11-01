@@ -1,9 +1,12 @@
 import {
   Settings,
   Expense,
+  Income,
   SettingsUpdateRequest,
   ExpenseCreateRequest,
   ExpenseUpdateRequest,
+  IncomeCreateRequest,
+  IncomeUpdateRequest,
 } from '@/types';
 
 /**
@@ -132,17 +135,92 @@ export class ApiService {
   }
 
   /**
-   * Load both settings and expenses in parallel
+   * Fetch all income positions from the API
+   */
+  static async getIncomes(): Promise<Income[]> {
+    const response = await fetch('/api/incomes');
+    if (!response.ok) {
+      throw new Error('Failed to fetch incomes');
+    }
+    return response.json();
+  }
+
+  /**
+   * Create a new income position via the API
+   */
+  static async createIncome(income: IncomeCreateRequest): Promise<Income> {
+    const incomeData = {
+      beschreibung: income.beschreibung.trim(),
+      betrag: parseFloat(income.betrag.toString()),
+      quelle: income.quelle,
+    };
+
+    const response = await fetch('/api/incomes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(incomeData),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create income');
+    }
+
+    return response.json();
+  }
+
+  /**
+   * Update an existing income position via the API
+   */
+  static async updateIncome(
+    incomeId: number,
+    income: IncomeUpdateRequest
+  ): Promise<Income> {
+    const incomeData = {
+      beschreibung: income.beschreibung.trim(),
+      betrag: parseFloat(income.betrag.toString()),
+      quelle: income.quelle,
+    };
+
+    const response = await fetch(`/api/incomes/${incomeId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(incomeData),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update income');
+    }
+
+    return response.json();
+  }
+
+  /**
+   * Delete an income position via the API
+   */
+  static async deleteIncome(incomeId: number): Promise<void> {
+    const response = await fetch(`/api/incomes/${incomeId}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete income');
+    }
+  }
+
+  /**
+   * Load settings, expenses, and incomes in parallel
    */
   static async loadInitialData(): Promise<{
     settings: Settings;
     expenses: Expense[];
+    incomes: Income[];
   }> {
-    const [settings, expenses] = await Promise.all([
+    const [settings, expenses, incomes] = await Promise.all([
       this.getSettings(),
       this.getExpenses(),
+      this.getIncomes(),
     ]);
 
-    return { settings, expenses };
+    return { settings, expenses, incomes };
   }
 }

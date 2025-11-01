@@ -1,7 +1,6 @@
 to do:
 
 - add exta income per partner
-- make the Einstellungen be closable window
 
 # Contigos - Fair Household Calculator
 

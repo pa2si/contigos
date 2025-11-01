@@ -1,5 +1,12 @@
 import { useState, useMemo, useCallback } from 'react';
-import { Settings, Expense, CalculationResults, Payer } from '@/types';
+import {
+  Settings,
+  Expense,
+  Income,
+  CalculationResults,
+  Payer,
+  IncomeSource,
+} from '@/types';
 import { ApiService } from '@/lib/api';
 import { calculateFinancialResults } from '@/lib/calculations';
 
@@ -197,6 +204,204 @@ export function useExpenseForm() {
 }
 
 /**
+ * Custom hook for income operations (without managing state)
+ */
+export function useIncomeOperations(
+  incomes: Income[],
+  setIncomes: (incomes: Income[]) => void
+) {
+  const addIncome = useCallback(
+    (income: Income) => {
+      setIncomes([...incomes, income]);
+    },
+    [incomes, setIncomes]
+  );
+
+  const updateIncome = useCallback(
+    (incomeId: number, updatedIncome: Income) => {
+      setIncomes(
+        incomes.map((inc) => (inc.id === incomeId ? updatedIncome : inc))
+      );
+    },
+    [incomes, setIncomes]
+  );
+
+  const removeIncome = useCallback(
+    (incomeId: number) => {
+      setIncomes(incomes.filter((inc) => inc.id !== incomeId));
+    },
+    [incomes, setIncomes]
+  );
+
+  const createIncome = useCallback(
+    async (incomeData: {
+      beschreibung: string;
+      betrag: string;
+      quelle: IncomeSource;
+    }) => {
+      try {
+        const newIncome = await ApiService.createIncome({
+          beschreibung: incomeData.beschreibung,
+          betrag: parseFloat(incomeData.betrag),
+          quelle: incomeData.quelle,
+        });
+        addIncome(newIncome);
+        return newIncome;
+      } catch (error) {
+        console.error('Error creating income:', error);
+        throw error;
+      }
+    },
+    [addIncome]
+  );
+
+  const editIncome = useCallback(
+    async (
+      incomeId: number,
+      incomeData: {
+        beschreibung: string;
+        betrag: string;
+        quelle: IncomeSource;
+      }
+    ) => {
+      try {
+        const updatedIncome = await ApiService.updateIncome(incomeId, {
+          beschreibung: incomeData.beschreibung,
+          betrag: parseFloat(incomeData.betrag),
+          quelle: incomeData.quelle,
+        });
+        updateIncome(incomeId, updatedIncome);
+        return updatedIncome;
+      } catch (error) {
+        console.error('Error updating income:', error);
+        throw error;
+      }
+    },
+    [updateIncome]
+  );
+
+  const deleteIncome = useCallback(
+    async (incomeId: number) => {
+      try {
+        await ApiService.deleteIncome(incomeId);
+        removeIncome(incomeId);
+      } catch (error) {
+        console.error('Error deleting income:', error);
+        throw error;
+      }
+    },
+    [removeIncome]
+  );
+
+  return {
+    createIncome,
+    editIncome,
+    deleteIncome,
+  };
+}
+
+/**
+ * Custom hook for managing partner-specific income lists and totals
+ */
+export function usePartnerIncomes(incomes: Income[]) {
+  const pascalIncomes = useMemo(
+    () => incomes.filter((income) => income.quelle === 'Partner1'),
+    [incomes]
+  );
+
+  const caroIncomes = useMemo(
+    () => incomes.filter((income) => income.quelle === 'Partner2'),
+    [incomes]
+  );
+
+  const pascalTotal = useMemo(
+    () =>
+      pascalIncomes.reduce(
+        (sum, income) => sum + (Number(income.betrag) || 0),
+        0
+      ),
+    [pascalIncomes]
+  );
+
+  const caroTotal = useMemo(
+    () =>
+      caroIncomes.reduce(
+        (sum, income) => sum + (Number(income.betrag) || 0),
+        0
+      ),
+    [caroIncomes]
+  );
+
+  return {
+    pascalIncomes,
+    caroIncomes,
+    pascalTotal,
+    caroTotal,
+  };
+}
+
+/**
+ * Custom hook for managing income form state
+ */
+export function useIncomeForm() {
+  const [showAddIncome, setShowAddIncome] = useState(false);
+  const [editingIncome, setEditingIncome] = useState<Income | null>(null);
+  const [incomeForm, setIncomeForm] = useState({
+    beschreibung: '',
+    betrag: '',
+    quelle: 'Partner1' as IncomeSource,
+  });
+
+  const resetForm = () => {
+    setIncomeForm({
+      beschreibung: '',
+      betrag: '',
+      quelle: 'Partner1' as IncomeSource,
+    });
+    setEditingIncome(null);
+    setShowAddIncome(false);
+  };
+
+  const startAddIncome = () => {
+    resetForm();
+    setShowAddIncome(true);
+  };
+
+  const startEditIncome = (income: Income) => {
+    setIncomeForm({
+      beschreibung: income.beschreibung,
+      betrag: income.betrag.toString(),
+      quelle: income.quelle,
+    });
+    setEditingIncome(income);
+    setShowAddIncome(true);
+  };
+
+  const updateForm = (
+    field: keyof typeof incomeForm,
+    value: string | IncomeSource
+  ) => {
+    setIncomeForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const isFormValid = () => {
+    return incomeForm.beschreibung.trim() && incomeForm.betrag;
+  };
+
+  return {
+    showAddIncome,
+    editingIncome,
+    incomeForm,
+    setShowAddIncome,
+    resetForm,
+    startAddIncome,
+    startEditIncome,
+    updateForm,
+    isFormValid,
+  };
+}
+
+/**
  * Custom hook that combines data loading with state management
  * This prevents infinite re-renders by managing the loading internally
  */
@@ -212,14 +417,56 @@ export function useAppData() {
     updatedAt: new Date(),
   });
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [incomes, setIncomes] = useState<Income[]>([]);
   const [loading, setLoading] = useState(true);
 
   const loadData = useCallback(async () => {
     try {
-      const { settings: loadedSettings, expenses: loadedExpenses } =
-        await ApiService.loadInitialData();
+      const {
+        settings: loadedSettings,
+        expenses: loadedExpenses,
+        incomes: loadedIncomes,
+      } = await ApiService.loadInitialData();
       setSettings(loadedSettings);
       setExpenses(loadedExpenses);
+
+      // Auto-migrate: Create default income positions if none exist but settings have income values
+      if (
+        loadedIncomes.length === 0 &&
+        (loadedSettings.p1_einkommen > 0 || loadedSettings.p2_einkommen > 0)
+      ) {
+        const migratedIncomes = [];
+
+        if (loadedSettings.p1_einkommen > 0) {
+          try {
+            const pascalIncome = await ApiService.createIncome({
+              beschreibung: 'Gehalt',
+              betrag: loadedSettings.p1_einkommen,
+              quelle: 'Partner1',
+            });
+            migratedIncomes.push(pascalIncome);
+          } catch (error) {
+            console.error('Error migrating Pascal income:', error);
+          }
+        }
+
+        if (loadedSettings.p2_einkommen > 0) {
+          try {
+            const caroIncome = await ApiService.createIncome({
+              beschreibung: 'Gehalt',
+              betrag: loadedSettings.p2_einkommen,
+              quelle: 'Partner2',
+            });
+            migratedIncomes.push(caroIncome);
+          } catch (error) {
+            console.error('Error migrating Caro income:', error);
+          }
+        }
+
+        setIncomes(migratedIncomes);
+      } else {
+        setIncomes(loadedIncomes);
+      }
     } catch (error) {
       console.error('Error loading data:', error);
     } finally {
@@ -232,6 +479,8 @@ export function useAppData() {
     setSettings,
     expenses,
     setExpenses,
+    incomes,
+    setIncomes,
     loading,
     loadData,
   };
@@ -243,9 +492,10 @@ export function useAppData() {
  */
 export function useFinancialCalculations(
   settings: Settings,
-  expenses: Expense[]
+  expenses: Expense[],
+  incomes: Income[]
 ): CalculationResults {
   return useMemo(() => {
-    return calculateFinancialResults(settings, expenses);
-  }, [settings, expenses]);
+    return calculateFinancialResults(settings, expenses, incomes);
+  }, [settings, expenses, incomes]);
 }

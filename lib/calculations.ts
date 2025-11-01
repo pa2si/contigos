@@ -1,4 +1,4 @@
-import { Settings, Expense, CalculationResults } from '@/types';
+import { Settings, Expense, Income, CalculationResults } from '@/types';
 
 /**
  * Calculates financial allocations between partners based on income ratios
@@ -6,11 +6,21 @@ import { Settings, Expense, CalculationResults } from '@/types';
  */
 export function calculateFinancialResults(
   settings: Settings,
-  expenses: Expense[]
+  expenses: Expense[],
+  incomes: Income[]
 ): CalculationResults {
-  // Step 0: Get base values safely as numbers
-  const p1_einkommen = Number(settings.p1_einkommen) || 0;
-  const p2_einkommen = Number(settings.p2_einkommen) || 0;
+  // Step 0: Calculate total income per partner from income positions
+  // Handle case where incomes might be undefined or empty during initial load
+  const safeIncomes = incomes || [];
+
+  // Calculate income totals from dynamic positions (this is now the source of truth)
+  const p1_einkommen = safeIncomes
+    .filter((income) => income.quelle === 'Partner1')
+    .reduce((sum, income) => sum + (Number(income.betrag) || 0), 0);
+
+  const p2_einkommen = safeIncomes
+    .filter((income) => income.quelle === 'Partner2')
+    .reduce((sum, income) => sum + (Number(income.betrag) || 0), 0);
   const restgeld_vormonat = Number(settings.restgeld_vormonat) || 0;
 
   // Fixed costs from settings (treated as shared account expenses)
@@ -136,4 +146,25 @@ export function isControlCalculationValid(
       results.kontrolle_einzahlungNötig - results.kontrolle_summeÜberweisungen
     ) < 0.01
   );
+}
+
+/**
+ * Calculate income totals per partner from income positions
+ * This function provides the computed totals that replace manual income entry
+ */
+export function calculateIncomeTotals(incomes: Income[]): {
+  pascalTotal: number;
+  caroTotal: number;
+} {
+  const safeIncomes = incomes || [];
+
+  const pascalTotal = safeIncomes
+    .filter((income) => income.quelle === 'Partner1')
+    .reduce((sum, income) => sum + (Number(income.betrag) || 0), 0);
+
+  const caroTotal = safeIncomes
+    .filter((income) => income.quelle === 'Partner2')
+    .reduce((sum, income) => sum + (Number(income.betrag) || 0), 0);
+
+  return { pascalTotal, caroTotal };
 }

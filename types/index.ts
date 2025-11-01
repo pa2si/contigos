@@ -1,4 +1,4 @@
-import { Payer } from '@prisma/client';
+import { Payer, IncomeSource } from '@prisma/client';
 
 // Database model types (from Prisma)
 export interface Settings {
@@ -21,6 +21,15 @@ export interface Expense {
   updatedAt: Date;
 }
 
+export interface Income {
+  id: number;
+  beschreibung: string;
+  betrag: number;
+  quelle: IncomeSource;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 // API request/response types
 export interface SettingsUpdateRequest {
   p1_einkommen: number;
@@ -37,6 +46,14 @@ export interface ExpenseCreateRequest {
 }
 
 export type ExpenseUpdateRequest = ExpenseCreateRequest;
+
+export interface IncomeCreateRequest {
+  beschreibung: string;
+  betrag: number;
+  quelle: 'Partner1' | 'Partner2';
+}
+
+export type IncomeUpdateRequest = IncomeCreateRequest;
 
 // Calculation result types (for the frontend calculations)
 export interface CalculationResults {
@@ -74,6 +91,7 @@ export interface CalculationResults {
   verbleibt_p2: number;
 }
 
-// Export Payer enum for convenience
-export { Payer };
+// Export enums for convenience
+export { Payer, IncomeSource };
 export type PayerType = Payer;
+export type IncomeSourceType = IncomeSource;

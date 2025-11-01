@@ -43,3 +43,21 @@ model Expense {
 
   @@map("expenses")
 }
+
+// Enum for income source (which partner)
+enum IncomeSource {
+  Partner1
+  Partner2
+}
+
+// Income model for tracking multiple income positions per partner
+model Income {
+  id           Int           @id @default(autoincrement())
+  beschreibung String        // e.g., "Gehalt", "Freelancing", "Nebenjob"
+  betrag       Float
+  quelle       IncomeSource  // which partner this income belongs to
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@map("incomes")
+}

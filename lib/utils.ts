@@ -1,4 +1,4 @@
-import { Payer } from '@/types';
+import { Payer, IncomeSource } from '@/types';
 
 /**
  * Display name mapping for payers
@@ -13,6 +13,20 @@ export function getPayerDisplayName(payer: Payer): string {
       return 'Gemeinschaftskonto';
     default:
       return payer;
+  }
+}
+
+/**
+ * Display name mapping for income sources
+ */
+export function getIncomeSourceDisplayName(source: IncomeSource): string {
+  switch (source) {
+    case 'Partner1':
+      return 'Pascal';
+    case 'Partner2':
+      return 'Caro';
+    default:
+      return source;
   }
 }
 
@@ -70,10 +84,33 @@ export function validateExpenseForm(form: {
 }
 
 /**
+ * Validation helper for income form
+ */
+export function validateIncomeForm(form: {
+  beschreibung: string;
+  betrag: string;
+  quelle: IncomeSource;
+}): boolean {
+  return Boolean(
+    form.beschreibung.trim() &&
+      form.betrag &&
+      !isNaN(parseFloat(form.betrag)) &&
+      parseFloat(form.betrag) > 0
+  );
+}
+
+/**
  * Confirmation dialog for expense deletion
  */
 export function confirmExpenseDeletion(): boolean {
   return confirm('Möchten Sie diese Ausgabe wirklich löschen?');
+}
+
+/**
+ * Confirmation dialog for income deletion
+ */
+export function confirmIncomeDeletion(): boolean {
+  return confirm('Möchten Sie diese Einkommensposition wirklich löschen?');
 }
 
 /**
