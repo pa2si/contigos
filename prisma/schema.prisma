@@ -1,6 +1,3 @@
-// Contigos - Fair Household Calculator Database Schema
-// This schema defines the models for income and expense tracking
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,28 +8,19 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-// Enum for who paid for an expense
-enum Payer {
-  Partner1
-  Partner2
-  Gemeinschaftskonto
-}
-
-// Settings model - Singleton pattern (only one record should exist)
 model Settings {
-  id                 Int   @id @default(1) // Force single record
-  p1_einkommen       Float @default(2215)
-  p2_einkommen       Float @default(1600)
-  restgeld_vormonat  Float @default(0)
-  comida_betrag      Float @default(1200)
-  ahorros_betrag     Float @default(0)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  id                Int      @id @default(1)
+  p1_einkommen      Float    @default(2215)
+  p2_einkommen      Float    @default(1600)
+  restgeld_vormonat Float    @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  ahorros_betrag    Float    @default(0)
+  comida_betrag     Float    @default(1200)
 
   @@map("settings")
 }
 
-// Expense model for individual household expenses
 model Expense {
   id           Int      @id @default(autoincrement())
   beschreibung String
@@ -44,20 +32,24 @@ model Expense {
   @@map("expenses")
 }
 
-// Enum for income source (which partner)
+model Income {
+  id           Int          @id @default(autoincrement())
+  beschreibung String
+  betrag       Float
+  quelle       IncomeSource
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@map("incomes")
+}
+
+enum Payer {
+  Partner1
+  Partner2
+  Gemeinschaftskonto
+}
+
 enum IncomeSource {
   Partner1
   Partner2
-}
-
-// Income model for tracking multiple income positions per partner
-model Income {
-  id           Int           @id @default(autoincrement())
-  beschreibung String        // e.g., "Gehalt", "Freelancing", "Nebenjob"
-  betrag       Float
-  quelle       IncomeSource  // which partner this income belongs to
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-
-  @@map("incomes")
 }
