@@ -58,9 +58,6 @@ export default function Settings({
             <span className='font-bold'>{formatCurrency(gesamteinkommen)}</span>
           </div>
         </div>
-        <div className='text-sm text-gray-500'>
-          {settingsExpanded ? 'Klicken zum Schließen' : 'Klicken zum Öffnen'}
-        </div>
       </div>
 
       {/* Collapsible Settings Content */}
