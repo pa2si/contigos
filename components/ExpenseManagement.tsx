@@ -99,8 +99,8 @@ export default function ExpenseManagement({
                   {formatCurrency(settings.comida_betrag)}
                 </span>
                 <div className='flex gap-2 invisible'>
-                  <button className='px-2 py-1 text-xs'>Bearbeiten</button>
-                  <button className='px-2 py-1 text-xs'>Löschen</button>
+                  <button className='px-2 py-1 text-xs'>edit</button>
+                  <button className='px-2 py-1 text-xs'>del</button>
                 </div>
               </div>
 
@@ -115,8 +115,8 @@ export default function ExpenseManagement({
                   {formatCurrency(settings.ahorros_betrag)}
                 </span>
                 <div className='flex gap-2 invisible'>
-                  <button className='px-2 py-1 text-xs'>Bearbeiten</button>
-                  <button className='px-2 py-1 text-xs'>Löschen</button>
+                  <button className='px-2 py-1 text-xs'>edit</button>
+                  <button className='px-2 py-1 text-xs'>del</button>
                 </div>
               </div>
             </div>
@@ -126,7 +126,7 @@ export default function ExpenseManagement({
               <div className='mb-6 p-4 border-2 border-blue-200 rounded-lg bg-blue-50'>
                 <h3 className='text-lg font-semibold mb-4'>
                   {editingExpense
-                    ? 'Ausgabe bearbeiten'
+                    ? 'Ausgabe editieren'
                     : 'Neue Ausgabe hinzufügen'}
                 </h3>
                 <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
@@ -229,13 +229,13 @@ export default function ExpenseManagement({
                           onClick={() => onStartEditExpense(expense)}
                           className='px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors'
                         >
-                          Bearbeiten
+                          edit
                         </button>
                         <button
                           onClick={() => onDeleteExpense(expense.id)}
                           className='px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600 transition-colors'
                         >
-                          Löschen
+                          del
                         </button>
                       </div>
                     </div>
