@@ -40,7 +40,6 @@ export default function HomePage() {
     setExpenses,
     incomes,
     setIncomes,
-    loading,
     loadData,
   } = useAppData();
 
@@ -232,15 +231,6 @@ export default function HomePage() {
       isDestructive: true,
     });
   };
-
-  // Loading state
-  if (loading) {
-    return (
-      <div className='min-h-screen bg-gray-50 flex items-center justify-center'>
-        <div className='text-xl'>Loading Contigos...</div>
-      </div>
-    );
-  }
 
   return (
     <div className='min-h-screen bg-gray-50 p-6'>

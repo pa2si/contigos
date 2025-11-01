@@ -421,7 +421,6 @@ export function useAppData() {
   });
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [incomes, setIncomes] = useState<Income[]>([]);
-  const [loading, setLoading] = useState(true);
 
   const loadData = useCallback(async () => {
     try {
@@ -472,8 +471,6 @@ export function useAppData() {
       }
     } catch (error) {
       console.error('Error loading data:', error);
-    } finally {
-      setLoading(false);
     }
   }, []);
 
@@ -484,7 +481,6 @@ export function useAppData() {
     setExpenses,
     incomes,
     setIncomes,
-    loading,
     loadData,
   };
 }
