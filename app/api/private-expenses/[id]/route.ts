@@ -5,10 +5,11 @@ import { Partner } from '@/types';
 // GET /api/private-expenses/[id] - Get specific private expense
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id: idString } = await params;
+    const id = parseInt(idString);
 
     if (isNaN(id)) {
       return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 });
@@ -38,10 +39,11 @@ export async function GET(
 // PUT /api/private-expenses/[id] - Update private expense
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id: idString } = await params;
+    const id = parseInt(idString);
 
     if (isNaN(id)) {
       return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 });
@@ -100,10 +102,11 @@ export async function PUT(
 // DELETE /api/private-expenses/[id] - Delete private expense
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
+    const { id: idString } = await params;
+    const id = parseInt(idString);
 
     if (isNaN(id)) {
       return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 });
