@@ -6,6 +6,9 @@ import {
   CalculationResults,
   Payer,
   IncomeSource,
+  PrivateExpense,
+  PrivateExpenseCreateRequest,
+  PrivateExpenseUpdateRequest,
 } from '@/types';
 import { ApiService } from '@/lib/api';
 import { calculateFinancialResults } from '@/lib/calculations';
@@ -426,7 +429,7 @@ export function useAppData() {
         settings: loadedSettings,
         expenses: loadedExpenses,
         incomes: loadedIncomes,
-      } = await ApiService.loadInitialData();
+      } = await ApiService.loadAllData();
       setSettings(loadedSettings);
       setExpenses(loadedExpenses);
 
@@ -493,9 +496,119 @@ export function useAppData() {
 export function useFinancialCalculations(
   settings: Settings,
   expenses: Expense[],
-  incomes: Income[]
+  incomes: Income[],
+  privateExpenses: PrivateExpense[] = []
 ): CalculationResults {
   return useMemo(() => {
-    return calculateFinancialResults(settings, expenses, incomes);
-  }, [settings, expenses, incomes]);
+    return calculateFinancialResults(
+      settings,
+      expenses,
+      incomes,
+      privateExpenses
+    );
+  }, [settings, expenses, incomes, privateExpenses]);
+}
+
+/**
+ * Custom hook for private expense operations (without managing state)
+ */
+export function usePrivateExpenseOperations(
+  privateExpenses: PrivateExpense[],
+  setPrivateExpenses: (expenses: PrivateExpense[]) => void
+) {
+  const createPrivateExpense = useCallback(
+    async (expenseData: PrivateExpenseCreateRequest) => {
+      try {
+        const newExpense = await ApiService.createPrivateExpense(expenseData);
+        setPrivateExpenses([...privateExpenses, newExpense]);
+        return newExpense;
+      } catch (error) {
+        console.error('Error creating private expense:', error);
+        throw error;
+      }
+    },
+    [privateExpenses, setPrivateExpenses]
+  );
+
+  const editPrivateExpense = useCallback(
+    async (id: number, expenseData: PrivateExpenseUpdateRequest) => {
+      try {
+        const updatedExpense = await ApiService.updatePrivateExpense(
+          id,
+          expenseData
+        );
+        setPrivateExpenses(
+          privateExpenses.map((expense) =>
+            expense.id === id ? updatedExpense : expense
+          )
+        );
+        return updatedExpense;
+      } catch (error) {
+        console.error('Error updating private expense:', error);
+        throw error;
+      }
+    },
+    [privateExpenses, setPrivateExpenses]
+  );
+
+  const deletePrivateExpense = useCallback(
+    async (id: number) => {
+      try {
+        await ApiService.deletePrivateExpense(id);
+        setPrivateExpenses(
+          privateExpenses.filter((expense) => expense.id !== id)
+        );
+      } catch (error) {
+        console.error('Error deleting private expense:', error);
+        throw error;
+      }
+    },
+    [privateExpenses, setPrivateExpenses]
+  );
+
+  return {
+    createPrivateExpense,
+    editPrivateExpense,
+    deletePrivateExpense,
+  };
+}
+
+/**
+ * Custom hook for private expense form management
+ */
+export function usePrivateExpenseForm() {
+  const [privateExpenseForm, setPrivateExpenseForm] = useState({
+    beschreibung: '',
+    betrag: '',
+    person: 'Partner1' as const,
+  });
+
+  const updatePrivateExpenseForm = useCallback(
+    (field: keyof typeof privateExpenseForm, value: string) => {
+      setPrivateExpenseForm((prev) => ({ ...prev, [field]: value }));
+    },
+    []
+  );
+
+  const resetPrivateExpenseForm = useCallback(() => {
+    setPrivateExpenseForm({
+      beschreibung: '',
+      betrag: '',
+      person: 'Partner1' as const,
+    });
+  }, []);
+
+  const isPrivateExpenseFormValid = useCallback(() => {
+    return (
+      privateExpenseForm.beschreibung.trim() !== '' &&
+      parseFloat(privateExpenseForm.betrag || '0') > 0
+    );
+  }, [privateExpenseForm]);
+
+  return {
+    privateExpenseForm,
+    updatePrivateExpenseForm,
+    resetPrivateExpenseForm,
+    isPrivateExpenseFormValid,
+  };
 }

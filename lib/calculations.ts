@@ -1,4 +1,10 @@
-import { Settings, Expense, Income, CalculationResults } from '@/types';
+import {
+  Settings,
+  Expense,
+  Income,
+  PrivateExpense,
+  CalculationResults,
+} from '@/types';
 
 /**
  * Calculates financial allocations between partners based on income ratios
@@ -7,7 +13,8 @@ import { Settings, Expense, Income, CalculationResults } from '@/types';
 export function calculateFinancialResults(
   settings: Settings,
   expenses: Expense[],
-  incomes: Income[]
+  incomes: Income[],
+  privateExpenses: PrivateExpense[] = []
 ): CalculationResults {
   // Step 0: Calculate total income per partner from income positions
   // Handle case where incomes might be undefined or empty during initial load
@@ -77,12 +84,28 @@ export function calculateFinancialResults(
   const finale_überweisung_p2 =
     p2_gesamtanteil_kosten - p2_direktzahlungen - p2_anteil_restgeld;
 
+  // Calculate private expenses totals per partner
+  const safePrivateExpenses = privateExpenses || [];
+  const p1_private_expenses = safePrivateExpenses
+    .filter((expense) => expense.person === 'Partner1')
+    .reduce((sum, expense) => sum + (Number(expense.betrag) || 0), 0);
+
+  const p2_private_expenses = safePrivateExpenses
+    .filter((expense) => expense.person === 'Partner2')
+    .reduce((sum, expense) => sum + (Number(expense.betrag) || 0), 0);
+
   // Step 14 & 15: Remaining free amounts
-  // What remains after actual payments (direct + transfer)
+  // What remains after actual payments (direct + transfer) minus private expenses
   const verbleibt_p1 =
-    p1_einkommen - p1_direktzahlungen - finale_überweisung_p1;
+    p1_einkommen -
+    p1_direktzahlungen -
+    finale_überweisung_p1 -
+    p1_private_expenses;
   const verbleibt_p2 =
-    p2_einkommen - p2_direktzahlungen - finale_überweisung_p2;
+    p2_einkommen -
+    p2_direktzahlungen -
+    finale_überweisung_p2 -
+    p2_private_expenses;
 
   // Step 16 & 17: Control calculations
   const kontrolle_einzahlungNötig = bedarf_gk - restgeld_vormonat;
@@ -165,6 +188,28 @@ export function calculateIncomeTotals(incomes: Income[]): {
   const caroTotal = safeIncomes
     .filter((income) => income.quelle === 'Partner2')
     .reduce((sum, income) => sum + (Number(income.betrag) || 0), 0);
+
+  return { pascalTotal, caroTotal };
+}
+
+/**
+ * Calculate private expense totals per partner
+ */
+export function calculatePrivateExpenseTotals(
+  privateExpenses: PrivateExpense[]
+): {
+  pascalTotal: number;
+  caroTotal: number;
+} {
+  const safePrivateExpenses = privateExpenses || [];
+
+  const pascalTotal = safePrivateExpenses
+    .filter((expense) => expense.person === 'Partner1')
+    .reduce((sum, expense) => sum + (Number(expense.betrag) || 0), 0);
+
+  const caroTotal = safePrivateExpenses
+    .filter((expense) => expense.person === 'Partner2')
+    .reduce((sum, expense) => sum + (Number(expense.betrag) || 0), 0);
 
   return { pascalTotal, caroTotal };
 }

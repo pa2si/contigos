@@ -2,11 +2,14 @@ import {
   Settings,
   Expense,
   Income,
+  PrivateExpense,
   SettingsUpdateRequest,
   ExpenseCreateRequest,
   ExpenseUpdateRequest,
   IncomeCreateRequest,
   IncomeUpdateRequest,
+  PrivateExpenseCreateRequest,
+  PrivateExpenseUpdateRequest,
 } from '@/types';
 
 /**
@@ -207,20 +210,93 @@ export class ApiService {
     }
   }
 
+  // ===== PRIVATE EXPENSES API =====
+
   /**
-   * Load settings, expenses, and incomes in parallel
+   * Fetch all private expenses from the API
    */
-  static async loadInitialData(): Promise<{
+  static async getPrivateExpenses(): Promise<PrivateExpense[]> {
+    const response = await fetch('/api/private-expenses');
+    if (!response.ok) {
+      throw new Error('Failed to fetch private expenses');
+    }
+    return response.json();
+  }
+
+  /**
+   * Create a new private expense
+   */
+  static async createPrivateExpense(
+    privateExpenseData: PrivateExpenseCreateRequest
+  ): Promise<PrivateExpense> {
+    const response = await fetch('/api/private-expenses', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(privateExpenseData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to create private expense');
+    }
+
+    return response.json();
+  }
+
+  /**
+   * Update an existing private expense
+   */
+  static async updatePrivateExpense(
+    id: number,
+    privateExpenseData: PrivateExpenseUpdateRequest
+  ): Promise<PrivateExpense> {
+    const response = await fetch(`/api/private-expenses/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(privateExpenseData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to update private expense');
+    }
+
+    return response.json();
+  }
+
+  /**
+   * Delete a private expense
+   */
+  static async deletePrivateExpense(id: number): Promise<void> {
+    const response = await fetch(`/api/private-expenses/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to delete private expense');
+    }
+  }
+
+  // ===== LOAD ALL DATA =====
+
+  /**
+   * Load all data needed for the app
+   * This provides a central way to load settings, expenses, and incomes with proper error handling
+   */
+  static async loadAllData(): Promise<{
     settings: Settings;
     expenses: Expense[];
     incomes: Income[];
+    privateExpenses: PrivateExpense[];
   }> {
-    const [settings, expenses, incomes] = await Promise.all([
+    const [settings, expenses, incomes, privateExpenses] = await Promise.all([
       this.getSettings(),
       this.getExpenses(),
       this.getIncomes(),
+      this.getPrivateExpenses(),
     ]);
 
-    return { settings, expenses, incomes };
+    return { settings, expenses, incomes, privateExpenses };
   }
 }

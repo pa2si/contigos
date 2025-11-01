@@ -1,5 +1,8 @@
 import { Payer, IncomeSource } from '@prisma/client';
 
+// Partner enum for private expenses
+export type Partner = 'Partner1' | 'Partner2';
+
 // Database model types (from Prisma)
 export interface Settings {
   id: number;
@@ -30,6 +33,15 @@ export interface Income {
   updatedAt: Date;
 }
 
+export interface PrivateExpense {
+  id: number;
+  beschreibung: string;
+  betrag: number;
+  person: Partner;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 // API request/response types
 export interface SettingsUpdateRequest {
   p1_einkommen: number;
@@ -54,6 +66,14 @@ export interface IncomeCreateRequest {
 }
 
 export type IncomeUpdateRequest = IncomeCreateRequest;
+
+export interface PrivateExpenseCreateRequest {
+  beschreibung: string;
+  betrag: number;
+  person: Partner;
+}
+
+export type PrivateExpenseUpdateRequest = PrivateExpenseCreateRequest;
 
 // Calculation result types (for the frontend calculations)
 export interface CalculationResults {

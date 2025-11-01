@@ -43,6 +43,17 @@ model Income {
   @@map("incomes")
 }
 
+model PrivateExpense {
+  id           Int          @id @default(autoincrement())
+  beschreibung String
+  betrag       Float
+  person       Partner
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@map("private_expenses")
+}
+
 enum Payer {
   Partner1
   Partner2
@@ -50,6 +61,11 @@ enum Payer {
 }
 
 enum IncomeSource {
+  Partner1
+  Partner2
+}
+
+enum Partner {
   Partner1
   Partner2
 }

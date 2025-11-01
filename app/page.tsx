@@ -10,12 +10,16 @@ import {
   useAppData,
   useFinancialCalculations,
   usePartnerIncomes,
+  usePrivateExpenseOperations,
+  usePrivateExpenseForm,
 } from '@/hooks';
 import {
   parseNumber,
   validateExpenseForm,
   validateIncomeForm,
 } from '@/lib/utils';
+import { PrivateExpense } from '@/types';
+import { ApiService } from '@/lib/api';
 
 // Import our new components
 import Settings from '@/components/Settings';
@@ -24,6 +28,8 @@ import ControlSection from '@/components/ControlSection';
 import Summary from '@/components/Summary';
 import ExpenseManagement from '@/components/ExpenseManagement';
 import ConfirmationModal from '@/components/ConfirmationModal';
+import TabLayout from '@/components/TabLayout';
+import PrivateExpenses from '@/components/PrivateExpenses';
 
 export default function HomePage() {
   // Combined data management hook (prevents infinite loops)
@@ -83,6 +89,26 @@ export default function HomePage() {
     isFormValid: isIncomeFormValid,
   } = useIncomeForm();
 
+  // Private expenses state
+  const [privateExpenses, setPrivateExpenses] = useState<PrivateExpense[]>([]);
+
+  // Private expense operations
+  const { createPrivateExpense, editPrivateExpense, deletePrivateExpense } =
+    usePrivateExpenseOperations(privateExpenses, setPrivateExpenses);
+
+  // Private expense form management
+  const {
+    privateExpenseForm,
+    updatePrivateExpenseForm,
+    resetPrivateExpenseForm,
+    isPrivateExpenseFormValid,
+  } = usePrivateExpenseForm();
+
+  // Private expense UI state
+  const [showAddPrivateExpense, setShowAddPrivateExpense] = useState(false);
+  const [editingPrivateExpense, setEditingPrivateExpense] =
+    useState<PrivateExpense | null>(null);
+
   // Modal state for confirmations
   const [confirmModal, setConfirmModal] = useState<{
     isOpen: boolean;
@@ -101,11 +127,26 @@ export default function HomePage() {
   // UI state is now managed by individual components
 
   // Financial calculations
-  const results = useFinancialCalculations(settings, expenses, incomes);
+  const results = useFinancialCalculations(
+    settings,
+    expenses,
+    incomes,
+    privateExpenses
+  );
 
   // Load data on component mount (only once)
   useEffect(() => {
     loadData();
+    // Load private expenses
+    const loadPrivateExpenses = async () => {
+      try {
+        const expenses = await ApiService.getPrivateExpenses();
+        setPrivateExpenses(expenses);
+      } catch (error) {
+        console.error('Error loading private expenses:', error);
+      }
+    };
+    loadPrivateExpenses();
   }, [loadData]);
 
   // Event handlers
@@ -212,55 +253,130 @@ export default function HomePage() {
           </p>
         </div>
 
-        {/* Settings Section with Income Management */}
-        <Settings
-          settings={settings}
-          onSettingsChange={handleSettingsChange}
-          onSettingsBlur={handleSettingsBlur}
-          pascalTotal={pascalTotal}
-          caroTotal={caroTotal}
-          pascalIncomes={pascalIncomes}
-          caroIncomes={caroIncomes}
-          gesamteinkommen={results.gesamteinkommen}
-        >
-          <IncomeManagement
-            pascalIncomes={pascalIncomes}
-            caroIncomes={caroIncomes}
-            pascalTotal={pascalTotal}
-            caroTotal={caroTotal}
-            showAddIncome={showAddIncome}
-            editingIncome={editingIncome}
-            incomeForm={incomeForm}
-            onStartAddIncome={startAddIncome}
-            onStartEditIncome={startEditIncome}
-            onUpdateIncomeForm={updateIncomeForm}
-            onSaveIncome={handleSaveIncome}
-            onResetIncomeForm={resetIncomeForm}
-            onDeleteIncome={handleDeleteIncome}
-            isIncomeFormValid={isIncomeFormValid}
-          />
-        </Settings>
+        {/* Tabbed Interface */}
+        <TabLayout
+          gemeinsam={
+            <>
+              {/* Settings Section with Income Management */}
+              <Settings
+                settings={settings}
+                onSettingsChange={handleSettingsChange}
+                onSettingsBlur={handleSettingsBlur}
+                pascalTotal={pascalTotal}
+                caroTotal={caroTotal}
+                pascalIncomes={pascalIncomes}
+                caroIncomes={caroIncomes}
+                gesamteinkommen={results.gesamteinkommen}
+              >
+                <IncomeManagement
+                  pascalIncomes={pascalIncomes}
+                  caroIncomes={caroIncomes}
+                  pascalTotal={pascalTotal}
+                  caroTotal={caroTotal}
+                  showAddIncome={showAddIncome}
+                  editingIncome={editingIncome}
+                  incomeForm={incomeForm}
+                  onStartAddIncome={startAddIncome}
+                  onStartEditIncome={startEditIncome}
+                  onUpdateIncomeForm={updateIncomeForm}
+                  onSaveIncome={handleSaveIncome}
+                  onResetIncomeForm={resetIncomeForm}
+                  onDeleteIncome={handleDeleteIncome}
+                  isIncomeFormValid={isIncomeFormValid}
+                />
+              </Settings>
 
-        {/* Summary - Action and Free Money */}
-        <Summary results={results} />
+              {/* Summary - Action and Free Money */}
+              <Summary results={results} />
 
-        {/* Control Section */}
-        <ControlSection settings={settings} results={results} />
+              {/* Control Section */}
+              <ControlSection settings={settings} results={results} />
 
-        {/* Expense Management */}
-        <ExpenseManagement
-          expenses={expenses}
-          settings={settings}
-          showAddExpense={showAddExpense}
-          editingExpense={editingExpense}
-          expenseForm={expenseForm}
-          onStartAddExpense={startAddExpense}
-          onStartEditExpense={startEditExpense}
-          onUpdateExpenseForm={updateExpenseForm}
-          onSaveExpense={handleSaveExpense}
-          onResetExpenseForm={resetExpenseForm}
-          onDeleteExpense={handleDeleteExpense}
-          isExpenseFormValid={isExpenseFormValid}
+              {/* Expense Management */}
+              <ExpenseManagement
+                expenses={expenses}
+                settings={settings}
+                showAddExpense={showAddExpense}
+                editingExpense={editingExpense}
+                expenseForm={expenseForm}
+                onStartAddExpense={startAddExpense}
+                onStartEditExpense={startEditExpense}
+                onUpdateExpenseForm={updateExpenseForm}
+                onSaveExpense={handleSaveExpense}
+                onResetExpenseForm={resetExpenseForm}
+                onDeleteExpense={handleDeleteExpense}
+                isExpenseFormValid={isExpenseFormValid}
+              />
+            </>
+          }
+          privat={
+            <PrivateExpenses
+              pascalExpenses={privateExpenses.filter(
+                (exp) => exp.person === 'Partner1'
+              )}
+              caroExpenses={privateExpenses.filter(
+                (exp) => exp.person === 'Partner2'
+              )}
+              pascalTotal={privateExpenses
+                .filter((exp) => exp.person === 'Partner1')
+                .reduce((sum, exp) => sum + exp.betrag, 0)}
+              caroTotal={privateExpenses
+                .filter((exp) => exp.person === 'Partner2')
+                .reduce((sum, exp) => sum + exp.betrag, 0)}
+              showAddPrivateExpense={showAddPrivateExpense}
+              editingPrivateExpense={editingPrivateExpense}
+              privateExpenseForm={privateExpenseForm}
+              onStartAddPrivateExpense={() => setShowAddPrivateExpense(true)}
+              onStartEditPrivateExpense={setEditingPrivateExpense}
+              onUpdatePrivateExpenseForm={updatePrivateExpenseForm}
+              onSavePrivateExpense={async () => {
+                try {
+                  const expenseData = {
+                    beschreibung: privateExpenseForm.beschreibung,
+                    betrag: parseFloat(privateExpenseForm.betrag),
+                    person: privateExpenseForm.person,
+                  };
+
+                  if (editingPrivateExpense) {
+                    await editPrivateExpense(
+                      editingPrivateExpense.id,
+                      expenseData
+                    );
+                    setEditingPrivateExpense(null);
+                  } else {
+                    await createPrivateExpense(expenseData);
+                    setShowAddPrivateExpense(false);
+                  }
+                  resetPrivateExpenseForm();
+                } catch (error) {
+                  console.error('Error saving private expense:', error);
+                }
+              }}
+              onResetPrivateExpenseForm={() => {
+                resetPrivateExpenseForm();
+                setShowAddPrivateExpense(false);
+                setEditingPrivateExpense(null);
+              }}
+              onDeletePrivateExpense={async (id) => {
+                setConfirmModal({
+                  isOpen: true,
+                  title: 'Privaten Ausgabe löschen',
+                  message:
+                    'Sind Sie sicher, dass Sie diese private Ausgabe löschen möchten?',
+                  onConfirm: async () => {
+                    try {
+                      await deletePrivateExpense(id);
+                      setConfirmModal((prev) => ({ ...prev, isOpen: false }));
+                    } catch (error) {
+                      console.error('Error deleting private expense:', error);
+                    }
+                  },
+                  isDestructive: true,
+                });
+              }}
+              isPrivateExpenseFormValid={isPrivateExpenseFormValid}
+            />
+          }
         />
 
         {/* Confirmation Modal */}
