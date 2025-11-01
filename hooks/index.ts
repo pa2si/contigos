@@ -186,8 +186,8 @@ export function useExpenseForm() {
     setExpenseForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const isFormValid = () => {
-    return expenseForm.beschreibung.trim() && expenseForm.betrag;
+  const isFormValid = (): boolean => {
+    return Boolean(expenseForm.beschreibung.trim() && expenseForm.betrag);
   };
 
   return {
@@ -384,8 +384,8 @@ export function useIncomeForm() {
     setIncomeForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const isFormValid = () => {
-    return incomeForm.beschreibung.trim() && incomeForm.betrag;
+  const isFormValid = (): boolean => {
+    return Boolean(incomeForm.beschreibung.trim() && incomeForm.betrag);
   };
 
   return {
