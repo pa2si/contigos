@@ -62,12 +62,12 @@ export interface CalculationResults {
   p2_anteil_restgeld: number;
 
   // Final transfer amounts (main results)
-  finale_ueberweisung_p1: number;
-  finale_ueberweisung_p2: number;
+  finale_überweisung_p1: number;
+  finale_überweisung_p2: number;
 
   // Control calculations
-  kontrolle_einzahlung_noetig: number;
-  kontrolle_summe_ueberweisungen: number;
+  kontrolle_einzahlungNötig: number;
+  kontrolle_summeÜberweisungen: number;
 
   // Remaining free amounts
   verbleibt_p1: number;
