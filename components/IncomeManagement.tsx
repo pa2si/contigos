@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { Income, IncomeSource } from '@/types';
 import { formatCurrencyFixed } from '@/lib/utils';
+import EditButton from '@/components/ui/EditButton';
+import DeleteButton from '@/components/ui/DeleteButton';
 
 interface IncomeManagementProps {
   pascalIncomes: Income[];
@@ -181,18 +183,16 @@ export default function IncomeManagement({
                       <span className='text-sm font-semibold text-blue-600'>
                         {formatCurrencyFixed(income.betrag)}
                       </span>
-                      <button
+                      <EditButton
                         onClick={() => onStartEditIncome(income)}
-                        className='px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors'
-                      >
-                        Edit
-                      </button>
-                      <button
+                        size='sm'
+                        variant='primary'
+                      />
+                      <DeleteButton
                         onClick={() => onDeleteIncome(income.id)}
-                        className='px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600 transition-colors'
-                      >
-                        Del
-                      </button>
+                        size='sm'
+                        variant='danger'
+                      />
                     </div>
                   </div>
                 ))
@@ -228,18 +228,16 @@ export default function IncomeManagement({
                       <span className='text-sm font-semibold text-green-600'>
                         {formatCurrencyFixed(income.betrag)}
                       </span>
-                      <button
+                      <EditButton
                         onClick={() => onStartEditIncome(income)}
-                        className='px-2 py-1 text-xs bg-green-500 text-white rounded hover:bg-green-600 transition-colors'
-                      >
-                        Edit
-                      </button>
-                      <button
+                        size='sm'
+                        variant='primary'
+                      />
+                      <DeleteButton
                         onClick={() => onDeleteIncome(income.id)}
-                        className='px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600 transition-colors'
-                      >
-                        Del
-                      </button>
+                        size='sm'
+                        variant='danger'
+                      />
                     </div>
                   </div>
                 ))

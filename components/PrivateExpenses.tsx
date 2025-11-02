@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { PrivateExpense, Partner } from '@/types';
 import { formatCurrencyFixed } from '@/lib/utils';
+import EditButton from '@/components/ui/EditButton';
+import DeleteButton from '@/components/ui/DeleteButton';
 
 interface PrivateExpensesProps {
   pascalExpenses: PrivateExpense[];
@@ -219,18 +221,16 @@ export default function PrivateExpenses({
                       <span className='text-sm font-semibold text-blue-600'>
                         {formatCurrencyFixed(expense.betrag)}
                       </span>
-                      <button
+                      <EditButton
                         onClick={() => onStartEditPrivateExpense(expense)}
-                        className='px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors'
-                      >
-                        Edit
-                      </button>
-                      <button
+                        size='sm'
+                        variant='primary'
+                      />
+                      <DeleteButton
                         onClick={() => onDeletePrivateExpense(expense.id)}
-                        className='px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600 transition-colors'
-                      >
-                        Del
-                      </button>
+                        size='sm'
+                        variant='danger'
+                      />
                     </div>
                   </div>
                 ))
@@ -266,18 +266,16 @@ export default function PrivateExpenses({
                       <span className='text-sm font-semibold text-green-600'>
                         {formatCurrencyFixed(expense.betrag)}
                       </span>
-                      <button
+                      <EditButton
                         onClick={() => onStartEditPrivateExpense(expense)}
-                        className='px-2 py-1 text-xs bg-green-500 text-white rounded hover:bg-green-600 transition-colors'
-                      >
-                        Edit
-                      </button>
-                      <button
+                        size='sm'
+                        variant='primary'
+                      />
+                      <DeleteButton
                         onClick={() => onDeletePrivateExpense(expense.id)}
-                        className='px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600 transition-colors'
-                      >
-                        Del
-                      </button>
+                        size='sm'
+                        variant='danger'
+                      />
                     </div>
                   </div>
                 ))

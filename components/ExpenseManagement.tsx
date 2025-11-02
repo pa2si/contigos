@@ -7,6 +7,8 @@ import {
   formatCurrencyFixed,
   getPayerDisplayName,
 } from '@/lib/utils';
+import EditButton from '@/components/ui/EditButton';
+import DeleteButton from '@/components/ui/DeleteButton';
 
 interface ExpenseManagementProps {
   expenses: Expense[];
@@ -241,18 +243,16 @@ export default function ExpenseManagement({
                         {formatCurrencyFixed(expense.betrag)}
                       </span>
                       <div className='flex gap-1'>
-                        <button
+                        <EditButton
                           onClick={() => onStartEditExpense(expense)}
-                          className='px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors'
-                        >
-                          edit
-                        </button>
-                        <button
+                          size='sm'
+                          variant='primary'
+                        />
+                        <DeleteButton
                           onClick={() => onDeleteExpense(expense.id)}
-                          className='px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600 transition-colors'
-                        >
-                          del
-                        </button>
+                          size='sm'
+                          variant='danger'
+                        />
                       </div>
                     </div>
                   </div>
