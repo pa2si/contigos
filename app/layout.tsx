@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Contigos - Presupuesto mensual contigos',
-  description: 'Presupuesto mensual contigos',
+  title: 'Contigos - Presupuesto mensual',
+  description: 'Presupuesto mensual',
 };
 
 export default function RootLayout({

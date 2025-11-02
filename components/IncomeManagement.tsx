@@ -1,18 +1,14 @@
 'use client';
 
-import { useState } from 'react';
 import { Income, IncomeSource } from '@/types';
 import { formatCurrencyFixed } from '@/lib/utils';
 import EditButton from '@/components/ui/EditButton';
 import DeleteButton from '@/components/ui/DeleteButton';
 
 interface IncomeManagementProps {
-  pascalIncomes: Income[];
-  caroIncomes: Income[];
-  pascalTotal: number;
-  caroTotal: number;
-  showAddIncome: boolean;
+  incomes: Income[];
   editingIncome: Income | null;
+  showAddIncome: boolean;
   incomeForm: {
     beschreibung: string;
     betrag: string;
@@ -27,75 +23,78 @@ interface IncomeManagementProps {
   onSaveIncome: () => Promise<void>;
   onResetIncomeForm: () => void;
   onDeleteIncome: (incomeId: number) => Promise<void>;
-  isIncomeFormValid: () => boolean;
 }
 
 export default function IncomeManagement({
-  pascalIncomes,
-  caroIncomes,
-  pascalTotal,
-  caroTotal,
-  showAddIncome,
+  incomes,
   editingIncome,
+  showAddIncome,
   incomeForm,
   onStartAddIncome,
   onStartEditIncome,
+  onDeleteIncome,
   onUpdateIncomeForm,
   onSaveIncome,
   onResetIncomeForm,
-  onDeleteIncome,
-  isIncomeFormValid,
 }: IncomeManagementProps) {
-  const [incomesExpanded, setIncomesExpanded] = useState(false);
+  const pascalIncomes = incomes.filter(
+    (income) => income.quelle === 'Partner1'
+  );
+  const caroIncomes = incomes.filter((income) => income.quelle === 'Partner2');
+  const pascalTotal = pascalIncomes.reduce(
+    (sum, income) => sum + Number(income.betrag),
+    0
+  );
+  const caroTotal = caroIncomes.reduce(
+    (sum, income) => sum + Number(income.betrag),
+    0
+  );
+
+  const isIncomeFormValid = () => {
+    return (
+      incomeForm.beschreibung.trim() && incomeForm.betrag && incomeForm.quelle
+    );
+  };
 
   return (
-    <div className='mt-8 pt-6 border-t border-gray-200'>
-      <div
-        className='cursor-pointer hover:bg-gray-50 transition-colors duration-200 flex justify-between items-center mb-4 p-2 rounded-lg'
-        onClick={() => setIncomesExpanded(!incomesExpanded)}
-      >
-        <div className='flex items-center gap-3'>
-          <h3 className='text-lg font-semibold text-gray-800'>
-            💰 Einkommensquellen
-          </h3>
-          <span
-            className={`transform transition-transform duration-200 ${
-              incomesExpanded ? 'rotate-180' : ''
-            }`}
+    <div className='space-y-6'>
+      {/* Add Button */}
+      <div className='flex justify-end'>
+        <button
+          onClick={onStartAddIncome}
+          className='flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg'
+        >
+          <svg
+            className='w-4 h-4'
+            fill='none'
+            stroke='currentColor'
+            viewBox='0 0 24 24'
           >
-            <svg className='w-4 h-4' fill='currentColor' viewBox='0 0 20 20'>
-              <path
-                fillRule='evenodd'
-                d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'
-                clipRule='evenodd'
-              />
-            </svg>
-          </span>
-        </div>
-        {incomesExpanded && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onStartAddIncome();
-            }}
-            className='px-3 py-1.5 bg-green-500 text-white text-sm rounded-md hover:bg-green-600 transition-colors'
-          >
-            + Einkommen hinzufügen
-          </button>
-        )}
+            <path
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              strokeWidth={2}
+              d='M12 4v16m8-8H4'
+            />
+          </svg>
+          Einkommen hinzufügen
+        </button>
       </div>
 
       {/* Add/Edit Income Form */}
       {showAddIncome && (
-        <div className='mb-4 p-3 border-2 border-green-200 rounded-lg bg-green-50'>
-          <h4 className='text-md font-medium mb-3'>
-            {editingIncome
-              ? 'Einkommen bearbeiten'
-              : 'Neues Einkommen hinzufügen'}
-          </h4>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-3'>
+        <div className='bg-white rounded-xl shadow-lg border border-gray-200 p-6'>
+          <div className='bg-gradient-to-r from-green-500 to-emerald-600 text-white p-4 rounded-lg mb-6'>
+            <h4 className='text-lg font-semibold'>
+              {editingIncome
+                ? '✏️ Einkommen bearbeiten'
+                : '💰 Neues Einkommen hinzufügen'}
+            </h4>
+          </div>
+
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label className='block text-sm font-semibold text-gray-700 mb-2'>
                 Beschreibung
               </label>
               <input
@@ -105,11 +104,11 @@ export default function IncomeManagement({
                   onUpdateIncomeForm('beschreibung', e.target.value)
                 }
                 placeholder='z.B. Gehalt, Freelancing, etc.'
-                className='w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm'
+                className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200'
               />
             </div>
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label className='block text-sm font-semibold text-gray-700 mb-2'>
                 Betrag (€)
               </label>
               <input
@@ -118,11 +117,11 @@ export default function IncomeManagement({
                 value={incomeForm.betrag}
                 onChange={(e) => onUpdateIncomeForm('betrag', e.target.value)}
                 placeholder='0.00'
-                className='w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm'
+                className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200'
               />
             </div>
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label className='block text-sm font-semibold text-gray-700 mb-2'>
                 Quelle
               </label>
               <select
@@ -130,24 +129,25 @@ export default function IncomeManagement({
                 onChange={(e) =>
                   onUpdateIncomeForm('quelle', e.target.value as IncomeSource)
                 }
-                className='w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-sm'
+                className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200'
               >
                 <option value='Partner1'>Pascal</option>
                 <option value='Partner2'>Caro</option>
               </select>
             </div>
           </div>
-          <div className='flex gap-2 mt-3'>
+
+          <div className='flex gap-3 mt-6'>
             <button
               onClick={onSaveIncome}
               disabled={!isIncomeFormValid()}
-              className='px-3 py-1.5 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors'
+              className='px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all duration-200 font-medium shadow-md hover:shadow-lg'
             >
               {editingIncome ? 'Speichern' : 'Hinzufügen'}
             </button>
             <button
               onClick={onResetIncomeForm}
-              className='px-3 py-1.5 bg-gray-500 text-white text-sm rounded-md hover:bg-gray-600 transition-colors'
+              className='px-6 py-2.5 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-all duration-200 font-medium shadow-md hover:shadow-lg'
             >
               Abbrechen
             </button>
@@ -155,102 +155,134 @@ export default function IncomeManagement({
         </div>
       )}
 
-      {/* Collapsible Income Content */}
-      {incomesExpanded && (
-        <div className='animate-in slide-in-from-top duration-200'>
-          <div className='space-y-2'>
-            {/* Pascal's Income */}
-            <div className='bg-blue-50 p-3 rounded-lg'>
-              <h4 className='font-medium text-blue-800 mb-2'>
-                Pascal Einkommen
-              </h4>
-              {pascalIncomes.length === 0 ? (
-                <p className='text-sm text-blue-600 italic py-2'>
+      {/* Income Cards */}
+      <div className='grid grid-cols-1 gap-4 sm:gap-6'>
+        {/* Pascal's Income */}
+        <div className='bg-white rounded-xl shadow-lg border border-gray-200'>
+          <div className='bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-3 sm:p-4 rounded-t-xl'>
+            <h4 className='text-base sm:text-lg font-semibold flex items-center gap-2'>
+              <span className='text-sm sm:text-base'>👨‍💼</span>
+              <span className='truncate'>Pascal Einkommen</span>
+            </h4>
+          </div>
+          <div className='p-4 sm:p-6'>
+            {pascalIncomes.length === 0 ? (
+              <div className='text-center py-6 sm:py-8'>
+                <div className='text-3xl sm:text-4xl mb-2 sm:mb-3'>💼</div>
+                <p className='text-gray-500 italic text-sm sm:text-base'>
                   Keine Einkommensquellen erfasst
                 </p>
-              ) : (
-                pascalIncomes.map((income) => (
-                  <div
-                    key={income.id}
-                    className='flex justify-between items-center py-1 px-2 bg-white rounded mb-1 last:mb-0'
-                  >
-                    <div className='flex-1'>
-                      <span className='text-sm font-medium'>
-                        {income.beschreibung}
-                      </span>
-                    </div>
-                    <div className='flex items-center gap-2'>
-                      <span className='text-sm font-semibold text-blue-600'>
-                        {formatCurrencyFixed(income.betrag)}
-                      </span>
-                      <EditButton
-                        onClick={() => onStartEditIncome(income)}
-                        size='sm'
-                        variant='primary'
-                      />
-                      <DeleteButton
-                        onClick={() => onDeleteIncome(income.id)}
-                        size='sm'
-                        variant='danger'
-                      />
-                    </div>
-                  </div>
-                ))
-              )}
-              <div className='text-right mt-2 pt-2 border-t border-blue-200'>
-                <span className='text-sm font-bold text-blue-700'>
-                  Gesamt: {formatCurrencyFixed(pascalTotal)}
-                </span>
               </div>
-            </div>
-
-            {/* Caro's Income */}
-            <div className='bg-green-50 p-3 rounded-lg'>
-              <h4 className='font-medium text-green-800 mb-2'>
-                Caro Einkommen
-              </h4>
-              {caroIncomes.length === 0 ? (
-                <p className='text-sm text-green-600 italic py-2'>
-                  Keine Einkommensquellen erfasst
-                </p>
-              ) : (
-                caroIncomes.map((income) => (
+            ) : (
+              <div className='space-y-2 sm:space-y-3'>
+                {pascalIncomes.map((income) => (
                   <div
                     key={income.id}
-                    className='flex justify-between items-center py-1 px-2 bg-white rounded mb-1 last:mb-0'
+                    className='flex flex-col sm:flex-row sm:justify-between sm:items-center p-2 sm:p-3 bg-gray-50 rounded-lg border hover:shadow-md transition-all duration-200 gap-2 sm:gap-3'
                   >
-                    <div className='flex-1'>
-                      <span className='text-sm font-medium'>
+                    <div className='flex-1 min-w-0'>
+                      <span className='font-medium text-gray-800 text-sm sm:text-base block truncate'>
                         {income.beschreibung}
                       </span>
                     </div>
-                    <div className='flex items-center gap-2'>
-                      <span className='text-sm font-semibold text-green-600'>
+                    <div className='flex items-center justify-between sm:justify-end gap-2 sm:gap-3'>
+                      <span className='font-bold text-blue-600 bg-blue-100 px-2 sm:px-3 py-1 rounded-full text-sm sm:text-base flex-shrink-0'>
                         {formatCurrencyFixed(income.betrag)}
                       </span>
-                      <EditButton
-                        onClick={() => onStartEditIncome(income)}
-                        size='sm'
-                        variant='primary'
-                      />
-                      <DeleteButton
-                        onClick={() => onDeleteIncome(income.id)}
-                        size='sm'
-                        variant='danger'
-                      />
+                      <div className='flex gap-1 flex-shrink-0'>
+                        <EditButton
+                          onClick={() => onStartEditIncome(income)}
+                          size='sm'
+                          variant='primary'
+                        />
+                        <DeleteButton
+                          onClick={() => onDeleteIncome(income.id)}
+                          size='sm'
+                          variant='danger'
+                        />
+                      </div>
                     </div>
                   </div>
-                ))
-              )}
-              <div className='text-right mt-2 pt-2 border-t border-green-200'>
-                <span className='text-sm font-bold text-green-700'>
-                  Gesamt: {formatCurrencyFixed(caroTotal)}
+                ))}
+              </div>
+            )}
+
+            <div className='mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200'>
+              <div className='flex justify-between items-center'>
+                <span className='text-gray-700 font-medium text-sm sm:text-base'>
+                  Gesamt:
+                </span>
+                <span className='text-lg sm:text-xl font-bold text-blue-600 bg-blue-100 px-3 sm:px-4 py-1 sm:py-2 rounded-full'>
+                  {formatCurrencyFixed(pascalTotal)}
                 </span>
               </div>
             </div>
           </div>
         </div>
-      )}
+
+        {/* Caro's Income */}
+        <div className='bg-white rounded-xl shadow-lg border border-gray-200'>
+          <div className='bg-gradient-to-r from-green-500 to-emerald-600 text-white p-3 sm:p-4 rounded-t-xl'>
+            <h4 className='text-base sm:text-lg font-semibold flex items-center gap-2'>
+              <span className='text-sm sm:text-base'>👩‍💼</span>
+              <span className='truncate'>Caro Einkommen</span>
+            </h4>
+          </div>
+          <div className='p-4 sm:p-6'>
+            {caroIncomes.length === 0 ? (
+              <div className='text-center py-6 sm:py-8'>
+                <div className='text-3xl sm:text-4xl mb-2 sm:mb-3'>💼</div>
+                <p className='text-gray-500 italic text-sm sm:text-base'>
+                  Keine Einkommensquellen erfasst
+                </p>
+              </div>
+            ) : (
+              <div className='space-y-2 sm:space-y-3'>
+                {caroIncomes.map((income) => (
+                  <div
+                    key={income.id}
+                    className='flex flex-col sm:flex-row sm:justify-between sm:items-center p-2 sm:p-3 bg-gray-50 rounded-lg border hover:shadow-md transition-all duration-200 gap-2 sm:gap-3'
+                  >
+                    <div className='flex-1 min-w-0'>
+                      <span className='font-medium text-gray-800 text-sm sm:text-base block truncate'>
+                        {income.beschreibung}
+                      </span>
+                    </div>
+                    <div className='flex items-center justify-between sm:justify-end gap-2 sm:gap-3'>
+                      <span className='font-bold text-green-600 bg-green-100 px-2 sm:px-3 py-1 rounded-full text-sm sm:text-base flex-shrink-0'>
+                        {formatCurrencyFixed(income.betrag)}
+                      </span>
+                      <div className='flex gap-1 flex-shrink-0'>
+                        <EditButton
+                          onClick={() => onStartEditIncome(income)}
+                          size='sm'
+                          variant='primary'
+                        />
+                        <DeleteButton
+                          onClick={() => onDeleteIncome(income.id)}
+                          size='sm'
+                          variant='danger'
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className='mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200'>
+              <div className='flex justify-between items-center'>
+                <span className='text-gray-700 font-medium text-sm sm:text-base'>
+                  Gesamt:
+                </span>
+                <span className='text-lg sm:text-xl font-bold text-green-600 bg-green-100 px-3 sm:px-4 py-1 sm:py-2 rounded-full'>
+                  {formatCurrencyFixed(caroTotal)}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

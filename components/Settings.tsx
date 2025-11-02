@@ -13,8 +13,80 @@ interface SettingsProps {
   pascalIncomes: Income[];
   caroIncomes: Income[];
   gesamteinkommen: number;
-  children?: React.ReactNode; // For IncomeManagement component
+  children?: React.ReactNode;
 }
+
+type SettingsTab = 'overview' | 'income' | 'budget' | 'savings';
+
+// Move InputCard component outside of render
+const InputCard = ({
+  title,
+  value,
+  onChange,
+  icon,
+  description,
+  color = 'blue',
+  isReadOnly = false,
+  onBlur,
+}: {
+  title: string;
+  value: number | string;
+  onChange?: (value: string) => void;
+  icon: string;
+  description: string;
+  color?: 'blue' | 'green' | 'purple' | 'amber';
+  isReadOnly?: boolean;
+  onBlur?: () => Promise<void>;
+}) => {
+  const colorClasses = {
+    blue: 'border-blue-200 bg-blue-50 text-blue-900 focus:border-blue-500 focus:ring-blue-500',
+    green:
+      'border-green-200 bg-green-50 text-green-900 focus:border-green-500 focus:ring-green-500',
+    purple:
+      'border-purple-200 bg-purple-50 text-purple-900 focus:border-purple-500 focus:ring-purple-500',
+    amber:
+      'border-amber-200 bg-amber-50 text-amber-900 focus:border-amber-500 focus:ring-amber-500',
+  };
+
+  return (
+    <div className='bg-white p-3 sm:p-4 rounded-xl border border-gray-100 hover:shadow-md transition-shadow duration-200'>
+      <div className='flex items-start sm:items-center gap-2 sm:gap-3 mb-3'>
+        <span className='text-xl sm:text-2xl flex-shrink-0'>{icon}</span>
+        <div className='min-w-0 flex-1'>
+          <h3 className='font-semibold text-gray-900 text-sm sm:text-base truncate'>
+            {title}
+          </h3>
+          <p className='text-xs sm:text-sm text-gray-500 break-words'>
+            {description}
+          </p>
+        </div>
+      </div>
+
+      {isReadOnly ? (
+        <div
+          className={`w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg font-semibold text-base sm:text-lg ${colorClasses[color]} break-all`}
+        >
+          {typeof value === 'number' ? formatCurrency(value) : value}
+        </div>
+      ) : (
+        <div className='relative'>
+          <span className='absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium text-sm sm:text-base'>
+            €
+          </span>
+          <input
+            type='number'
+            value={value}
+            onChange={(e) => onChange?.(e.target.value)}
+            onBlur={onBlur}
+            className={`w-full pl-6 sm:pl-8 pr-3 sm:pr-4 py-2 sm:py-3 rounded-lg border-2 transition-colors font-semibold text-base sm:text-lg ${colorClasses[color]}`}
+            placeholder='0.00'
+            step='0.01'
+          />
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default function Settings({
   settings,
@@ -28,131 +100,235 @@ export default function Settings({
   children,
 }: SettingsProps) {
   const [settingsExpanded, setSettingsExpanded] = useState(false);
+  const [activeTab, setActiveTab] = useState<SettingsTab>('overview');
+
+  const tabs = [
+    { id: 'overview' as const, label: 'Übersicht', icon: '📊' },
+    { id: 'income' as const, label: 'Einkommen', icon: '💼' },
+    { id: 'budget' as const, label: 'Budget', icon: '💰' },
+    { id: 'savings' as const, label: 'Sparen', icon: '🏦' },
+  ];
 
   return (
-    <div className='bg-white rounded-lg shadow-md mb-6'>
-      {/* Settings Header - Always Visible */}
+    <div className='bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-lg border border-gray-100 mb-6 overflow-hidden'>
+      {/* Modern Header */}
       <div
-        className='p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200 flex justify-between items-center'
+        className='p-4 sm:p-6 cursor-pointer hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-300'
         onClick={() => setSettingsExpanded(!settingsExpanded)}
       >
-        <div>
-          <div className='flex items-center gap-3'>
-            <h2 className='text-2xl font-semibold'>⚙️ Einstellungen</h2>
-            <span
-              className={`transform transition-transform duration-200 ${
+        <div className='flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4'>
+          {/* Title Section */}
+          <div className='flex items-center gap-3 sm:gap-4'>
+            <div className='bg-gradient-to-br from-blue-500 to-purple-600 p-2 sm:p-3 rounded-xl text-white shadow-lg flex-shrink-0'>
+              <svg
+                className='w-5 h-5 sm:w-6 sm:h-6'
+                fill='none'
+                stroke='currentColor'
+                viewBox='0 0 24 24'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z'
+                />
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'
+                />
+              </svg>
+            </div>
+            <div className='min-w-0'>
+              <h2 className='text-xl sm:text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent'>
+                Einstellungen
+              </h2>
+              <p className='text-sm sm:text-base text-gray-500 mt-1 break-words'>
+                Verwalte deine Finanzen und Budgets
+              </p>
+            </div>
+          </div>
+
+          {/* Income and Toggle Section */}
+          <div className='flex items-center justify-between sm:justify-end gap-3 sm:gap-4'>
+            <div className='text-left sm:text-right'>
+              <div className='text-xs sm:text-sm text-gray-500 whitespace-nowrap'>
+                Gemeinsames Einkommen
+              </div>
+              <div className='text-lg sm:text-xl font-bold text-green-600'>
+                {formatCurrency(gesamteinkommen)}
+              </div>
+            </div>
+            <div
+              className={`transform transition-transform duration-300 p-2 rounded-full bg-gray-100 flex-shrink-0 ${
                 settingsExpanded ? 'rotate-180' : ''
               }`}
             >
-              <svg className='w-5 h-5' fill='currentColor' viewBox='0 0 20 20'>
+              <svg
+                className='w-4 h-4 sm:w-5 sm:h-5 text-gray-600'
+                fill='currentColor'
+                viewBox='0 0 20 20'
+              >
                 <path
                   fillRule='evenodd'
                   d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'
                   clipRule='evenodd'
                 />
               </svg>
-            </span>
-          </div>
-          <div className='mt-2 text-lg font-medium text-green-700'>
-            Gemeinsames Einkommen:{' '}
-            <span className='font-bold'>{formatCurrency(gesamteinkommen)}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Collapsible Settings Content */}
+      {/* Modern Tabbed Content */}
       {settingsExpanded && (
-        <div className='px-6 pb-6 border-t border-gray-100 animate-in slide-in-from-top duration-200'>
-          <div className='pt-4 grid grid-cols-1 md:grid-cols-3 gap-4'>
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>
-                Pascal Einkommen (€)
-              </label>
-              <div className='w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50 text-gray-700 font-medium'>
-                {formatCurrency(pascalTotal)}
-              </div>
-              <p className='text-xs text-gray-500 mt-1'>
-                Berechnet aus {pascalIncomes.length} Einkommensposition
-                {pascalIncomes.length !== 1 ? 'en' : ''}
-              </p>
-            </div>
-
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>
-                Caro Einkommen (€)
-              </label>
-              <div className='w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50 text-gray-700 font-medium'>
-                {formatCurrency(caroTotal)}
-              </div>
-              <p className='text-xs text-gray-500 mt-1'>
-                Berechnet aus {caroIncomes.length} Einkommensposition
-                {caroIncomes.length !== 1 ? 'en' : ''}
-              </p>
-            </div>
-
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>
-                Rest vom Vormonat (€)
-              </label>
-              <input
-                type='number'
-                value={settings.restgeld_vormonat}
-                onChange={(e) =>
-                  onSettingsChange('restgeld_vormonat', e.target.value)
-                }
-                onBlur={onSettingsBlur}
-                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
-              />
-            </div>
-
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>
-                Comida (Lebensmittel, €)
-              </label>
-              <input
-                type='number'
-                value={settings.comida_betrag}
-                onChange={(e) =>
-                  onSettingsChange('comida_betrag', e.target.value)
-                }
-                onBlur={onSettingsBlur}
-                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
-              />
-            </div>
-
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>
-                Ahorros (Sparen, €)
-              </label>
-              <input
-                type='number'
-                value={settings.ahorros_betrag}
-                onChange={(e) =>
-                  onSettingsChange('ahorros_betrag', e.target.value)
-                }
-                onBlur={onSettingsBlur}
-                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
-              />
-            </div>
-
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>
-                Tagesgeldkonto (aktueller Stand, €)
-              </label>
-              <input
-                type='number'
-                value={settings.tagesgeldkonto_betrag}
-                onChange={(e) =>
-                  onSettingsChange('tagesgeldkonto_betrag', e.target.value)
-                }
-                onBlur={onSettingsBlur}
-                className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
-              />
-            </div>
+        <div className='border-t border-gray-100 bg-gray-50'>
+          {/* Tab Navigation */}
+          <div className='px-4 sm:px-6 pt-4 sm:pt-6'>
+            <nav className='grid grid-cols-2 sm:flex sm:space-x-2 gap-2 sm:gap-0'>
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center justify-center sm:justify-start gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-3 rounded-xl font-medium transition-all duration-200 text-sm sm:text-base ${
+                    activeTab === tab.id
+                      ? 'bg-white text-blue-600 shadow-sm border border-blue-100'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
+                  }`}
+                >
+                  <span className='text-base sm:text-lg'>{tab.icon}</span>
+                  <span className='truncate'>{tab.label}</span>
+                </button>
+              ))}
+            </nav>
           </div>
 
-          {/* Income Management Section - will be passed as children */}
-          {children}
+          {/* Tab Content */}
+          <div className='p-4 sm:p-6'>
+            {activeTab === 'overview' && (
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6'>
+                <InputCard
+                  title='Pascal Einkommen'
+                  value={pascalTotal}
+                  icon='👨‍💼'
+                  description={`${pascalIncomes.length} Einkommensquelle${
+                    pascalIncomes.length !== 1 ? 'n' : ''
+                  }`}
+                  color='blue'
+                  isReadOnly={true}
+                />
+                <InputCard
+                  title='Caro Einkommen'
+                  value={caroTotal}
+                  icon='👩‍💼'
+                  description={`${caroIncomes.length} Einkommensquelle${
+                    caroIncomes.length !== 1 ? 'n' : ''
+                  }`}
+                  color='green'
+                  isReadOnly={true}
+                />
+                <InputCard
+                  title='Rest vom Vormonat'
+                  value={settings.restgeld_vormonat}
+                  onChange={(value) =>
+                    onSettingsChange('restgeld_vormonat', value)
+                  }
+                  onBlur={onSettingsBlur}
+                  icon='💰'
+                  description='Übrig gebliebenes Geld vom letzten Monat'
+                  color='amber'
+                />
+              </div>
+            )}
+
+            {activeTab === 'income' && (
+              <div className='space-y-6'>
+                {/* Income Management in Card Style */}
+                <div className='bg-white rounded-xl border border-gray-100 overflow-hidden'>
+                  <div className='p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100'>
+                    <h3 className='text-lg font-semibold text-gray-900 flex items-center gap-2'>
+                      <span>👥</span>
+                      Einkommensquellen verwalten
+                    </h3>
+                    <p className='text-sm text-gray-600 mt-1'>
+                      Verwalte alle Einkommensquellen für Pascal und Caro
+                    </p>
+                  </div>
+                  <div className='p-6'>{children}</div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'budget' && (
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6'>
+                <InputCard
+                  title='Comida (Lebensmittel)'
+                  value={settings.comida_betrag}
+                  onChange={(value) => onSettingsChange('comida_betrag', value)}
+                  onBlur={onSettingsBlur}
+                  icon='🛒'
+                  description='Monatliches Budget für Lebensmittel'
+                  color='green'
+                />
+                <InputCard
+                  title='Ahorros (Sparen)'
+                  value={settings.ahorros_betrag}
+                  onChange={(value) =>
+                    onSettingsChange('ahorros_betrag', value)
+                  }
+                  onBlur={onSettingsBlur}
+                  icon='💎'
+                  description='Monatlicher Sparbetrag'
+                  color='purple'
+                />
+              </div>
+            )}
+
+            {activeTab === 'savings' && (
+              <div className='space-y-4 sm:space-y-6'>
+                <div className='grid grid-cols-1 gap-4 sm:gap-6'>
+                  <InputCard
+                    title='Tagesgeldkonto'
+                    value={settings.tagesgeldkonto_betrag}
+                    onChange={(value) =>
+                      onSettingsChange('tagesgeldkonto_betrag', value)
+                    }
+                    onBlur={onSettingsBlur}
+                    icon='🏦'
+                    description='Aktueller Stand deines Tagesgeldkontos'
+                    color='blue'
+                  />
+                </div>
+
+                {/* Savings Progress Visualization */}
+                <div className='bg-white p-4 sm:p-6 rounded-xl border border-gray-100'>
+                  <h3 className='font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2 text-sm sm:text-base'>
+                    <span>📈</span>
+                    Sparfortschritt diesen Monat
+                  </h3>
+                  <div className='bg-gray-200 rounded-full h-3 sm:h-4 mb-2'>
+                    <div
+                      className='bg-gradient-to-r from-blue-500 to-purple-600 h-3 sm:h-4 rounded-full transition-all duration-500'
+                      style={{ width: '65%' }}
+                    ></div>
+                  </div>
+                  <div className='flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0 text-xs sm:text-sm text-gray-600'>
+                    <span>
+                      Aktuell: {formatCurrency(settings.tagesgeldkonto_betrag)}
+                    </span>
+                    <span>
+                      Ziel:{' '}
+                      {formatCurrency(
+                        Number(settings.tagesgeldkonto_betrag) +
+                          Number(settings.ahorros_betrag)
+                      )}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

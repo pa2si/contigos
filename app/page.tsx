@@ -88,7 +88,6 @@ export default function HomePage() {
     startAddIncome,
     startEditIncome,
     updateForm: updateIncomeForm,
-    isFormValid: isIncomeFormValid,
   } = useIncomeForm();
 
   // Private expenses state
@@ -324,12 +323,9 @@ export default function HomePage() {
                 gesamteinkommen={results.gesamteinkommen}
               >
                 <IncomeManagement
-                  pascalIncomes={pascalIncomes}
-                  caroIncomes={caroIncomes}
-                  pascalTotal={pascalTotal}
-                  caroTotal={caroTotal}
-                  showAddIncome={showAddIncome}
+                  incomes={incomes}
                   editingIncome={editingIncome}
+                  showAddIncome={showAddIncome}
                   incomeForm={incomeForm}
                   onStartAddIncome={startAddIncome}
                   onStartEditIncome={startEditIncome}
@@ -337,7 +333,6 @@ export default function HomePage() {
                   onSaveIncome={handleSaveIncome}
                   onResetIncomeForm={resetIncomeForm}
                   onDeleteIncome={handleDeleteIncome}
-                  isIncomeFormValid={isIncomeFormValid}
                 />
               </Settings>
 
