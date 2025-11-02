@@ -42,9 +42,9 @@ export default function ControlSection({
             </span>
           </div>
           <div className='mt-2 text-lg font-medium text-blue-700'>
-            Bedarf Gemeinschaftskonto:{' '}
+            Benötigte Einzahlung:{' '}
             <span className='font-bold'>
-              {formatCurrencyFixed(results.bedarf_gk)}
+              {formatCurrencyFixed(results.kontrolle_einzahlungNötig)}
             </span>
           </div>
         </div>
