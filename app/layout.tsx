@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Contigos - Calculacion de gastos compartidos mensuales',
-  description: 'Calculacion de gastos compartidos mensuales',
+  title: 'Contigos - Presupuesto mensual contigos',
+  description: 'Presupuesto mensual contigos',
 };
 
 export default function RootLayout({

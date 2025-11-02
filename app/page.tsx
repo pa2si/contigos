@@ -246,9 +246,7 @@ export default function HomePage() {
           {/* Header */}
           <div className='text-center mb-8'>
             <h1 className='text-4xl font-bold text-gray-900 mb-2'>Contigos</h1>
-            <p className='text-gray-600'>
-              Calculacion de gastos compartidos mensuales
-            </p>
+            <p className='text-gray-600'>Presupuesto mensual contigos</p>
           </div>
 
           {/* Loading Skeleton */}
@@ -307,9 +305,7 @@ export default function HomePage() {
         {/* Header */}
         <div className='text-center mb-8'>
           <h1 className='text-4xl font-bold text-gray-900 mb-2'>Contigos</h1>
-          <p className='text-gray-600'>
-            Calculacion de gastos compartidos mensuales
-          </p>
+          <p className='text-gray-600'>Presupuesto mensual contigos</p>
         </div>
 
         {/* Tabbed Interface */}

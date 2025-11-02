@@ -46,6 +46,14 @@ export default function ExpenseManagement({
 }: ExpenseManagementProps) {
   const [expensesExpanded, setExpensesExpanded] = useState(false);
 
+  // Calculate total expenses (dynamic + fixed from settings)
+  const dynamicExpensesTotal = expenses.reduce(
+    (sum, expense) => sum + expense.betrag,
+    0
+  );
+  const totalExpenses =
+    dynamicExpensesTotal + settings.comida_betrag + settings.ahorros_betrag;
+
   return (
     <div className='bg-white rounded-lg shadow-md'>
       {/* Expenses Header - Clickable */}
@@ -53,33 +61,41 @@ export default function ExpenseManagement({
         className='p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200 flex justify-between items-center'
         onClick={() => setExpensesExpanded(!expensesExpanded)}
       >
-        <div className='flex items-center gap-3'>
-          <h2 className='text-2xl font-semibold'>🛒 Ausgaben</h2>
-          <span
-            className={`transform transition-transform duration-200 ${
-              expensesExpanded ? 'rotate-180' : ''
-            }`}
-          >
-            <svg className='w-5 h-5' fill='currentColor' viewBox='0 0 20 20'>
-              <path
-                fillRule='evenodd'
-                d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'
-                clipRule='evenodd'
-              />
-            </svg>
-          </span>
+        <div>
+          <div className='flex items-center gap-3'>
+            <h2 className='text-2xl font-semibold'>🛒 Ausgaben</h2>
+            <span
+              className={`transform transition-transform duration-200 ${
+                expensesExpanded ? 'rotate-180' : ''
+              }`}
+            >
+              <svg className='w-5 h-5' fill='currentColor' viewBox='0 0 20 20'>
+                <path
+                  fillRule='evenodd'
+                  d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'
+                  clipRule='evenodd'
+                />
+              </svg>
+            </span>
+          </div>
+          <div className='mt-2 text-lg font-medium text-red-700'>
+            Gesamtausgaben:{' '}
+            <span className='font-bold'>{formatCurrency(totalExpenses)}</span>
+          </div>
         </div>
-        {expensesExpanded && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onStartAddExpense();
-            }}
-            className='px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors'
-          >
-            Ausgabe hinzufügen
-          </button>
-        )}
+        <div>
+          {expensesExpanded && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onStartAddExpense();
+              }}
+              className='px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors'
+            >
+              Ausgabe hinzufügen
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Collapsible Expenses Content */}

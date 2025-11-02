@@ -53,7 +53,7 @@ export default function Settings({
               </svg>
             </span>
           </div>
-          <div className='mt-2 text-lg font-medium text-blue-700'>
+          <div className='mt-2 text-lg font-medium text-green-700'>
             Gemeinsames Einkommen:{' '}
             <span className='font-bold'>{formatCurrency(gesamteinkommen)}</span>
           </div>
