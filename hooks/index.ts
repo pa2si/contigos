@@ -35,6 +35,7 @@ export function useSettingsOperations(
         restgeld_vormonat: settings.restgeld_vormonat,
         comida_betrag: settings.comida_betrag,
         ahorros_betrag: settings.ahorros_betrag,
+        tagesgeldkonto_betrag: settings.tagesgeldkonto_betrag,
       });
     } catch (error) {
       console.error('Error saving settings:', error);
@@ -416,6 +417,7 @@ export function useAppData() {
     restgeld_vormonat: 0,
     comida_betrag: 0,
     ahorros_betrag: 0,
+    tagesgeldkonto_betrag: 0,
     createdAt: new Date(),
     updatedAt: new Date(),
   });

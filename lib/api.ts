@@ -34,6 +34,7 @@ export class ApiService {
       restgeld_vormonat: Number(data.restgeld_vormonat) || 0,
       comida_betrag: Number(data.comida_betrag) || 0,
       ahorros_betrag: Number(data.ahorros_betrag) || 0,
+      tagesgeldkonto_betrag: Number(data.tagesgeldkonto_betrag) || 0,
     };
   }
 
@@ -49,6 +50,7 @@ export class ApiService {
       restgeld_vormonat: Number(settings.restgeld_vormonat) || 0,
       comida_betrag: Number(settings.comida_betrag) || 0,
       ahorros_betrag: Number(settings.ahorros_betrag) || 0,
+      tagesgeldkonto_betrag: Number(settings.tagesgeldkonto_betrag) || 0,
     };
 
     const response = await fetch('/api/settings', {

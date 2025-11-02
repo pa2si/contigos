@@ -33,6 +33,7 @@ export function calculateFinancialResults(
   // Fixed costs from settings (treated as shared account expenses)
   const comida_betrag = Number(settings.comida_betrag) || 0;
   const ahorros_betrag = Number(settings.ahorros_betrag) || 0;
+  const tagesgeldkonto_betrag = Number(settings.tagesgeldkonto_betrag) || 0;
 
   // Step 1: Total income
   const gesamteinkommen = p1_einkommen + p2_einkommen;
@@ -112,6 +113,10 @@ export function calculateFinancialResults(
   const kontrolle_summeÜberweisungen =
     finale_überweisung_p1 + finale_überweisung_p2;
 
+  // Step 18: Savings calculations
+  const aktuelles_tagesgeldkonto = tagesgeldkonto_betrag;
+  const neues_tagesgeldkonto = tagesgeldkonto_betrag + ahorros_betrag;
+
   return {
     gesamteinkommen,
     p1_anteil_prozent: p1_anteil_ratio * 100, // Convert to percentage for display
@@ -130,6 +135,8 @@ export function calculateFinancialResults(
     kontrolle_summeÜberweisungen,
     verbleibt_p1,
     verbleibt_p2,
+    aktuelles_tagesgeldkonto,
+    neues_tagesgeldkonto,
   };
 }
 
@@ -155,6 +162,8 @@ function createEmptyResults(): CalculationResults {
     kontrolle_summeÜberweisungen: 0,
     verbleibt_p1: 0,
     verbleibt_p2: 0,
+    aktuelles_tagesgeldkonto: 0,
+    neues_tagesgeldkonto: 0,
   };
 }
 

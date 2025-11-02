@@ -11,6 +11,7 @@ export interface Settings {
   restgeld_vormonat: number;
   comida_betrag: number;
   ahorros_betrag: number;
+  tagesgeldkonto_betrag: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -49,6 +50,7 @@ export interface SettingsUpdateRequest {
   restgeld_vormonat: number;
   comida_betrag: number;
   ahorros_betrag: number;
+  tagesgeldkonto_betrag: number;
 }
 
 export interface ExpenseCreateRequest {
@@ -109,6 +111,10 @@ export interface CalculationResults {
   // Remaining free amounts
   verbleibt_p1: number;
   verbleibt_p2: number;
+
+  // Savings calculations
+  aktuelles_tagesgeldkonto: number;
+  neues_tagesgeldkonto: number;
 }
 
 // Export enums for convenience
