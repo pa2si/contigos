@@ -110,6 +110,10 @@ export default function HomePage() {
   const [editingPrivateExpense, setEditingPrivateExpense] =
     useState<PrivateExpense | null>(null);
 
+  // Tab navigation state
+  const [activeTab, setActiveTab] = useState('gemeinsam');
+  const [privateExpensesExpanded, setPrivateExpensesExpanded] = useState(false);
+
   // Modal state for confirmations
   const [confirmModal, setConfirmModal] = useState<{
     isOpen: boolean;
@@ -168,6 +172,11 @@ export default function HomePage() {
     } catch (error) {
       console.error('Error saving settings:', error);
     }
+  };
+
+  const handleNavigateToPrivateExpenses = () => {
+    setActiveTab('privat');
+    setPrivateExpensesExpanded(true); // Auto-expand the private expenses section
   };
 
   const handleSaveExpense = async () => {
@@ -309,6 +318,8 @@ export default function HomePage() {
 
         {/* Tabbed Interface */}
         <TabLayout
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
           gemeinsam={
             <>
               {/* Settings Section with Income Management */}
@@ -337,7 +348,11 @@ export default function HomePage() {
               </Settings>
 
               {/* Summary - Action and Free Money */}
-              <Summary results={results} settings={settings} />
+              <Summary
+                results={results}
+                settings={settings}
+                onNavigateToPrivateExpenses={handleNavigateToPrivateExpenses}
+              />
 
               {/* Control Section - Now integrated into ActionSection */}
               {/* <ControlSection settings={settings} results={results} /> */}
@@ -376,6 +391,8 @@ export default function HomePage() {
               showAddPrivateExpense={showAddPrivateExpense}
               editingPrivateExpense={editingPrivateExpense}
               privateExpenseForm={privateExpenseForm}
+              isExpanded={privateExpensesExpanded}
+              setIsExpanded={setPrivateExpensesExpanded}
               onStartAddPrivateExpense={() => setShowAddPrivateExpense(true)}
               onStartEditPrivateExpense={(expense) => {
                 setEditingPrivateExpense(expense);

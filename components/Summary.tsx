@@ -8,16 +8,25 @@ import SavingsSection from './SavingsSection';
 interface SummaryProps {
   results: CalculationResults;
   settings: Settings;
+  onNavigateToPrivateExpenses?: () => void;
 }
 
-export default function Summary({ results, settings }: SummaryProps) {
+export default function Summary({
+  results,
+  settings,
+  onNavigateToPrivateExpenses,
+}: SummaryProps) {
   return (
     <>
       {/* ACTION SECTION */}
       <ActionSection results={results} settings={settings} />
 
       {/* GIROKONTO SECTION */}
-      <GirokontoSection results={results} />
+      <GirokontoSection
+        results={results}
+        onPascalClick={onNavigateToPrivateExpenses}
+        onCaroClick={onNavigateToPrivateExpenses}
+      />
 
       {/* SAVINGS SECTION */}
       <SavingsSection results={results} />

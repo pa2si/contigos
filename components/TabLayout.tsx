@@ -6,6 +6,8 @@ import { motion } from 'framer-motion';
 interface TabLayoutProps {
   gemeinsam: React.ReactNode;
   privat: React.ReactNode;
+  activeTab?: string;
+  onTabChange?: (tab: string) => void;
 }
 
 interface Tab {
@@ -19,8 +21,27 @@ const tabs: Tab[] = [
   { id: 'privat', label: 'Privat', icon: '👤' },
 ];
 
-export default function TabLayout({ gemeinsam, privat }: TabLayoutProps) {
-  const [activeTab, setActiveTab] = useState('gemeinsam');
+export default function TabLayout({
+  gemeinsam,
+  privat,
+  activeTab: externalActiveTab,
+  onTabChange,
+}: TabLayoutProps) {
+  const [internalActiveTab, setInternalActiveTab] = useState('gemeinsam');
+
+  // Use external state if provided, otherwise use internal state
+  const activeTab =
+    externalActiveTab !== undefined ? externalActiveTab : internalActiveTab;
+
+  const handleTabClick = (tabId: string) => {
+    if (onTabChange) {
+      // If external handler is provided, use it
+      onTabChange(tabId);
+    } else {
+      // Otherwise use internal state
+      setInternalActiveTab(tabId);
+    }
+  };
 
   return (
     <div className='bg-gray-50'>
@@ -31,7 +52,7 @@ export default function TabLayout({ gemeinsam, privat }: TabLayoutProps) {
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => handleTabClick(tab.id)}
                 className={`relative flex-1 flex items-center justify-center px-4 py-3 rounded-md font-medium text-base transition-colors duration-200 cursor-pointer ${
                   activeTab === tab.id
                     ? 'text-blue-600 bg-blue-50'
@@ -63,7 +84,8 @@ export default function TabLayout({ gemeinsam, privat }: TabLayoutProps) {
           key={activeTab}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.2 }}
         >
           {activeTab === 'gemeinsam' ? gemeinsam : privat}
         </motion.div>

@@ -6,6 +6,8 @@ import { formatCurrencyFixed } from '@/lib/utils';
 
 interface GirokontoSectionProps {
   results: CalculationResults;
+  onPascalClick?: () => void;
+  onCaroClick?: () => void;
 }
 
 // Modern Amount Card Component
@@ -15,12 +17,14 @@ const AmountCard = ({
   description,
   color,
   icon,
+  onClick,
 }: {
   name: string;
   amount: number;
   description: string;
   color: 'blue' | 'green';
   icon: string;
+  onClick?: () => void;
 }) => {
   const colorClasses = {
     blue: {
@@ -45,7 +49,14 @@ const AmountCard = ({
 
   return (
     <div
-      className={`${classes.container} border-2 rounded-xl p-4 sm:p-6 transition-all duration-300 hover:shadow-lg ${classes.glow} transform hover:scale-105`}
+      className={`${
+        classes.container
+      } border-2 rounded-xl p-4 sm:p-6 transition-all duration-300 hover:shadow-lg ${
+        classes.glow
+      } transform hover:scale-105 ${onClick ? 'cursor-pointer' : ''}`}
+      onClick={() => {
+        onClick?.();
+      }}
     >
       {/* Header */}
       <div className='flex items-center gap-2 mb-3'>
@@ -72,14 +83,22 @@ const AmountCard = ({
       {/* Progress Indicator - Optional visual enhancement */}
       <div className='mt-4 pt-4 border-t border-gray-200'>
         <div className='text-xs text-gray-500 text-center'>
-          💳 Verfügbares Budget
+          {onClick ? (
+            <>🔗 Klicken für Private Ausgaben</>
+          ) : (
+            <>💳 Verfügbares Budget</>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default function GirokontoSection({ results }: GirokontoSectionProps) {
+export default function GirokontoSection({
+  results,
+  onPascalClick,
+  onCaroClick,
+}: GirokontoSectionProps) {
   const [sectionExpanded, setSectionExpanded] = useState(true);
 
   const totalAmount = results.verbleibt_p1 + results.verbleibt_p2;
@@ -161,6 +180,7 @@ export default function GirokontoSection({ results }: GirokontoSectionProps) {
                 description='zur freien Verfügung'
                 color='blue'
                 icon='👨‍💼'
+                onClick={onPascalClick}
               />
               <AmountCard
                 name='Caro'
@@ -168,6 +188,7 @@ export default function GirokontoSection({ results }: GirokontoSectionProps) {
                 description='zur freien Verfügung'
                 color='green'
                 icon='👩‍💼'
+                onClick={onCaroClick}
               />
             </div>
 

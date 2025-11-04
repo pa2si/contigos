@@ -18,6 +18,8 @@ interface PrivateExpensesProps {
     betrag: string;
     person: Partner;
   };
+  isExpanded?: boolean;
+  setIsExpanded?: (expanded: boolean) => void;
   onStartAddPrivateExpense: () => void;
   onStartEditPrivateExpense: (expense: PrivateExpense) => void;
   onUpdatePrivateExpenseForm: (
@@ -38,6 +40,8 @@ export default function PrivateExpenses({
   showAddPrivateExpense,
   editingPrivateExpense,
   privateExpenseForm,
+  isExpanded,
+  setIsExpanded,
   onStartAddPrivateExpense,
   onStartEditPrivateExpense,
   onUpdatePrivateExpenseForm,
@@ -46,7 +50,12 @@ export default function PrivateExpenses({
   onDeletePrivateExpense,
   isPrivateExpenseFormValid,
 }: PrivateExpensesProps) {
-  const [privateExpensesExpanded, setPrivateExpensesExpanded] = useState(false);
+  const [internalExpanded, setInternalExpanded] = useState(false);
+
+  // Use external state if provided, otherwise use internal state
+  const privateExpensesExpanded =
+    isExpanded !== undefined ? isExpanded : internalExpanded;
+  const setPrivateExpensesExpanded = setIsExpanded || setInternalExpanded;
 
   return (
     <div className='bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-lg border border-gray-100 mb-6 overflow-hidden'>
