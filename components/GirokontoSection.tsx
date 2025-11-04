@@ -99,7 +99,7 @@ export default function GirokontoSection({
   onPascalClick,
   onCaroClick,
 }: GirokontoSectionProps) {
-  const [sectionExpanded, setSectionExpanded] = useState(true);
+  const [sectionExpanded, setSectionExpanded] = useState(false);
 
   const totalAmount = results.verbleibt_p1 + results.verbleibt_p2;
 

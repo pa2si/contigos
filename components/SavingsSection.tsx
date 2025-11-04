@@ -91,7 +91,7 @@ const SavingsCard = ({
 };
 
 export default function SavingsSection({ results }: SavingsSectionProps) {
-  const [savingsExpanded, setSavingsExpanded] = useState(true);
+  const [savingsExpanded, setSavingsExpanded] = useState(false);
 
   const monthlySavings =
     results.neues_tagesgeldkonto - results.aktuelles_tagesgeldkonto;

@@ -114,7 +114,7 @@ export default function ExpenseManagement({
   onDeleteExpense,
   isExpenseFormValid,
 }: ExpenseManagementProps) {
-  const [expensesExpanded, setExpensesExpanded] = useState(true);
+  const [expensesExpanded, setExpensesExpanded] = useState(false);
 
   // Calculate total expenses (dynamic + fixed from settings)
   const dynamicExpensesTotal = expenses.reduce(
