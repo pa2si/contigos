@@ -137,6 +137,10 @@ export function calculateFinancialResults(
     verbleibt_p2,
     aktuelles_tagesgeldkonto,
     neues_tagesgeldkonto,
+    // Individual breakdown components
+    comida_betrag,
+    ahorros_betrag,
+    gk_dyn_expenses,
   };
 }
 
@@ -164,6 +168,9 @@ function createEmptyResults(): CalculationResults {
     verbleibt_p2: 0,
     aktuelles_tagesgeldkonto: 0,
     neues_tagesgeldkonto: 0,
+    comida_betrag: 0,
+    ahorros_betrag: 0,
+    gk_dyn_expenses: 0,
   };
 }
 

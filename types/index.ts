@@ -115,6 +115,11 @@ export interface CalculationResults {
   // Savings calculations
   aktuelles_tagesgeldkonto: number;
   neues_tagesgeldkonto: number;
+
+  // Individual breakdown components
+  comida_betrag: number;
+  ahorros_betrag: number;
+  gk_dyn_expenses: number;
 }
 
 // Export enums for convenience

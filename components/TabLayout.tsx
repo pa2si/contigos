@@ -32,7 +32,7 @@ export default function TabLayout({ gemeinsam, privat }: TabLayoutProps) {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative flex-1 flex items-center justify-center px-4 py-3 rounded-md font-medium text-sm transition-colors duration-200 cursor-pointer ${
+                className={`relative flex-1 flex items-center justify-center px-4 py-3 rounded-md font-medium text-base transition-colors duration-200 cursor-pointer ${
                   activeTab === tab.id
                     ? 'text-blue-600 bg-blue-50'
                     : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'

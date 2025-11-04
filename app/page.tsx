@@ -24,7 +24,7 @@ import { ApiService } from '@/lib/api';
 // Import our new components
 import Settings from '@/components/Settings';
 import IncomeManagement from '@/components/IncomeManagement';
-import ControlSection from '@/components/ControlSection';
+
 import Summary from '@/components/Summary';
 import ExpenseManagement from '@/components/ExpenseManagement';
 import ConfirmationModal from '@/components/ConfirmationModal';
@@ -337,10 +337,10 @@ export default function HomePage() {
               </Settings>
 
               {/* Summary - Action and Free Money */}
-              <Summary results={results} />
+              <Summary results={results} settings={settings} />
 
-              {/* Control Section */}
-              <ControlSection settings={settings} results={results} />
+              {/* Control Section - Now integrated into ActionSection */}
+              {/* <ControlSection settings={settings} results={results} /> */}
 
               {/* Expense Management */}
               <ExpenseManagement
@@ -377,7 +377,13 @@ export default function HomePage() {
               editingPrivateExpense={editingPrivateExpense}
               privateExpenseForm={privateExpenseForm}
               onStartAddPrivateExpense={() => setShowAddPrivateExpense(true)}
-              onStartEditPrivateExpense={setEditingPrivateExpense}
+              onStartEditPrivateExpense={(expense) => {
+                setEditingPrivateExpense(expense);
+                updatePrivateExpenseForm('beschreibung', expense.beschreibung);
+                updatePrivateExpenseForm('betrag', expense.betrag.toString());
+                updatePrivateExpenseForm('person', expense.person);
+                setShowAddPrivateExpense(true);
+              }}
               onUpdatePrivateExpenseForm={updatePrivateExpenseForm}
               onSavePrivateExpense={async () => {
                 try {
