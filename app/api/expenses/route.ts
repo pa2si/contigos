@@ -25,7 +25,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { beschreibung, betrag, bezahlt_von } = body;
 
-    // Validate input
+    // Enhanced input validation and sanitization
+
+    // Validate and sanitize description
     if (!beschreibung || typeof beschreibung !== 'string') {
       return NextResponse.json(
         { error: 'Description is required and must be a string' },
@@ -33,14 +35,36 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (typeof betrag !== 'number' || betrag <= 0) {
+    const sanitizedBeschreibung = beschreibung
+      .trim()
+      .replace(/[<>]/g, '') // Remove potential HTML tags
+      .slice(0, 100); // Limit length
+
+    if (sanitizedBeschreibung.length === 0) {
       return NextResponse.json(
-        { error: 'Amount must be a positive number' },
+        { error: 'Description cannot be empty' },
         { status: 400 }
       );
     }
 
-    if (!Object.values(Payer).includes(bezahlt_von)) {
+    // Validate amount with strict bounds
+    if (
+      typeof betrag !== 'number' ||
+      betrag <= 0 ||
+      betrag > 1000000 ||
+      !isFinite(betrag)
+    ) {
+      return NextResponse.json(
+        {
+          error: 'Amount must be a positive number between 0.01 and 1,000,000',
+        },
+        { status: 400 }
+      );
+    }
+
+    // Validate payer enum with explicit allowlist
+    const validPayers: Payer[] = ['Partner1', 'Partner2', 'Gemeinschaftskonto'];
+    if (!validPayers.includes(bezahlt_von)) {
       return NextResponse.json(
         {
           error:
@@ -52,8 +76,8 @@ export async function POST(request: NextRequest) {
 
     const expense = await prisma.expense.create({
       data: {
-        beschreibung,
-        betrag,
+        beschreibung: sanitizedBeschreibung,
+        betrag: Math.round(betrag * 100) / 100, // Round to 2 decimal places
         bezahlt_von,
       },
     });

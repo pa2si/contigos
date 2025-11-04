@@ -82,35 +82,77 @@ export function parseNumber(value: string | number): number {
 }
 
 /**
- * Validation helper for expense form
+ * Enhanced validation helper for expense form with sanitization
  */
 export function validateExpenseForm(form: {
   beschreibung: string;
   betrag: string;
   bezahlt_von: Payer;
 }): boolean {
-  return Boolean(
-    form.beschreibung.trim() &&
-      form.betrag &&
-      !isNaN(parseFloat(form.betrag)) &&
-      parseFloat(form.betrag) > 0
-  );
+  try {
+    // Validate description
+    const beschreibung = form.beschreibung.trim();
+    if (
+      !beschreibung ||
+      beschreibung.length === 0 ||
+      beschreibung.length > 100
+    ) {
+      return false;
+    }
+
+    // Validate amount
+    const betrag = parseFloat(form.betrag);
+    if (isNaN(betrag) || !isFinite(betrag) || betrag <= 0 || betrag > 1000000) {
+      return false;
+    }
+
+    // Validate payer enum
+    const validPayers: Payer[] = ['Partner1', 'Partner2', 'Gemeinschaftskonto'];
+    if (!validPayers.includes(form.bezahlt_von)) {
+      return false;
+    }
+
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /**
- * Validation helper for income form
+ * Enhanced validation helper for income form with sanitization
  */
 export function validateIncomeForm(form: {
   beschreibung: string;
   betrag: string;
   quelle: IncomeSource;
 }): boolean {
-  return Boolean(
-    form.beschreibung.trim() &&
-      form.betrag &&
-      !isNaN(parseFloat(form.betrag)) &&
-      parseFloat(form.betrag) > 0
-  );
+  try {
+    // Validate description
+    const beschreibung = form.beschreibung.trim();
+    if (
+      !beschreibung ||
+      beschreibung.length === 0 ||
+      beschreibung.length > 100
+    ) {
+      return false;
+    }
+
+    // Validate amount
+    const betrag = parseFloat(form.betrag);
+    if (isNaN(betrag) || !isFinite(betrag) || betrag <= 0 || betrag > 1000000) {
+      return false;
+    }
+
+    // Validate source enum
+    const validSources: IncomeSource[] = ['Partner1', 'Partner2'];
+    if (!validSources.includes(form.quelle)) {
+      return false;
+    }
+
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /**

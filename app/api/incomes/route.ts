@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import {
+  sanitizeBeschreibung,
+  sanitizeBetrag,
+  validateEnum,
+} from '@/lib/sanitization';
 
 // GET /api/incomes - Fetch all income positions
 export async function GET() {
@@ -27,33 +32,36 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { beschreibung, betrag, quelle } = body;
 
-    // Validate input
-    if (!beschreibung || !beschreibung.trim()) {
-      return NextResponse.json(
-        { error: 'Beschreibung is required' },
-        { status: 400 }
-      );
-    }
+    // Enhanced validation with sanitization
+    let sanitizedBeschreibung: string;
+    let sanitizedBetrag: number;
+    let validatedQuelle: string;
 
-    if (typeof betrag !== 'number' || betrag <= 0) {
-      return NextResponse.json(
-        { error: 'Valid betrag is required' },
-        { status: 400 }
+    try {
+      sanitizedBeschreibung = sanitizeBeschreibung(beschreibung);
+      sanitizedBetrag = sanitizeBetrag(betrag);
+      validatedQuelle = validateEnum(
+        quelle,
+        ['Partner1', 'Partner2'],
+        'quelle'
       );
-    }
-
-    if (!quelle || !['Partner1', 'Partner2'].includes(quelle)) {
+    } catch (validationError) {
       return NextResponse.json(
-        { error: 'Valid quelle is required' },
+        {
+          error:
+            validationError instanceof Error
+              ? validationError.message
+              : 'Validation failed',
+        },
         { status: 400 }
       );
     }
 
     const income = await prisma.income.create({
       data: {
-        beschreibung: beschreibung.trim(),
-        betrag: parseFloat(betrag.toString()),
-        quelle,
+        beschreibung: sanitizedBeschreibung,
+        betrag: Math.round(sanitizedBetrag * 100) / 100, // Round to 2 decimal places
+        quelle: validatedQuelle as 'Partner1' | 'Partner2',
       },
     });
 
