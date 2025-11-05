@@ -1,7 +1,7 @@
 'use client';
 
 import { CalculationResults, Settings } from '@/types';
-import ActionSection from './ActionSection';
+import ControlSection from './ControlSection';
 import GirokontoSection from './GirokontoSection';
 import SavingsSection from './SavingsSection';
 
@@ -18,8 +18,8 @@ export default function Summary({
 }: SummaryProps) {
   return (
     <>
-      {/* ACTION SECTION */}
-      <ActionSection results={results} settings={settings} />
+      {/* CONTROL SECTION */}
+      <ControlSection results={results} settings={settings} />
 
       {/* GIROKONTO SECTION */}
       <GirokontoSection

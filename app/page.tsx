@@ -354,8 +354,7 @@ export default function HomePage() {
                 onNavigateToPrivateExpenses={handleNavigateToPrivateExpenses}
               />
 
-              {/* Control Section - Now integrated into ActionSection */}
-              {/* <ControlSection settings={settings} results={results} /> */}
+
 
               {/* Expense Management */}
               <ExpenseManagement
