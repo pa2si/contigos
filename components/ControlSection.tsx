@@ -129,7 +129,7 @@ export default function ControlSection({
               <h3 className='font-semibold text-lg mb-2'>
                 Pascal überweist auf GK:
               </h3>
-              <div className='text-4xl font-bold mb-1'>
+              <div className='text-4xl xl:text-[2.4rem] font-bold mb-1'>
                 {formatCurrencyFixed(results.finale_überweisung_p1)}
               </div>
               <div className='text-sm opacity-90'>
@@ -140,7 +140,7 @@ export default function ControlSection({
               <h3 className='font-semibold text-lg mb-2'>
                 Caro überweist auf GK:
               </h3>
-              <div className='text-4xl font-bold mb-1'>
+              <div className='text-4xl xl:text-[2.4rem]  font-bold mb-1'>
                 {formatCurrencyFixed(results.finale_überweisung_p2)}
               </div>
               <div className='text-sm opacity-90'>

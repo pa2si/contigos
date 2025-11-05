@@ -52,48 +52,50 @@ const ExpenseRow = ({
 }) => {
   return (
     <div
-      className={`flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:shadow-sm transition-all duration-200 ${
+      className={`flex items-center justify-between p-2 sm:p-3 bg-white border border-gray-200 rounded-lg hover:shadow-sm transition-all duration-200 ${
         !isFixed ? 'hover:border-gray-300' : ''
       }`}
     >
       {/* Left Side - Icon and Title */}
-      <div className='flex items-center gap-3 flex-1'>
+      <div className='flex items-center gap-2 flex-1 min-w-0'>
         <div
-          className={`p-2 rounded-lg ${
+          className={`p-1.5 rounded-lg shrink-0 ${
             type === 'fixed' ? 'bg-blue-100' : 'bg-gray-100'
           }`}
         >
-          <span className='text-lg'>{type === 'fixed' ? '📌' : '🛒'}</span>
+          <span className='text-sm'>{type === 'fixed' ? '📌' : '🛒'}</span>
         </div>
-        <div>
+        <div className='min-w-0 flex-1'>
           <div className='flex items-center gap-2'>
-            <h3 className='font-semibold text-gray-900'>{title}</h3>
+            <h3 className='font-medium text-gray-900 text-sm truncate'>
+              {title}
+            </h3>
             {isFixed && (
-              <span className='bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium'>
+              <span className='bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded-full text-xs font-medium shrink-0'>
                 Fix
               </span>
             )}
           </div>
-          <p className='text-sm text-gray-500'>{description}</p>
+          <p className='text-xs text-gray-500 truncate'>{description}</p>
         </div>
       </div>
 
       {/* Center - Amount */}
-      <div className='text-right mx-6'>
-        <div className='text-xl font-bold text-gray-900'>
+      <div className='text-right mx-3 shrink-0'>
+        <div className='text-base font-bold text-gray-900 tabular-nums'>
           {formatCurrencyFixed(amount)}
         </div>
       </div>
 
       {/* Right Side - Actions */}
-      <div className='flex items-center'>
+      <div className='flex items-center shrink-0'>
         {!isFixed ? (
           <div className='flex gap-1'>
             <EditButton onClick={onEdit!} size='sm' variant='primary' />
             <DeleteButton onClick={onDelete!} size='sm' variant='danger' />
           </div>
         ) : (
-          <div className='w-16'></div> // Placeholder for consistent alignment
+          <div className='w-12'></div> // Placeholder for consistent alignment
         )}
       </div>
     </div>
@@ -225,7 +227,7 @@ export default function ExpenseManagement({
                   Konfiguriert in Einstellungen
                 </div>
               </div>
-              <div className='space-y-3'>
+              <div className='space-y-2'>
                 <ExpenseRow
                   title='Comida (Lebensmittel)'
                   amount={settings.comida_betrag}
@@ -359,7 +361,7 @@ export default function ExpenseManagement({
                   </p>
                 </div>
               ) : (
-                <div className='space-y-3'>
+                <div className='space-y-2'>
                   {expenses.map((expense) => (
                     <ExpenseRow
                       key={expense.id}
