@@ -49,10 +49,10 @@ export default function IncomeModal({
       onClose={onClose}
       title={
         <>
-          <span className='text-xl mr-2'>
-            {editingIncome ? '✏️' : '💼'}
-          </span>
-          {editingIncome ? 'Einkommen bearbeiten' : 'Neues Einkommen hinzufügen'}
+          <span className='text-xl mr-2'>{editingIncome ? '✏️' : '💼'}</span>
+          {editingIncome
+            ? 'Einkommen bearbeiten'
+            : 'Neues Einkommen hinzufügen'}
         </>
       }
       size='lg'
@@ -124,7 +124,7 @@ export default function IncomeModal({
             <span>{editingIncome ? '💾' : '💼'}</span>
             {editingIncome ? 'Änderungen speichern' : 'Einkommen hinzufügen'}
           </button>
-          
+
           <button
             onClick={onClose}
             className='flex-1 sm:flex-none px-6 py-3 bg-gradient-to-r from-gray-400 to-gray-500 text-white rounded-xl font-medium hover:from-gray-500 hover:to-gray-600 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 flex items-center justify-center gap-2 text-sm sm:text-base'

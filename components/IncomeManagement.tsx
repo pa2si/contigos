@@ -165,8 +165,6 @@ export default function IncomeManagement({
         </button>
       </div>
 
-
-
       {/* Simple Income Sections */}
       <div className='space-y-8'>
         {/* Pascal's Income Section */}
