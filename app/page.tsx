@@ -354,8 +354,6 @@ export default function HomePage() {
                 onNavigateToPrivateExpenses={handleNavigateToPrivateExpenses}
               />
 
-
-
               {/* Expense Management */}
               <ExpenseManagement
                 expenses={expenses}
