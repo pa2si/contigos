@@ -9,12 +9,12 @@ interface PrivateExpenseModalProps {
   editingExpense?: PrivateExpense | null;
   expenseForm: {
     beschreibung: string;
-    betrag: number;
+    betrag: string;
     person: Partner;
   };
   onUpdateExpenseForm: (
     field: 'beschreibung' | 'betrag' | 'person',
-    value: string | number | Partner
+    value: string | Partner
   ) => void;
   onSaveExpense: () => Promise<void>;
   isExpenseFormValid: () => boolean;
@@ -29,7 +29,7 @@ export default function PrivateExpenseModal({
   onSaveExpense,
   isExpenseFormValid,
 }: PrivateExpenseModalProps) {
-  const handleUpdateForm = (field: string, value: string | number | Partner) => {
+  const handleUpdateForm = (field: string, value: string | Partner) => {
     onUpdateExpenseForm(field as 'beschreibung' | 'betrag' | 'person', value);
   };
 
@@ -41,7 +41,7 @@ export default function PrivateExpenseModal({
       isEditing={!!editingExpense}
       formData={{
         beschreibung: expenseForm.beschreibung,
-        betrag: expenseForm.betrag.toString(),
+        betrag: expenseForm.betrag,
         thirdField: expenseForm.person,
       }}
       onUpdateForm={handleUpdateForm}

@@ -304,7 +304,7 @@ export default function ExpenseManagement({
 
               {/* Summary Row */}
               {expenses.length > 0 && (
-                <div className='mt-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200'>
+                <div className='mt-6 p-4 bg-gradient-to-r from-red-50 to-rose-50 rounded-lg border border-red-200'>
                   <div className='flex items-center justify-between'>
                     <div className='flex items-center gap-2'>
                       <span className='text-lg'>📊</span>
@@ -313,10 +313,10 @@ export default function ExpenseManagement({
                       </span>
                     </div>
                     <div className='text-right'>
-                      <div className='text-2xl font-bold text-blue-600'>
+                      <div className='text-2xl font-bold text-red-600'>
                         {formatCurrency(totalExpenses)}
                       </div>
-                      <div className='text-sm text-blue-500'>
+                      <div className='text-sm text-red-500'>
                         {formatCurrency(
                           settings.comida_betrag +
                             settings.ahorros_betrag +
