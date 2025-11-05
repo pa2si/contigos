@@ -121,6 +121,7 @@ export interface CalculationResults {
   // Individual breakdown components
   comida_betrag: number;
   ahorros_betrag: number;
+  investieren: number;
   gk_dyn_expenses: number;
 }
 

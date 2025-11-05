@@ -33,6 +33,7 @@ export function calculateFinancialResults(
   // Fixed costs from settings (treated as shared account expenses)
   const comida_betrag = Number(settings.comida_betrag) || 0;
   const ahorros_betrag = Number(settings.ahorros_betrag) || 0;
+  const investieren = Number(settings.investieren) || 0;
   const tagesgeldkonto_betrag = Number(settings.tagesgeldkonto_betrag) || 0;
 
   // Step 1: Total income
@@ -52,7 +53,8 @@ export function calculateFinancialResults(
     (sum, exp) => sum + (Number(exp.betrag) || 0),
     0
   );
-  const gesamtkosten = comida_betrag + ahorros_betrag + sum_dyn_expenses;
+  const gesamtkosten =
+    comida_betrag + ahorros_betrag + investieren + sum_dyn_expenses;
 
   // Step 5 & 6: Total cost share per partner
   const p1_gesamtanteil_kosten = gesamtkosten * p1_anteil_ratio;
@@ -72,7 +74,8 @@ export function calculateFinancialResults(
     .filter((exp) => exp.bezahlt_von === 'Gemeinschaftskonto')
     .reduce((sum, exp) => sum + (Number(exp.betrag) || 0), 0);
 
-  const bedarf_gk = comida_betrag + ahorros_betrag + gk_dyn_expenses;
+  const bedarf_gk =
+    comida_betrag + ahorros_betrag + investieren + gk_dyn_expenses;
 
   // Step 10 & 11: Previous month remainder allocation
   const p1_anteil_restgeld = restgeld_vormonat * p1_anteil_ratio;
@@ -140,6 +143,7 @@ export function calculateFinancialResults(
     // Individual breakdown components
     comida_betrag,
     ahorros_betrag,
+    investieren,
     gk_dyn_expenses,
   };
 }
@@ -170,6 +174,7 @@ function createEmptyResults(): CalculationResults {
     neues_tagesgeldkonto: 0,
     comida_betrag: 0,
     ahorros_betrag: 0,
+    investieren: 0,
     gk_dyn_expenses: 0,
   };
 }

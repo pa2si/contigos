@@ -125,7 +125,10 @@ export default function ExpenseManagement({
     0
   );
   const totalExpenses =
-    dynamicExpensesTotal + settings.comida_betrag + settings.ahorros_betrag;
+    dynamicExpensesTotal +
+    settings.comida_betrag +
+    settings.ahorros_betrag +
+    settings.investieren;
 
   return (
     <div className='bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-lg border border-gray-100 mb-6 overflow-hidden'>
@@ -243,6 +246,13 @@ export default function ExpenseManagement({
                   type='fixed'
                   isFixed={true}
                 />
+                <ExpenseRow
+                  title='Investieren'
+                  amount={settings.investieren}
+                  description='Monatliches Investment Budget'
+                  type='fixed'
+                  isFixed={true}
+                />
               </div>
             </div>
 
@@ -308,7 +318,9 @@ export default function ExpenseManagement({
                       </div>
                       <div className='text-sm text-blue-500'>
                         {formatCurrency(
-                          settings.comida_betrag + settings.ahorros_betrag
+                          settings.comida_betrag +
+                            settings.ahorros_betrag +
+                            settings.investieren
                         )}{' '}
                         budget + {formatCurrency(dynamicExpensesTotal)} geteilt
                       </div>
