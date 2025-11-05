@@ -36,6 +36,7 @@ export function useSettingsOperations(
         comida_betrag: settings.comida_betrag,
         ahorros_betrag: settings.ahorros_betrag,
         tagesgeldkonto_betrag: settings.tagesgeldkonto_betrag,
+        investieren: settings.investieren,
       });
     } catch (error) {
       console.error('Error saving settings:', error);
@@ -418,6 +419,7 @@ export function useAppData() {
     comida_betrag: 0,
     ahorros_betrag: 0,
     tagesgeldkonto_betrag: 0,
+    investieren: 0,
     createdAt: new Date(),
     updatedAt: new Date(),
   });

@@ -12,6 +12,7 @@ export interface Settings {
   comida_betrag: number;
   ahorros_betrag: number;
   tagesgeldkonto_betrag: number;
+  investieren: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -51,6 +52,7 @@ export interface SettingsUpdateRequest {
   comida_betrag: number;
   ahorros_betrag: number;
   tagesgeldkonto_betrag: number;
+  investieren: number;
 }
 
 export interface ExpenseCreateRequest {

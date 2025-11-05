@@ -17,6 +17,7 @@ export async function GET() {
           comida_betrag: 1200,
           ahorros_betrag: 0,
           tagesgeldkonto_betrag: 0,
+          investieren: 0,
         },
       });
     }
@@ -42,6 +43,7 @@ export async function PUT(request: NextRequest) {
       comida_betrag,
       ahorros_betrag,
       tagesgeldkonto_betrag,
+      investieren,
     } = body;
 
     // Validate input
@@ -51,7 +53,8 @@ export async function PUT(request: NextRequest) {
       typeof restgeld_vormonat !== 'number' ||
       typeof comida_betrag !== 'number' ||
       typeof ahorros_betrag !== 'number' ||
-      typeof tagesgeldkonto_betrag !== 'number'
+      typeof tagesgeldkonto_betrag !== 'number' ||
+      typeof investieren !== 'number'
     ) {
       return NextResponse.json(
         { error: 'Invalid input: all fields must be numbers' },
@@ -69,6 +72,7 @@ export async function PUT(request: NextRequest) {
         comida_betrag,
         ahorros_betrag,
         tagesgeldkonto_betrag,
+        investieren,
       },
       create: {
         id: 1,
@@ -78,6 +82,7 @@ export async function PUT(request: NextRequest) {
         comida_betrag,
         ahorros_betrag,
         tagesgeldkonto_betrag,
+        investieren,
       },
     });
 

@@ -35,6 +35,7 @@ export class ApiService {
       comida_betrag: Number(data.comida_betrag) || 0,
       ahorros_betrag: Number(data.ahorros_betrag) || 0,
       tagesgeldkonto_betrag: Number(data.tagesgeldkonto_betrag) || 0,
+      investieren: Number(data.investieren) || 0,
     };
   }
 
@@ -51,6 +52,7 @@ export class ApiService {
       comida_betrag: Number(settings.comida_betrag) || 0,
       ahorros_betrag: Number(settings.ahorros_betrag) || 0,
       tagesgeldkonto_betrag: Number(settings.tagesgeldkonto_betrag) || 0,
+      investieren: Number(settings.investieren) || 0,
     };
 
     const response = await fetch('/api/settings', {

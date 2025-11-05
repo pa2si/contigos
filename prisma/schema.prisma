@@ -18,6 +18,7 @@ model Settings {
   ahorros_betrag       Float    @default(0)
   comida_betrag        Float    @default(1200)
   tagesgeldkonto_betrag Float   @default(0)
+  investieren          Float    @default(0)
 
   @@map("settings")
 }
