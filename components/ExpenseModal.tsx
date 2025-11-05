@@ -1,7 +1,7 @@
 'use client';
 
 import { Expense, Payer } from '@/types';
-import Modal from '@/components/ui/Modal';
+import FormModal from '@/components/FormModal';
 
 interface ExpenseModalProps {
   isOpen: boolean;
@@ -29,111 +29,24 @@ export default function ExpenseModal({
   onSaveExpense,
   isExpenseFormValid,
 }: ExpenseModalProps) {
-  const handleSave = async () => {
-    if (isExpenseFormValid()) {
-      await onSaveExpense();
-      onClose();
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && e.ctrlKey && isExpenseFormValid()) {
-      handleSave();
-    }
+  const handleUpdateForm = (field: string, value: string | Payer) => {
+    onUpdateExpenseForm(field as 'beschreibung' | 'betrag' | 'bezahlt_von', value);
   };
 
   return (
-    <Modal
+    <FormModal
+      type="expense"
       isOpen={isOpen}
       onClose={onClose}
-      title={
-        <>
-          <span className='text-xl mr-2'>{editingExpense ? '✏️' : '➕'}</span>
-          {editingExpense ? 'Ausgabe bearbeiten' : 'Neue Ausgabe hinzufügen'}
-        </>
-      }
-      size='lg'
-    >
-      <div className='p-4 sm:p-6' onKeyDown={handleKeyDown}>
-        {/* Form Fields */}
-        <div className='space-y-4 sm:space-y-6'>
-          {/* Description Field */}
-          <div>
-            <label className='block text-sm font-medium text-gray-700 mb-2'>
-              📝 Beschreibung
-            </label>
-            <input
-              type='text'
-              value={expenseForm.beschreibung}
-              onChange={(e) =>
-                onUpdateExpenseForm('beschreibung', e.target.value)
-              }
-              placeholder='z.B. Einkauf, Miete, Restaurantbesuch...'
-              className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm sm:text-base'
-              autoFocus
-            />
-          </div>
-
-          {/* Amount and Payer Grid */}
-          <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6'>
-            {/* Amount Field */}
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>
-                💰 Betrag (€)
-              </label>
-              <input
-                type='number'
-                step='0.01'
-                min='0'
-                value={expenseForm.betrag}
-                onChange={(e) => onUpdateExpenseForm('betrag', e.target.value)}
-                placeholder='0.00'
-                className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm sm:text-base'
-              />
-            </div>
-
-            {/* Payer Field */}
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>
-                👤 Bezahlt von
-              </label>
-              <select
-                value={expenseForm.bezahlt_von}
-                onChange={(e) =>
-                  onUpdateExpenseForm('bezahlt_von', e.target.value as Payer)
-                }
-                className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm sm:text-base'
-              >
-                <option value='Partner1'>👨‍💼 Pascal</option>
-                <option value='Partner2'>👩‍💼 Caro</option>
-                <option value='Gemeinschaftskonto'>
-                  🏦 Gemeinschaftskonto
-                </option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className='flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8 pt-6 border-t border-gray-200'>
-          <button
-            onClick={handleSave}
-            disabled={!isExpenseFormValid()}
-            className='flex-1 sm:flex-none px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-medium hover:from-green-600 hover:to-emerald-700 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 flex items-center justify-center gap-2 text-sm sm:text-base'
-          >
-            <span>{editingExpense ? '💾' : '➕'}</span>
-            {editingExpense ? 'Änderungen speichern' : 'Ausgabe hinzufügen'}
-          </button>
-
-          <button
-            onClick={onClose}
-            className='flex-1 sm:flex-none px-6 py-3 bg-gradient-to-r from-gray-400 to-gray-500 text-white rounded-xl font-medium hover:from-gray-500 hover:to-gray-600 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 flex items-center justify-center gap-2 text-sm sm:text-base'
-          >
-            <span>❌</span>
-            Abbrechen
-          </button>
-        </div>
-      </div>
-    </Modal>
+      isEditing={!!editingExpense}
+      formData={{
+        beschreibung: expenseForm.beschreibung,
+        betrag: expenseForm.betrag,
+        thirdField: expenseForm.bezahlt_von,
+      }}
+      onUpdateForm={handleUpdateForm}
+      onSave={onSaveExpense}
+      isFormValid={isExpenseFormValid}
+    />
   );
 }
