@@ -9,6 +9,7 @@ import {
 } from '@/lib/utils';
 import EditButton from '@/components/ui/EditButton';
 import DeleteButton from '@/components/ui/DeleteButton';
+import ExpenseModal from '@/components/ExpenseModal';
 
 interface ExpenseManagementProps {
   expenses: Expense[];
@@ -245,93 +246,6 @@ export default function ExpenseManagement({
               </div>
             </div>
 
-            {/* Modern Add/Edit Form */}
-            {showAddExpense && (
-              <div className='mb-6 bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm'>
-                <div className='p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100'>
-                  <h3 className='text-lg font-semibold text-gray-900 flex items-center gap-2'>
-                    <span className='text-xl'>
-                      {editingExpense ? '✏️' : '➕'}
-                    </span>
-                    {editingExpense
-                      ? 'Ausgabe bearbeiten'
-                      : 'Neue Ausgabe hinzufügen'}
-                  </h3>
-                </div>
-                <div className='p-4'>
-                  <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mb-4'>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-2'>
-                        📝 Beschreibung
-                      </label>
-                      <input
-                        type='text'
-                        value={expenseForm.beschreibung}
-                        onChange={(e) =>
-                          onUpdateExpenseForm('beschreibung', e.target.value)
-                        }
-                        placeholder='z.B. Einkauf, Miete, etc.'
-                        className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all'
-                      />
-                    </div>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-2'>
-                        💰 Betrag (€)
-                      </label>
-                      <input
-                        type='number'
-                        step='0.01'
-                        value={expenseForm.betrag}
-                        onChange={(e) =>
-                          onUpdateExpenseForm('betrag', e.target.value)
-                        }
-                        placeholder='0.00'
-                        className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all'
-                      />
-                    </div>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-2'>
-                        👤 Bezahlt von
-                      </label>
-                      <select
-                        value={expenseForm.bezahlt_von}
-                        onChange={(e) =>
-                          onUpdateExpenseForm(
-                            'bezahlt_von',
-                            e.target.value as Payer
-                          )
-                        }
-                        className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all'
-                      >
-                        <option value='Partner1'>👨‍💼 Pascal</option>
-                        <option value='Partner2'>👩‍💼 Caro</option>
-                        <option value='Gemeinschaftskonto'>
-                          🏦 Gemeinschaftskonto
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className='flex gap-3'>
-                    <button
-                      onClick={onSaveExpense}
-                      disabled={!isExpenseFormValid()}
-                      className='px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-medium hover:from-green-600 hover:to-emerald-700 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 flex items-center gap-2'
-                    >
-                      <span>{editingExpense ? '💾' : '➕'}</span>
-                      {editingExpense ? 'Speichern' : 'Hinzufügen'}
-                    </button>
-                    <button
-                      onClick={onResetExpenseForm}
-                      className='px-6 py-3 bg-gradient-to-r from-gray-400 to-gray-500 text-white rounded-xl font-medium hover:from-gray-500 hover:to-gray-600 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 flex items-center gap-2'
-                    >
-                      <span>❌</span>
-                      Abbrechen
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
             {/* Dynamic Expenses Section */}
             <div>
               <div className='flex items-center justify-between mb-4'>
@@ -406,6 +320,17 @@ export default function ExpenseManagement({
           </div>
         </div>
       )}
+
+      {/* Expense Modal */}
+      <ExpenseModal
+        isOpen={showAddExpense}
+        onClose={onResetExpenseForm}
+        editingExpense={editingExpense}
+        expenseForm={expenseForm}
+        onUpdateExpenseForm={onUpdateExpenseForm}
+        onSaveExpense={onSaveExpense}
+        isExpenseFormValid={isExpenseFormValid}
+      />
     </div>
   );
 }

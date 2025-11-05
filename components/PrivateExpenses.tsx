@@ -5,6 +5,7 @@ import { PrivateExpense, Partner } from '@/types';
 import { formatCurrencyFixed } from '@/lib/utils';
 import EditButton from '@/components/ui/EditButton';
 import DeleteButton from '@/components/ui/DeleteButton';
+import PrivateExpenseModal from '@/components/PrivateExpenseModal';
 
 interface PrivateExpensesProps {
   pascalExpenses: PrivateExpense[];
@@ -143,106 +144,6 @@ export default function PrivateExpenses({
             </div>
 
             <div className='space-y-6'>
-              {/* Add/Edit Private Expense Form */}
-              {showAddPrivateExpense && (
-                <div
-                  className={`mb-4 p-3 border-2 rounded-lg ${
-                    privateExpenseForm.person === 'Partner1'
-                      ? 'border-blue-200 bg-blue-50'
-                      : 'border-green-200 bg-green-50'
-                  }`}
-                >
-                  <h4 className='text-md font-medium mb-3'>
-                    {editingPrivateExpense
-                      ? 'Private Ausgabe bearbeiten'
-                      : 'Neue private Ausgabe hinzufügen'}
-                  </h4>
-                  <div className='grid grid-cols-1 md:grid-cols-3 gap-3'>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-1'>
-                        Beschreibung
-                      </label>
-                      <input
-                        type='text'
-                        value={privateExpenseForm.beschreibung}
-                        onChange={(e) =>
-                          onUpdatePrivateExpenseForm(
-                            'beschreibung',
-                            e.target.value
-                          )
-                        }
-                        placeholder='z.B. Kleidung, Hobbies, etc.'
-                        className={`w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-sm ${
-                          privateExpenseForm.person === 'Partner1'
-                            ? 'focus:ring-blue-500'
-                            : 'focus:ring-green-500'
-                        }`}
-                      />
-                    </div>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-1'>
-                        Betrag (€)
-                      </label>
-                      <input
-                        type='number'
-                        step='0.01'
-                        value={privateExpenseForm.betrag}
-                        onChange={(e) =>
-                          onUpdatePrivateExpenseForm('betrag', e.target.value)
-                        }
-                        placeholder='0.00'
-                        className={`w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-sm ${
-                          privateExpenseForm.person === 'Partner1'
-                            ? 'focus:ring-blue-500'
-                            : 'focus:ring-green-500'
-                        }`}
-                      />
-                    </div>
-                    <div>
-                      <label className='block text-sm font-medium text-gray-700 mb-1'>
-                        Person
-                      </label>
-                      <select
-                        value={privateExpenseForm.person}
-                        onChange={(e) =>
-                          onUpdatePrivateExpenseForm(
-                            'person',
-                            e.target.value as Partner
-                          )
-                        }
-                        className={`w-full px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-sm ${
-                          privateExpenseForm.person === 'Partner1'
-                            ? 'focus:ring-blue-500'
-                            : 'focus:ring-green-500'
-                        }`}
-                      >
-                        <option value='Partner1'>Pascal</option>
-                        <option value='Partner2'>Caro</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className='flex gap-2 mt-3'>
-                    <button
-                      onClick={onSavePrivateExpense}
-                      disabled={!isPrivateExpenseFormValid()}
-                      className={`px-3 py-1.5 text-white text-sm rounded-md disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors ${
-                        privateExpenseForm.person === 'Partner1'
-                          ? 'bg-blue-600 hover:bg-blue-700'
-                          : 'bg-green-600 hover:bg-green-700'
-                      }`}
-                    >
-                      {editingPrivateExpense ? 'Speichern' : 'Hinzufügen'}
-                    </button>
-                    <button
-                      onClick={onResetPrivateExpenseForm}
-                      className='px-3 py-1.5 bg-gray-500 text-white text-sm rounded-md hover:bg-gray-600 transition-colors'
-                    >
-                      Abbrechen
-                    </button>
-                  </div>
-                </div>
-              )}
-
               {/* Private Expenses Lists */}
               <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                 {/* Pascal's Private Expenses */}
@@ -339,6 +240,17 @@ export default function PrivateExpenses({
           </div>
         </div>
       )}
+
+      {/* Private Expense Modal */}
+      <PrivateExpenseModal
+        isOpen={showAddPrivateExpense}
+        onClose={onResetPrivateExpenseForm}
+        editingExpense={editingPrivateExpense}
+        expenseForm={privateExpenseForm}
+        onUpdateExpenseForm={onUpdatePrivateExpenseForm}
+        onSaveExpense={onSavePrivateExpense}
+        isExpenseFormValid={isPrivateExpenseFormValid}
+      />
     </div>
   );
 }
