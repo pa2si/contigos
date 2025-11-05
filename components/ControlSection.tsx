@@ -47,11 +47,23 @@ const ControlDetails = ({
           <div className='flex justify-between py-1'>
             <span className='text-gray-700'>🏦 Ahorros (Sparen):</span>
             <span className='font-bold text-gray-900 tabular-nums'>
+              {formatCurrencyFixed(results.ahorros_betrag + results.investieren)}
+            </span>
+          </div>
+          <div className='flex justify-between py-1 ml-6'>
+            <span className='text-gray-600 text-sm'>↳ Tagesgeldkonto:</span>
+            <span className='font-medium text-gray-800 tabular-nums text-sm'>
               {formatCurrencyFixed(results.ahorros_betrag)}
             </span>
           </div>
+          <div className='flex justify-between py-1 ml-6'>
+            <span className='text-gray-600 text-sm'>↳ Depot:</span>
+            <span className='font-medium text-gray-800 tabular-nums text-sm'>
+              {formatCurrencyFixed(results.investieren)}
+            </span>
+          </div>
           <div className='flex justify-between py-1'>
-            <span className='text-gray-700'>📝 Dynamische Ausgaben (GK):</span>
+            <span className='text-gray-700'>🧾 Weitere Ausgaben (GK):</span>
             <span className='font-bold text-gray-900 tabular-nums'>
               {formatCurrencyFixed(results.gk_dyn_expenses)}
             </span>
