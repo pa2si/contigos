@@ -23,10 +23,8 @@ const nextConfig: NextConfig = {
     ];
   },
 
-  // Experimental features for security
-  experimental: {
-    serverComponentsExternalPackages: ['prisma'],
-  },
+  // Server external packages for security
+  serverExternalPackages: ['prisma'],
 };
 
 export default nextConfig;

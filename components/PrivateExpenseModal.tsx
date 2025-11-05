@@ -70,7 +70,7 @@ export default function PrivateExpenseModal({
               onChange={(e) =>
                 onUpdateExpenseForm('beschreibung', e.target.value)
               }
-              placeholder='z.B. Kleidung, Hobby, Geschenke, Fitness...'
+              placeholder='z.B. abos, creditos, bvg ...'
               className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-sm sm:text-base'
               autoFocus
             />
