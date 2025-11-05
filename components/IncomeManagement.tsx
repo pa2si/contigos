@@ -1,9 +1,11 @@
 'use client';
 
-import { Income, IncomeSource } from '@/types';
+import { Income } from '@/types';
+import { IncomeSource } from '@prisma/client';
 import { formatCurrencyFixed } from '@/lib/utils';
 import EditButton from '@/components/ui/EditButton';
 import DeleteButton from '@/components/ui/DeleteButton';
+import IncomeModal from '@/components/IncomeModal';
 
 // Clean Income Row Component - Mobile Responsive
 const IncomeRow = ({
@@ -134,8 +136,8 @@ export default function IncomeManagement({
     0
   );
 
-  const isIncomeFormValid = () => {
-    return (
+  const isIncomeFormValid = (): boolean => {
+    return Boolean(
       incomeForm.beschreibung.trim() && incomeForm.betrag && incomeForm.quelle
     );
   };
@@ -163,80 +165,7 @@ export default function IncomeManagement({
         </button>
       </div>
 
-      {/* Simple Add/Edit Form */}
-      {showAddIncome && (
-        <div className='bg-white rounded-lg border border-gray-200 p-4 sm:p-6'>
-          <div className='mb-4'>
-            <h4 className='text-lg font-semibold text-gray-900 flex items-center gap-2'>
-              <span>{editingIncome ? '✏️' : '➕'}</span>
-              {editingIncome
-                ? 'Einkommen bearbeiten'
-                : 'Neues Einkommen hinzufügen'}
-            </h4>
-          </div>
 
-          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6'>
-            <div className='sm:col-span-2 md:col-span-1'>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>
-                📝 Beschreibung
-              </label>
-              <input
-                type='text'
-                value={incomeForm.beschreibung}
-                onChange={(e) =>
-                  onUpdateIncomeForm('beschreibung', e.target.value)
-                }
-                placeholder='z.B. Gehalt, Freelancing, etc.'
-                className='w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base sm:text-sm'
-              />
-            </div>
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>
-                💰 Betrag (€)
-              </label>
-              <input
-                type='number'
-                step='0.01'
-                value={incomeForm.betrag}
-                onChange={(e) => onUpdateIncomeForm('betrag', e.target.value)}
-                placeholder='0.00'
-                className='w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base sm:text-sm'
-              />
-            </div>
-            <div>
-              <label className='block text-sm font-medium text-gray-700 mb-2'>
-                👤 Quelle
-              </label>
-              <select
-                value={incomeForm.quelle}
-                onChange={(e) =>
-                  onUpdateIncomeForm('quelle', e.target.value as IncomeSource)
-                }
-                className='w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base sm:text-sm'
-              >
-                <option value='Partner1'>👨‍💼 Pascal</option>
-                <option value='Partner2'>👩‍💼 Caro</option>
-              </select>
-            </div>
-          </div>
-
-          <div className='flex flex-col sm:flex-row gap-3'>
-            <button
-              onClick={onSaveIncome}
-              disabled={!isIncomeFormValid()}
-              className='w-full sm:w-auto px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium'
-            >
-              {editingIncome ? 'Speichern' : 'Hinzufügen'}
-            </button>
-            <button
-              onClick={onResetIncomeForm}
-              className='w-full sm:w-auto px-6 py-2.5 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-medium'
-            >
-              Abbrechen
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Simple Income Sections */}
       <div className='space-y-8'>
@@ -333,6 +262,17 @@ export default function IncomeManagement({
           </div>
         )}
       </div>
+
+      {/* Income Modal */}
+      <IncomeModal
+        isOpen={showAddIncome}
+        onClose={onResetIncomeForm}
+        editingIncome={editingIncome}
+        incomeForm={incomeForm}
+        onUpdateIncomeForm={onUpdateIncomeForm}
+        onSaveIncome={onSaveIncome}
+        isIncomeFormValid={isIncomeFormValid}
+      />
     </div>
   );
 }
