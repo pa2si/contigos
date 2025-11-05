@@ -19,38 +19,57 @@ const IncomeRow = ({
   onDelete: () => void;
   color?: 'blue' | 'green';
 }) => {
-  const colorClasses =
-    color === 'blue'
-      ? 'bg-blue-50 text-blue-700 border-2 border-blue-200'
-      : 'bg-emerald-50 text-emerald-700 border-2 border-emerald-200';
+  const colorClasses = {
+    blue: {
+      container:
+        'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 hover:border-blue-300',
+      title: 'text-blue-800',
+      amount: 'text-blue-700',
+      amountBg: 'bg-blue-200 text-blue-800',
+      glow: 'hover:shadow-blue-200',
+    },
+    green: {
+      container:
+        'bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200 hover:border-emerald-300',
+      title: 'text-emerald-800',
+      amount: 'text-emerald-700',
+      amountBg: 'bg-emerald-200 text-emerald-800',
+      glow: 'hover:shadow-emerald-200',
+    },
+  };
+
+  const classes = colorClasses[color];
 
   return (
-    <div className='p-3 sm:p-4 bg-white border border-gray-200 rounded-lg hover:shadow-sm hover:border-gray-300 transition-all duration-200'>
+    <div
+      className={`p-3 sm:p-4 ${classes.container} border-2 rounded-lg hover:shadow-lg ${classes.glow} transition-all duration-200`}
+    >
       {/* Mobile Layout - Stacked */}
       <div className='flex flex-col sm:hidden gap-3'>
         {/* Top Row: Icon, Title and Actions */}
-        <div className='flex items-center justify-between'>
-          <div className='flex items-center gap-2 flex-1 min-w-0'>
-            <div className='p-1.5 rounded-lg bg-gray-100 shrink-0'>
+        <div className='flex items-start justify-between mb-3'>
+          <div className='flex items-start gap-2 flex-1 min-w-0'>
+            <div className='p-1.5 rounded-lg bg-white/50 shrink-0'>
               <span className='text-base'>💼</span>
             </div>
             <div className='min-w-0 flex-1'>
-              <h3 className='font-semibold text-gray-900 text-sm truncate'>
+              <h3
+                className={`font-semibold text-sm leading-tight ${classes.title}`}
+              >
                 {income.beschreibung}
               </h3>
-              <p className='text-xs text-gray-500'>Monatlich</p>
             </div>
           </div>
-          <div className='flex gap-1 shrink-0'>
+          <div className='flex gap-1 shrink-0 ml-2'>
             <EditButton onClick={onEdit} />
             <DeleteButton onClick={onDelete} />
           </div>
         </div>
 
-        {/* Bottom Row: Amount */}
+        {/* Full Width Amount Display */}
         <div className='w-full'>
           <div
-            className={`w-full px-3 py-2 rounded-lg font-semibold text-base ${colorClasses}`}
+            className={`w-full px-4 py-3 rounded-lg font-bold text-lg text-center ${classes.amountBg}`}
           >
             {formatCurrencyFixed(income.betrag)}
           </div>
@@ -61,28 +80,23 @@ const IncomeRow = ({
       <div className='hidden sm:flex items-center justify-between'>
         {/* Left Side - Income Details */}
         <div className='flex items-center gap-3 flex-1'>
-          <div className='p-2 rounded-lg bg-gray-100 shrink-0'>
+          <div className='p-2 rounded-lg bg-white/50 shrink-0'>
             <span className='text-lg'>💼</span>
           </div>
-          <div className='min-w-0'>
-            <h3 className='font-semibold text-gray-900'>
+          <div className='min-w-0 flex-1'>
+            <h3 className={`font-semibold text-base mb-2 ${classes.title}`}>
               {income.beschreibung}
             </h3>
-            <p className='text-sm text-gray-500'>Monatliches Einkommen</p>
-          </div>
-        </div>
-
-        {/* Center - Amount */}
-        <div className='flex-1 max-w-xs mx-6'>
-          <div
-            className={`w-full px-3 py-2 rounded-lg font-semibold text-lg text-center ${colorClasses}`}
-          >
-            {formatCurrencyFixed(income.betrag)}
+            <div
+              className={`w-full px-4 py-2 rounded-lg font-bold text-lg text-center ${classes.amountBg}`}
+            >
+              {formatCurrencyFixed(income.betrag)}
+            </div>
           </div>
         </div>
 
         {/* Right Side - Actions */}
-        <div className='flex gap-1 shrink-0'>
+        <div className='flex gap-1 shrink-0 ml-4'>
           <EditButton onClick={onEdit} />
           <DeleteButton onClick={onDelete} />
         </div>
@@ -165,93 +179,97 @@ export default function IncomeManagement({
         </button>
       </div>
 
-      {/* Simple Income Sections */}
+      {/* Income Sections - Side by Side on Desktop */}
       <div className='space-y-8'>
-        {/* Pascal's Income Section */}
-        <div>
-          <div className='flex items-center justify-between mb-4'>
-            <h3 className='text-lg font-semibold text-gray-700 flex items-center gap-2'>
-              <span>👨‍💼</span>
-              Pascal Einkommen
-            </h3>
-            <div className='text-sm text-gray-500'>
-              {pascalIncomes.length > 0 && (
-                <span>Gesamt: {formatCurrencyFixed(pascalTotal)}</span>
-              )}
+        <div className='space-y-8 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-8'>
+          {/* Pascal's Income Section */}
+          <div className='space-y-4'>
+            <div className='flex items-center justify-between mb-4'>
+              <h3 className='text-lg font-semibold text-gray-700 flex items-center gap-2'>
+                <span>👨‍💼</span>
+                Pascal Einkommen
+              </h3>
+              <div className='text-sm text-gray-500'>
+                {pascalIncomes.length > 0 && (
+                  <span>Gesamt: {formatCurrencyFixed(pascalTotal)}</span>
+                )}
+              </div>
             </div>
+
+            {pascalIncomes.length === 0 ? (
+              <div className='text-center py-6 lg:py-8 bg-white rounded-lg border-2 border-dashed border-blue-200'>
+                <div className='text-3xl lg:text-4xl mb-3'>�‍�💼</div>
+                <p className='text-gray-500 text-sm lg:text-base'>
+                  Keine Einkommensquellen für Pascal
+                </p>
+              </div>
+            ) : (
+              <div className='space-y-3'>
+                {pascalIncomes.map((income) => (
+                  <IncomeRow
+                    key={income.id}
+                    income={income}
+                    onEdit={() => onStartEditIncome(income)}
+                    onDelete={() => onDeleteIncome(income.id)}
+                    color='blue'
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
-          {pascalIncomes.length === 0 ? (
-            <div className='text-center py-8 bg-white rounded-lg border-2 border-dashed border-gray-200'>
-              <div className='text-4xl mb-3'>💼</div>
-              <p className='text-gray-500'>
-                Keine Einkommensquellen für Pascal
-              </p>
+          {/* Caro's Income Section */}
+          <div className='space-y-4'>
+            <div className='flex items-center justify-between mb-4'>
+              <h3 className='text-lg font-semibold text-gray-700 flex items-center gap-2'>
+                <span>👩‍💼</span>
+                Caro Einkommen
+              </h3>
+              <div className='text-sm text-gray-500'>
+                {caroIncomes.length > 0 && (
+                  <span>Gesamt: {formatCurrencyFixed(caroTotal)}</span>
+                )}
+              </div>
             </div>
-          ) : (
-            <div className='space-y-3'>
-              {pascalIncomes.map((income) => (
-                <IncomeRow
-                  key={income.id}
-                  income={income}
-                  onEdit={() => onStartEditIncome(income)}
-                  onDelete={() => onDeleteIncome(income.id)}
-                  color='blue'
-                />
-              ))}
-            </div>
-          )}
-        </div>
 
-        {/* Caro's Income Section */}
-        <div>
-          <div className='flex items-center justify-between mb-4'>
-            <h3 className='text-lg font-semibold text-gray-700 flex items-center gap-2'>
-              <span>👩‍💼</span>
-              Caro Einkommen
-            </h3>
-            <div className='text-sm text-gray-500'>
-              {caroIncomes.length > 0 && (
-                <span>Gesamt: {formatCurrencyFixed(caroTotal)}</span>
-              )}
-            </div>
+            {caroIncomes.length === 0 ? (
+              <div className='text-center py-6 lg:py-8 bg-white rounded-lg border-2 border-dashed border-emerald-200'>
+                <div className='text-3xl lg:text-4xl mb-3'>�‍�💼</div>
+                <p className='text-gray-500 text-sm lg:text-base'>
+                  Keine Einkommensquellen für Caro
+                </p>
+              </div>
+            ) : (
+              <div className='space-y-3'>
+                {caroIncomes.map((income) => (
+                  <IncomeRow
+                    key={income.id}
+                    income={income}
+                    onEdit={() => onStartEditIncome(income)}
+                    onDelete={() => onDeleteIncome(income.id)}
+                    color='green'
+                  />
+                ))}
+              </div>
+            )}
           </div>
-
-          {caroIncomes.length === 0 ? (
-            <div className='text-center py-8 bg-white rounded-lg border-2 border-dashed border-gray-200'>
-              <div className='text-4xl mb-3'>💼</div>
-              <p className='text-gray-500'>Keine Einkommensquellen für Caro</p>
-            </div>
-          ) : (
-            <div className='space-y-3'>
-              {caroIncomes.map((income) => (
-                <IncomeRow
-                  key={income.id}
-                  income={income}
-                  onEdit={() => onStartEditIncome(income)}
-                  onDelete={() => onDeleteIncome(income.id)}
-                  color='green'
-                />
-              ))}
-            </div>
-          )}
         </div>
 
         {/* Summary Section */}
         {(pascalIncomes.length > 0 || caroIncomes.length > 0) && (
-          <div className='p-4 bg-blue-50 rounded-lg border border-blue-200'>
-            <div className='flex items-center justify-between'>
+          <div className='p-4 lg:p-6 bg-gradient-to-r from-blue-50 to-emerald-50 rounded-lg border border-blue-200'>
+            <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3'>
               <div className='flex items-center gap-2'>
-                <span className='text-lg'>📊</span>
-                <span className='font-semibold text-gray-700'>
+                <span className='text-xl'>📊</span>
+                <span className='font-semibold text-gray-800 text-lg'>
                   Gesamteinkommen beider Partner
                 </span>
               </div>
-              <div className='text-right'>
-                <div className='text-2xl font-bold text-blue-600'>
+              <div className='text-left sm:text-right'>
+                <div className='text-2xl lg:text-3xl font-bold text-gray-800'>
                   {formatCurrencyFixed(pascalTotal + caroTotal)}
                 </div>
-                <div className='text-sm text-blue-500'>
+                <div className='text-sm text-gray-600 mt-1'>
                   Pascal: {formatCurrencyFixed(pascalTotal)} + Caro:{' '}
                   {formatCurrencyFixed(caroTotal)}
                 </div>
