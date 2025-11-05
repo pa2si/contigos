@@ -92,8 +92,8 @@ const ExpenseRow = ({
       <div className='flex items-center shrink-0'>
         {!isFixed ? (
           <div className='flex gap-1'>
-            <EditButton onClick={onEdit!} size='sm' variant='primary' />
-            <DeleteButton onClick={onDelete!} size='sm' variant='danger' />
+            <EditButton onClick={onEdit!} />
+            <DeleteButton onClick={onDelete!} />
           </div>
         ) : (
           <div className='w-12'></div> // Placeholder for consistent alignment
@@ -200,8 +200,8 @@ export default function ExpenseManagement({
             {/* Action Bar */}
             <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6'>
               <div className='text-sm text-gray-600'>
-                <span className='font-medium'>{expenses.length}</span>{' '}
-                dynamische Ausgaben
+                <span className='font-medium'>{expenses.length}</span> weitere
+                Ausgaben
                 {expenses.length > 0 && (
                   <span className='ml-2'>
                     • Σ {formatCurrency(dynamicExpensesTotal)}
@@ -217,12 +217,12 @@ export default function ExpenseManagement({
               </button>
             </div>
 
-            {/* Fixed Expenses Section */}
+            {/* Budget Expenses Section */}
             <div className='mb-8'>
               <div className='flex items-center justify-between mb-4'>
                 <h3 className='text-lg font-semibold text-gray-700 flex items-center gap-2'>
-                  <span>📌</span>
-                  Fixe Ausgaben
+                  <span>�</span>
+                  Budget Ausgaben
                 </h3>
                 <div className='text-sm text-gray-500'>
                   Konfiguriert in Einstellungen
@@ -246,12 +246,12 @@ export default function ExpenseManagement({
               </div>
             </div>
 
-            {/* Dynamic Expenses Section */}
+            {/* Additional Expenses Section */}
             <div>
               <div className='flex items-center justify-between mb-4'>
                 <h3 className='text-lg font-semibold text-gray-700 flex items-center gap-2'>
-                  <span>🛒</span>
-                  Dynamische Ausgaben
+                  <span>📝</span>
+                  Weitere Ausgaben
                 </h3>
                 <div className='flex items-center gap-4 text-sm text-gray-500'>
                   {expenses.length > 0 && (
@@ -266,9 +266,9 @@ export default function ExpenseManagement({
 
               {expenses.length === 0 ? (
                 <div className='text-center py-12 bg-white rounded-xl border-2 border-dashed border-gray-200'>
-                  <div className='text-6xl mb-4'>🛒</div>
+                  <div className='text-6xl mb-4'>🤝</div>
                   <p className='text-gray-500 text-lg mb-2'>
-                    Noch keine dynamischen Ausgaben
+                    Noch keine weiteren Ausgaben
                   </p>
                   <p className='text-sm text-gray-400'>
                     Klicke auf &quot;Ausgabe hinzufügen&quot; um zu starten!
@@ -310,7 +310,7 @@ export default function ExpenseManagement({
                         {formatCurrency(
                           settings.comida_betrag + settings.ahorros_betrag
                         )}{' '}
-                        fix + {formatCurrency(dynamicExpensesTotal)} dynamisch
+                        budget + {formatCurrency(dynamicExpensesTotal)} geteilt
                       </div>
                     </div>
                   </div>

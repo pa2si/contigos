@@ -1,6 +1,5 @@
 - check continuaity, meaning Parter is always partner or did we use at some point person?
 - make possible to delete 0 in input fields
-- make the add ... fields a modal
 - add savings to sparen
 - display it in an own component as investment
 - disaply somewhere the overview of total income this month, total saving, total investment, total money to spend and always in relatoin to total income

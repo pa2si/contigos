@@ -42,8 +42,8 @@ const IncomeRow = ({
             </div>
           </div>
           <div className='flex gap-1 shrink-0'>
-            <EditButton onClick={onEdit} size='sm' variant='primary' />
-            <DeleteButton onClick={onDelete} size='sm' variant='danger' />
+            <EditButton onClick={onEdit} />
+            <DeleteButton onClick={onDelete} />
           </div>
         </div>
 
@@ -83,8 +83,8 @@ const IncomeRow = ({
 
         {/* Right Side - Actions */}
         <div className='flex gap-1 shrink-0'>
-          <EditButton onClick={onEdit} size='sm' variant='primary' />
-          <DeleteButton onClick={onDelete} size='sm' variant='danger' />
+          <EditButton onClick={onEdit} />
+          <DeleteButton onClick={onDelete} />
         </div>
       </div>
     </div>

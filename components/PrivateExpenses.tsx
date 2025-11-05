@@ -172,13 +172,9 @@ export default function PrivateExpenses({
                           </span>
                           <EditButton
                             onClick={() => onStartEditPrivateExpense(expense)}
-                            size='sm'
-                            variant='primary'
                           />
                           <DeleteButton
                             onClick={() => onDeletePrivateExpense(expense.id)}
-                            size='sm'
-                            variant='danger'
                           />
                         </div>
                       </div>
@@ -217,13 +213,9 @@ export default function PrivateExpenses({
                           </span>
                           <EditButton
                             onClick={() => onStartEditPrivateExpense(expense)}
-                            size='sm'
-                            variant='primary'
                           />
                           <DeleteButton
                             onClick={() => onDeletePrivateExpense(expense.id)}
-                            size='sm'
-                            variant='danger'
                           />
                         </div>
                       </div>
