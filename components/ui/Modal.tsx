@@ -10,6 +10,7 @@ interface ModalProps {
   children: ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl';
   showCloseButton?: boolean;
+  headerClass?: string;
 }
 
 export default function Modal({
@@ -19,6 +20,7 @@ export default function Modal({
   children,
   size = 'md',
   showCloseButton = true,
+  headerClass,
 }: ModalProps) {
   // Handle ESC key press
   useEffect(() => {
@@ -61,13 +63,13 @@ export default function Modal({
 
       {/* Modal Content */}
       <div
-        className={`relative w-full ${sizeClasses[size]} max-h-[90vh] bg-white rounded-2xl shadow-2xl transform transition-all duration-300 scale-100 animate-in fade-in slide-in-from-bottom-4`}
+        className={`relative w-full ${sizeClasses[size]} max-h-[90vh] bg-white/95 rounded-2xl shadow-xl transform transition-all duration-300 scale-100 animate-in fade-in slide-in-from-bottom-4`}
         role='dialog'
         aria-modal='true'
         aria-labelledby='modal-title'
       >
-        {/* Header */}
-        <div className='flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-2xl'>
+        {/* Header - allow caller to override header class to tint by person */}
+        <div className={headerClass || 'flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-2xl'}>
           <h2
             id='modal-title'
             className='text-lg sm:text-xl font-semibold text-gray-900 flex items-center gap-2'

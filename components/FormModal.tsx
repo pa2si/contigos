@@ -162,6 +162,8 @@ export default function FormModal({
         buttonTo: 'to-blue-600',
         buttonHoverFrom: 'hover:from-blue-600',
         buttonHoverTo: 'hover:to-blue-700',
+        headerFrom: 'from-blue-50',
+        headerTo: 'to-blue-100',
       };
     } else if (formData.thirdField === 'Partner2') {
       return {
@@ -171,6 +173,8 @@ export default function FormModal({
         buttonTo: 'to-green-600',
         buttonHoverFrom: 'hover:from-green-600',
         buttonHoverTo: 'hover:to-green-700',
+        headerFrom: 'from-emerald-50',
+        headerTo: 'to-green-100',
       };
     } else {
       // Gemeinschaftskonto or default
@@ -181,6 +185,8 @@ export default function FormModal({
         buttonTo: 'to-pink-600',
         buttonHoverFrom: 'hover:from-purple-600',
         buttonHoverTo: 'hover:to-pink-700',
+        headerFrom: 'from-purple-50',
+        headerTo: 'to-pink-50',
       };
     }
   };
@@ -199,6 +205,7 @@ export default function FormModal({
           {isEditing ? config.title.edit : config.title.add}
         </>
       }
+      headerClass={`flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r ${colors.headerFrom} ${colors.headerTo} rounded-t-2xl`}
       size='lg'
     >
       <div className='p-4 sm:p-6' onKeyDown={handleKeyDown}>
@@ -275,7 +282,7 @@ export default function FormModal({
 
           <button
             onClick={onClose}
-            className='flex-1 sm:flex-none px-6 py-3 bg-gradient-to-r from-gray-400 to-gray-500 text-white rounded-xl font-medium hover:from-gray-500 hover:to-gray-600 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 flex items-center justify-center gap-2 text-sm sm:text-base'
+            className='flex-1 sm:flex-none px-6 py-3 bg-white border border-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all duration-200 transform flex items-center justify-center gap-2 text-sm sm:text-base'
           >
             <span>❌</span>
             Abbrechen
