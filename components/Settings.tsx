@@ -340,36 +340,42 @@ export default function Settings({
                     Monatliche Budget Übersicht
                   </h3>
                   <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-                    <div className='bg-purple-50 p-4 rounded-lg border border-purple-200'>
-                      <div className='flex items-center gap-2 mb-2'>
-                        <span className='text-lg'>💎</span>
-                        <span className='font-medium text-purple-900'>
+                    {/* Sparen card - Einkommen style */}
+                    <div className='bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-100 p-4 space-y-3'>
+                      <div className='flex items-center justify-between'>
+                        <h4 className='text-lg font-semibold text-purple-700 flex items-center gap-2'>
+                          <span>💎</span>
                           Sparen
-                        </span>
+                        </h4>
+                        <div className='text-sm text-purple-600 font-medium'>
+                          {formatCurrency(settings.ahorros_betrag)}
+                        </div>
                       </div>
-                      <div className='text-2xl font-bold text-purple-700'>
+                      <div className='text-2xl font-bold text-gray-800'>
                         {formatCurrency(settings.ahorros_betrag)}
                       </div>
-                      <div className='text-xs text-purple-600 mt-1'>
-                        pro Monat
-                      </div>
+                      <div className='text-sm text-gray-500'>pro Monat</div>
                     </div>
-                    <div className='bg-blue-50 p-4 rounded-lg border border-blue-200'>
-                      <div className='flex items-center gap-2 mb-2'>
-                        <span className='text-lg'>📊</span>
-                        <span className='font-medium text-blue-900'>
+
+                    {/* Investieren card - Einkommen style */}
+                    <div className='bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-4 space-y-3'>
+                      <div className='flex items-center justify-between'>
+                        <h4 className='text-lg font-semibold text-blue-700 flex items-center gap-2'>
+                          <span>📊</span>
                           Investieren
-                        </span>
+                        </h4>
+                        <div className='text-sm text-blue-600 font-medium'>
+                          {formatCurrency(settings.investieren)}
+                        </div>
                       </div>
-                      <div className='text-2xl font-bold text-blue-700'>
+                      <div className='text-2xl font-bold text-gray-800'>
                         {formatCurrency(settings.investieren)}
                       </div>
-                      <div className='text-xs text-blue-600 mt-1'>
-                        pro Monat
-                      </div>
+                      <div className='text-sm text-gray-500'>pro Monat</div>
                     </div>
                   </div>
-                  <div className='mt-4 p-3 bg-green-50 rounded-lg border border-green-200'>
+
+                  <div className='mt-4 p-3 bg-gradient-to-r from-green-50 to-green-100 rounded-xl border border-green-100'>
                     <div className='flex items-center justify-between'>
                       <span className='text-sm font-medium text-green-900'>
                         Gesamtes monatliches Sparziel:
