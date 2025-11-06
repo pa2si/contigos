@@ -52,14 +52,18 @@ const InputCard = ({
 
   const pastelWrappers: Record<string, string> = {
     blue: 'bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-3 sm:p-4',
-    green: 'bg-gradient-to-r from-emerald-50 to-green-100 rounded-xl border border-emerald-100 p-3 sm:p-4',
-    purple: 'bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-100 p-3 sm:p-4',
-    amber: 'bg-gradient-to-r from-amber-50 to-yellow-100 rounded-xl border border-amber-100 p-3 sm:p-4',
+    green:
+      'bg-gradient-to-r from-emerald-50 to-green-100 rounded-xl border border-emerald-100 p-3 sm:p-4',
+    purple:
+      'bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-100 p-3 sm:p-4',
+    amber:
+      'bg-gradient-to-r from-amber-50 to-yellow-100 rounded-xl border border-amber-100 p-3 sm:p-4',
   };
 
   const wrapperClass =
     surface === 'pastel'
-      ? pastelWrappers[color] || 'bg-white p-3 sm:p-4 rounded-xl border border-gray-100'
+      ? pastelWrappers[color] ||
+        'bg-white p-3 sm:p-4 rounded-xl border border-gray-100'
       : 'bg-white p-3 sm:p-4 rounded-xl border border-gray-100 hover:shadow-md transition-shadow duration-200';
 
   return (
@@ -305,7 +309,9 @@ export default function Settings({
                 <InputCard
                   title='Ahorros (Sparen)'
                   value={settings.ahorros_betrag}
-                  onChange={(value) => onSettingsChange('ahorros_betrag', value)}
+                  onChange={(value) =>
+                    onSettingsChange('ahorros_betrag', value)
+                  }
                   onBlur={onSettingsBlur}
                   icon='💎'
                   description='Monatlicher Sparbetrag'
@@ -446,7 +452,8 @@ export default function Settings({
                           Investieren
                         </span>
                         <span className='text-sm text-gray-600'>
-                          0 € / {formatCurrency(settings.investieren)} Monatsziel
+                          0 € / {formatCurrency(settings.investieren)}{' '}
+                          Monatsziel
                         </span>
                       </div>
                       <div className='bg-gray-200 rounded-full h-2'>
