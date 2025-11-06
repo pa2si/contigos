@@ -135,27 +135,6 @@ export default function IncomeManagement({
 
   return (
     <div className='space-y-6'>
-      {/* Mobile-Responsive Action Bar */}
-      <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0'>
-        <div className='text-sm text-gray-600'>
-          <span className='font-medium'>{incomes.length}</span>{' '}
-          Einkommensquellen
-          {incomes.length > 0 && (
-            <span className='block sm:inline sm:ml-2'>
-              <span className='hidden sm:inline'>• </span>
-              <span>Σ {formatCurrencyFixed(pascalTotal + caroTotal)}</span>
-            </span>
-          )}
-        </div>
-        <button
-          onClick={onStartAddIncome}
-          className='w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center sm:justify-start gap-2'
-        >
-          <span>➕</span>
-          <span className='sm:inline'>Einkommen hinzufügen</span>
-        </button>
-      </div>
-
       {/* Income Sections - Side by Side on Desktop */}
       <div className='space-y-8'>
         <div className='space-y-8 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-8'>
@@ -254,6 +233,17 @@ export default function IncomeManagement({
             </div>
           </div>
         )}
+      </div>
+
+      {/* Add Income Button at the Bottom */}
+      <div className='flex justify-end'>
+        <button
+          onClick={onStartAddIncome}
+          className='w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center sm:justify-start gap-2 mt-4'
+        >
+          <span>➕</span>
+          <span className='sm:inline'>Einkommen hinzufügen</span>
+        </button>
       </div>
 
       {/* Income Modal */}
