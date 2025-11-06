@@ -28,6 +28,7 @@ const InputCard = ({
   color = 'blue',
   isReadOnly = false,
   onBlur,
+  surface = 'white',
 }: {
   title: string;
   value: number | string;
@@ -37,6 +38,7 @@ const InputCard = ({
   color?: 'blue' | 'green' | 'purple' | 'amber';
   isReadOnly?: boolean;
   onBlur?: () => Promise<void>;
+  surface?: 'white' | 'pastel';
 }) => {
   const colorClasses = {
     blue: 'border-blue-200 bg-blue-50 text-blue-900 focus:border-blue-500 focus:ring-blue-500',
@@ -48,8 +50,20 @@ const InputCard = ({
       'border-amber-200 bg-amber-50 text-amber-900 focus:border-amber-500 focus:ring-amber-500',
   };
 
+  const pastelWrappers: Record<string, string> = {
+    blue: 'bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-3 sm:p-4',
+    green: 'bg-gradient-to-r from-emerald-50 to-green-100 rounded-xl border border-emerald-100 p-3 sm:p-4',
+    purple: 'bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-100 p-3 sm:p-4',
+    amber: 'bg-gradient-to-r from-amber-50 to-yellow-100 rounded-xl border border-amber-100 p-3 sm:p-4',
+  };
+
+  const wrapperClass =
+    surface === 'pastel'
+      ? pastelWrappers[color] || 'bg-white p-3 sm:p-4 rounded-xl border border-gray-100'
+      : 'bg-white p-3 sm:p-4 rounded-xl border border-gray-100 hover:shadow-md transition-shadow duration-200';
+
   return (
-    <div className='bg-white p-3 sm:p-4 rounded-xl border border-gray-100 hover:shadow-md transition-shadow duration-200'>
+    <div className={wrapperClass}>
       <div className='flex items-start sm:items-center gap-2 sm:gap-3 mb-3'>
         <span className='text-xl sm:text-2xl flex-shrink-0'>{icon}</span>
         <div className='min-w-0 flex-1'>
@@ -278,63 +292,43 @@ export default function Settings({
 
             {activeTab === 'budget' && (
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6'>
-                {/* Comida (Lebensmittel) - card style matching Einkommen */}
-                <div className='bg-gradient-to-r from-emerald-50 to-green-100 rounded-xl border border-emerald-100 p-4 space-y-3'>
-                  <div className='flex items-center justify-between'>
-                    <h3 className='text-lg font-semibold text-emerald-700 flex items-center gap-2'>
-                      <span>🛒</span>
-                      Comida (Lebensmittel)
-                    </h3>
-                    <div className='text-sm text-emerald-600 font-medium'>
-                      <span>{formatCurrency(settings.comida_betrag)}</span>
-                    </div>
-                  </div>
-                  <div className='text-2xl font-bold text-gray-800'>
-                    {formatCurrency(settings.comida_betrag)}
-                  </div>
-                  <div className='text-sm text-gray-500'>Monatliches Budget für Lebensmittel</div>
-                </div>
-
-                {/* Ahorros (Sparen) - card style matching Einkommen */}
-                <div className='bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-100 p-4 space-y-3'>
-                  <div className='flex items-center justify-between'>
-                    <h3 className='text-lg font-semibold text-purple-700 flex items-center gap-2'>
-                      <span>💎</span>
-                      Ahorros (Sparen)
-                    </h3>
-                    <div className='text-sm text-purple-600 font-medium'>
-                      <span>{formatCurrency(settings.ahorros_betrag)}</span>
-                    </div>
-                  </div>
-                  <div className='text-2xl font-bold text-gray-800'>
-                    {formatCurrency(settings.ahorros_betrag)}
-                  </div>
-                  <div className='text-sm text-gray-500'>Monatlicher Sparbetrag</div>
-                </div>
-
-                {/* Investieren - card style matching Einkommen */}
-                <div className='bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-4 space-y-3'>
-                  <div className='flex items-center justify-between'>
-                    <h3 className='text-lg font-semibold text-blue-700 flex items-center gap-2'>
-                      <span>📊</span>
-                      Investieren
-                    </h3>
-                    <div className='text-sm text-blue-600 font-medium'>
-                      <span>{formatCurrency(settings.investieren)}</span>
-                    </div>
-                  </div>
-                  <div className='text-2xl font-bold text-gray-800'>
-                    {formatCurrency(settings.investieren)}
-                  </div>
-                  <div className='text-sm text-gray-500'>Monatliches Investment Budget</div>
-                </div>
+                <InputCard
+                  title='Comida (Lebensmittel)'
+                  value={settings.comida_betrag}
+                  onChange={(value) => onSettingsChange('comida_betrag', value)}
+                  onBlur={onSettingsBlur}
+                  icon='🛒'
+                  description='Monatliches Budget für Lebensmittel'
+                  color='green'
+                  surface='pastel'
+                />
+                <InputCard
+                  title='Ahorros (Sparen)'
+                  value={settings.ahorros_betrag}
+                  onChange={(value) => onSettingsChange('ahorros_betrag', value)}
+                  onBlur={onSettingsBlur}
+                  icon='💎'
+                  description='Monatlicher Sparbetrag'
+                  color='purple'
+                  surface='pastel'
+                />
+                <InputCard
+                  title='Investieren'
+                  value={settings.investieren}
+                  onChange={(value) => onSettingsChange('investieren', value)}
+                  onBlur={onSettingsBlur}
+                  icon='📊'
+                  description='Monatliches Investment Budget'
+                  color='blue'
+                  surface='pastel'
+                />
               </div>
             )}
 
             {activeTab === 'savings' && (
               <div className='space-y-4 sm:space-y-6'>
                 {/* Budget Overview */}
-                <div className='bg-white p-4 sm:p-6 rounded-xl border border-gray-100'>
+                <div className='bg-transparent p-4 sm:p-6 rounded-xl border border-gray-100'>
                   <h3 className='font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2 text-sm sm:text-base'>
                     <span>💰</span>
                     Monatliche Budget Übersicht
@@ -401,6 +395,7 @@ export default function Settings({
                     icon='🏦'
                     description='Aktueller Stand deines Tagesgeldkontos'
                     color='blue'
+                    surface='pastel'
                   />
                 </div>
 
@@ -413,53 +408,57 @@ export default function Settings({
 
                   {/* Savings Progress */}
                   <div className='mb-4'>
-                    <div className='flex justify-between items-center mb-2'>
-                      <span className='text-sm font-medium text-purple-700'>
-                        Sparen
-                      </span>
-                      <span className='text-sm text-gray-600'>
-                        {formatCurrency(settings.tagesgeldkonto_betrag)} /{' '}
-                        {formatCurrency(settings.ahorros_betrag)} Monatsziel
-                      </span>
-                    </div>
-                    <div className='bg-gray-200 rounded-full h-2'>
-                      <div
-                        className='bg-gradient-to-r from-purple-500 to-purple-600 h-2 rounded-full transition-all duration-500'
-                        style={{
-                          width:
-                            settings.ahorros_betrag > 0
-                              ? `${Math.min(
-                                  (settings.tagesgeldkonto_betrag /
-                                    settings.ahorros_betrag) *
-                                    100,
-                                  100
-                                )}%`
-                              : '0%',
-                        }}
-                      ></div>
+                    <div className='bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg border border-purple-100 p-3'>
+                      <div className='flex justify-between items-center mb-2'>
+                        <span className='text-sm font-medium text-purple-700'>
+                          Sparen
+                        </span>
+                        <span className='text-sm text-gray-600'>
+                          {formatCurrency(settings.tagesgeldkonto_betrag)} /{' '}
+                          {formatCurrency(settings.ahorros_betrag)} Monatsziel
+                        </span>
+                      </div>
+                      <div className='bg-gray-200 rounded-full h-2'>
+                        <div
+                          className='bg-gradient-to-r from-purple-500 to-purple-600 h-2 rounded-full transition-all duration-500'
+                          style={{
+                            width:
+                              settings.ahorros_betrag > 0
+                                ? `${Math.min(
+                                    (settings.tagesgeldkonto_betrag /
+                                      settings.ahorros_betrag) *
+                                      100,
+                                    100
+                                  )}%`
+                                : '0%',
+                          }}
+                        ></div>
+                      </div>
                     </div>
                   </div>
 
                   {/* Investment Progress */}
                   <div className='mb-4'>
-                    <div className='flex justify-between items-center mb-2'>
-                      <span className='text-sm font-medium text-blue-700'>
-                        Investieren
-                      </span>
-                      <span className='text-sm text-gray-600'>
-                        0 € / {formatCurrency(settings.investieren)} Monatsziel
-                      </span>
-                    </div>
-                    <div className='bg-gray-200 rounded-full h-2'>
-                      <div
-                        className='bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-500'
-                        style={{ width: '0%' }}
-                      ></div>
+                    <div className='bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-100 p-3'>
+                      <div className='flex justify-between items-center mb-2'>
+                        <span className='text-sm font-medium text-blue-700'>
+                          Investieren
+                        </span>
+                        <span className='text-sm text-gray-600'>
+                          0 € / {formatCurrency(settings.investieren)} Monatsziel
+                        </span>
+                      </div>
+                      <div className='bg-gray-200 rounded-full h-2'>
+                        <div
+                          className='bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-500'
+                          style={{ width: '0%' }}
+                        ></div>
+                      </div>
                     </div>
                   </div>
 
                   {/* Total Progress */}
-                  <div className='p-3 bg-gray-50 rounded-lg'>
+                  <div className='p-3 bg-transparent rounded-lg'>
                     <div className='flex justify-between items-center text-sm'>
                       <span className='font-medium text-gray-700'>
                         Gesamtfortschritt diesen Monat:
