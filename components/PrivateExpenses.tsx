@@ -147,8 +147,8 @@ export default function PrivateExpenses({
               {/* Private Expenses Lists */}
               <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                 {/* Pascal's Private Expenses */}
-                <div className='bg-blue-50 p-3 rounded-lg'>
-                  <h4 className='font-medium text-blue-800 mb-2'>
+                <div className='bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-4'>
+                  <h4 className='font-semibold text-blue-800 mb-3'>
                     Pascal Private Ausgaben
                   </h4>
                   {pascalExpenses.length === 0 ? (
@@ -159,22 +159,24 @@ export default function PrivateExpenses({
                     pascalExpenses.map((expense) => (
                       <div
                         key={expense.id}
-                        className='flex justify-between items-center py-1 px-2 bg-white rounded mb-1 last:mb-0'
+                        className='flex justify-between items-center gap-3 p-2 bg-white/95 border border-gray-100 rounded-lg mb-2 last:mb-0 shadow-sm'
                       >
                         <div className='flex-1'>
-                          <span className='text-sm font-medium'>
+                          <span className='text-sm font-semibold text-gray-900'>
                             {expense.beschreibung}
                           </span>
                         </div>
-                        <div className='flex items-center gap-2'>
+                        <div className='flex items-center gap-3'>
                           <span className='text-sm font-semibold text-blue-600'>
                             {formatCurrencyFixed(expense.betrag)}
                           </span>
                           <EditButton
                             onClick={() => onStartEditPrivateExpense(expense)}
+                            variant='income'
                           />
                           <DeleteButton
                             onClick={() => onDeletePrivateExpense(expense.id)}
+                            variant='income'
                           />
                         </div>
                       </div>
@@ -188,8 +190,8 @@ export default function PrivateExpenses({
                 </div>
 
                 {/* Caro's Private Expenses */}
-                <div className='bg-green-50 p-3 rounded-lg'>
-                  <h4 className='font-medium text-green-800 mb-2'>
+                <div className='bg-gradient-to-r from-emerald-50 to-green-100 rounded-xl border border-emerald-100 p-4'>
+                  <h4 className='font-semibold text-green-800 mb-3'>
                     Caro Private Ausgaben
                   </h4>
                   {caroExpenses.length === 0 ? (
@@ -200,22 +202,24 @@ export default function PrivateExpenses({
                     caroExpenses.map((expense) => (
                       <div
                         key={expense.id}
-                        className='flex justify-between items-center py-1 px-2 bg-white rounded mb-1 last:mb-0'
+                        className='flex justify-between items-center gap-3 p-2 bg-white/95 border border-gray-100 rounded-lg mb-2 last:mb-0 shadow-sm'
                       >
                         <div className='flex-1'>
-                          <span className='text-sm font-medium'>
+                          <span className='text-sm font-semibold text-gray-900'>
                             {expense.beschreibung}
                           </span>
                         </div>
-                        <div className='flex items-center gap-2'>
+                        <div className='flex items-center gap-3'>
                           <span className='text-sm font-semibold text-green-600'>
                             {formatCurrencyFixed(expense.betrag)}
                           </span>
                           <EditButton
                             onClick={() => onStartEditPrivateExpense(expense)}
+                            variant='income'
                           />
                           <DeleteButton
                             onClick={() => onDeletePrivateExpense(expense.id)}
+                            variant='income'
                           />
                         </div>
                       </div>
