@@ -21,19 +21,19 @@ const IncomeRow = ({
 }) => {
   const colorClasses = {
     blue: {
-      container: 'bg-blue-50 border-blue-200',
+      container: 'bg-blue-50 border border-blue-100',
       text: 'text-blue-700',
       amount: 'text-blue-700',
       amountBg:
-        'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg',
+        'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow',
       glow: 'hover:shadow-blue-200',
     },
     green: {
-      container: 'bg-emerald-50 border-emerald-200',
+      container: 'bg-emerald-50 border border-emerald-100',
       text: 'text-emerald-700',
       amount: 'text-emerald-700',
       amountBg:
-        'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg',
+        'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow',
       glow: 'hover:shadow-emerald-200',
     },
   };
@@ -42,39 +42,36 @@ const IncomeRow = ({
 
   return (
     <div className='group'>
-      {/* Mobile Layout - Stacked */}
+      {/* Mobile Layout - Stacked (compact pastel card) */}
       <div className='flex flex-col sm:hidden gap-2'>
-        {/* Income Display with integrated actions */}
-        <div
-          className={`px-3 py-1 rounded-lg ${classes.amountBg} flex items-center justify-between`}
-        >
-          <div className='flex-1'>
-            <div className='font-medium text-sm'>{income.beschreibung}</div>
-            <div className='font-bold text-lg'>
-              {formatCurrencyFixed(income.betrag)}
-            </div>
+        <div className={`px-3 py-2 rounded-lg ${classes.container} flex items-center justify-between`}>
+          <div className='flex-1 pr-3'>
+            <div className='font-medium text-sm leading-tight'>{income.beschreibung}</div>
+            <div className='text-xs text-gray-500 mt-0.5'>{income.quelle}</div>
           </div>
-          <div className='flex gap-1 opacity-70 group-hover:opacity-100 transition-opacity'>
-            <EditButton onClick={onEdit} variant='income' />
-            <DeleteButton onClick={onDelete} variant='income' />
+          <div className='flex items-center gap-2'>
+            <div className={`px-3 py-1 rounded-full ${classes.amountBg} font-bold text-sm`}>{formatCurrencyFixed(income.betrag)}</div>
+            <div className='flex gap-1 opacity-60 group-hover:opacity-100 transition-opacity'>
+              <EditButton onClick={onEdit} variant='income' />
+              <DeleteButton onClick={onDelete} variant='income' />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Desktop Layout - Horizontal */}
+      {/* Desktop Layout - Horizontal (compact pastel card with amount pill) */}
       <div className='hidden sm:block'>
-        <div
-          className={`px-3 py-1 rounded-lg ${classes.amountBg} flex items-center justify-between hover:shadow-sm transition-shadow`}
-        >
-          <div className='flex-1'>
+        <div className={`px-4 py-3 rounded-lg ${classes.container} flex items-center justify-between hover:shadow-sm transition-shadow`}>
+          <div className='flex-1 pr-4'>
             <div className='font-medium text-sm'>{income.beschreibung}</div>
-            <div className='font-bold text-lg'>
-              {formatCurrencyFixed(income.betrag)}
-            </div>
+            <div className='text-xs text-gray-500 mt-0.5'>{income.quelle}</div>
           </div>
-          <div className='flex gap-1 opacity-70 group-hover:opacity-100 transition-opacity'>
-            <EditButton onClick={onEdit} variant='income' />
-            <DeleteButton onClick={onDelete} variant='income' />
+          <div className='flex items-center gap-3'>
+            <div className={`px-4 py-1 rounded-full ${classes.amountBg} font-bold text-base`}>{formatCurrencyFixed(income.betrag)}</div>
+            <div className='flex gap-1 opacity-60 group-hover:opacity-100 transition-opacity'>
+              <EditButton onClick={onEdit} variant='income' />
+              <DeleteButton onClick={onDelete} variant='income' />
+            </div>
           </div>
         </div>
       </div>
