@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Settings as SettingsType, Income } from '@/types';
 import { formatCurrency } from '@/lib/utils';
+import Card from '@/components/ui/Card';
 
 interface SettingsProps {
   settings: SettingsType;
@@ -227,7 +228,7 @@ export default function Settings({
             {activeTab === 'overview' && (
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6'>
                 {/* Pascal overview card (match Einkommen UI) */}
-                <div className='bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-4 space-y-3'>
+                <Card variant='blue'>
                   <div className='flex items-center justify-between'>
                     <h3 className='text-lg font-semibold text-blue-700 flex items-center gap-2'>
                       <span>👨‍💼</span>
@@ -246,10 +247,10 @@ export default function Settings({
                     {pascalIncomes.length} Einkommensquelle
                     {pascalIncomes.length !== 1 ? 'n' : ''}
                   </div>
-                </div>
+                </Card>
 
                 {/* Caro overview card (match Einkommen UI) */}
-                <div className='bg-gradient-to-r from-green-50 to-emerald-100 rounded-xl border border-emerald-100 p-4 space-y-3'>
+                <Card variant='green'>
                   <div className='flex items-center justify-between'>
                     <h3 className='text-lg font-semibold text-emerald-700 flex items-center gap-2'>
                       <span>👩‍💼</span>
@@ -268,7 +269,7 @@ export default function Settings({
                     {caroIncomes.length} Einkommensquelle
                     {caroIncomes.length !== 1 ? 'n' : ''}
                   </div>
-                </div>
+                </Card>
 
                 {/* Rest vom Vormonat - keep Input style but align visually */}
                 <div className='bg-white p-3 sm:p-4 rounded-xl border border-gray-100'>
