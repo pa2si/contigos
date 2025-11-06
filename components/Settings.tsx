@@ -371,7 +371,8 @@ export default function Settings({
 
                   <div className='mt-4 p-3 bg-gradient-to-r from-green-50 to-green-100 rounded-xl border border-green-100'>
                     <div className='flex items-center justify-between'>
-                      <span className='text-sm font-medium text-green-900'>
+                      <span className='text-sm font-medium text-green-900 flex items-center gap-2'>
+                        <span>🎯</span>
                         Gesamtes monatliches Sparziel:
                       </span>
                       <span className='text-lg font-bold text-green-700'>
