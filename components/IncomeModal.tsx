@@ -36,7 +36,7 @@ export default function IncomeModal({
 
   return (
     <FormModal
-      type="income"
+      type='income'
       isOpen={isOpen}
       onClose={onClose}
       isEditing={!!editingIncome}

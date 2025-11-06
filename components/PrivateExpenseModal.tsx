@@ -35,7 +35,7 @@ export default function PrivateExpenseModal({
 
   return (
     <FormModal
-      type="private-expense"
+      type='private-expense'
       isOpen={isOpen}
       onClose={onClose}
       isEditing={!!editingExpense}

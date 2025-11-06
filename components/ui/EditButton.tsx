@@ -4,12 +4,14 @@ interface EditButtonProps {
   onClick: () => void;
   disabled?: boolean;
   size?: 'sm' | 'md' | 'lg';
+  variant?: 'default' | 'income';
 }
 
 export default function EditButton({
   onClick,
   disabled = false,
   size = 'sm',
+  variant = 'default',
 }: EditButtonProps) {
   const iconSizes = {
     sm: 'w-4 h-4',
@@ -17,11 +19,16 @@ export default function EditButton({
     lg: 'w-6 h-6',
   };
 
+  const colorClasses =
+    variant === 'income'
+      ? 'text-white/70 hover:text-white cursor-pointer transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed'
+      : 'text-gray-500 hover:text-blue-600 cursor-pointer transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
+
   return (
     <button
       onClick={onClick}
       disabled={disabled}
-      className='text-gray-500 hover:text-blue-600 cursor-pointer transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed'
+      className={colorClasses}
       title='Bearbeiten'
     >
       {/* Modern edit icon - simple pencil */}

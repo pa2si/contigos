@@ -21,19 +21,19 @@ const IncomeRow = ({
 }) => {
   const colorClasses = {
     blue: {
-      container:
-        'bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 hover:border-blue-300',
-      title: 'text-blue-800',
+      container: 'bg-blue-50 border-blue-200',
+      text: 'text-blue-700',
       amount: 'text-blue-700',
-      amountBg: 'bg-blue-200 text-blue-800',
+      amountBg:
+        'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg',
       glow: 'hover:shadow-blue-200',
     },
     green: {
-      container:
-        'bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200 hover:border-emerald-300',
-      title: 'text-emerald-800',
+      container: 'bg-emerald-50 border-emerald-200',
+      text: 'text-emerald-700',
       amount: 'text-emerald-700',
-      amountBg: 'bg-emerald-200 text-emerald-800',
+      amountBg:
+        'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg',
       glow: 'hover:shadow-emerald-200',
     },
   };
@@ -41,64 +41,41 @@ const IncomeRow = ({
   const classes = colorClasses[color];
 
   return (
-    <div
-      className={`p-3 sm:p-4 ${classes.container} border-2 rounded-lg hover:shadow-lg ${classes.glow} transition-all duration-200`}
-    >
+    <div className='group'>
       {/* Mobile Layout - Stacked */}
-      <div className='flex flex-col sm:hidden gap-3'>
-        {/* Top Row: Icon, Title and Actions */}
-        <div className='flex items-start justify-between mb-3'>
-          <div className='flex items-start gap-2 flex-1 min-w-0'>
-            <div className='p-1.5 rounded-lg bg-white/50 shrink-0'>
-              <span className='text-base'>💼</span>
-            </div>
-            <div className='min-w-0 flex-1'>
-              <h3
-                className={`font-semibold text-sm leading-tight ${classes.title}`}
-              >
-                {income.beschreibung}
-              </h3>
+      <div className='flex flex-col sm:hidden gap-2'>
+        {/* Income Display with integrated actions */}
+        <div
+          className={`px-3 py-1.5 rounded-lg ${classes.amountBg} flex items-center justify-between`}
+        >
+          <div className='flex-1'>
+            <div className='font-medium text-sm'>{income.beschreibung}</div>
+            <div className='font-bold text-lg'>
+              {formatCurrencyFixed(income.betrag)}
             </div>
           </div>
-          <div className='flex gap-1 shrink-0 ml-2'>
-            <EditButton onClick={onEdit} />
-            <DeleteButton onClick={onDelete} />
-          </div>
-        </div>
-
-        {/* Full Width Amount Display */}
-        <div className='w-full'>
-          <div
-            className={`w-full px-4 py-3 rounded-lg font-bold text-lg text-center ${classes.amountBg}`}
-          >
-            {formatCurrencyFixed(income.betrag)}
+          <div className='flex gap-1 opacity-70 group-hover:opacity-100 transition-opacity'>
+            <EditButton onClick={onEdit} variant='income' />
+            <DeleteButton onClick={onDelete} variant='income' />
           </div>
         </div>
       </div>
 
       {/* Desktop Layout - Horizontal */}
-      <div className='hidden sm:flex items-center justify-between'>
-        {/* Left Side - Income Details */}
-        <div className='flex items-center gap-3 flex-1'>
-          <div className='p-2 rounded-lg bg-white/50 shrink-0'>
-            <span className='text-lg'>💼</span>
-          </div>
-          <div className='min-w-0 flex-1'>
-            <h3 className={`font-semibold text-base mb-2 ${classes.title}`}>
-              {income.beschreibung}
-            </h3>
-            <div
-              className={`w-full px-4 py-2 rounded-lg font-bold text-lg text-center ${classes.amountBg}`}
-            >
+      <div className='hidden sm:block'>
+        <div
+          className={`px-3 py-1.5 rounded-lg ${classes.amountBg} flex items-center justify-between hover:shadow-sm transition-shadow`}
+        >
+          <div className='flex-1'>
+            <div className='font-medium text-sm'>{income.beschreibung}</div>
+            <div className='font-bold text-lg'>
               {formatCurrencyFixed(income.betrag)}
             </div>
           </div>
-        </div>
-
-        {/* Right Side - Actions */}
-        <div className='flex gap-1 shrink-0 ml-4'>
-          <EditButton onClick={onEdit} />
-          <DeleteButton onClick={onDelete} />
+          <div className='flex gap-1 opacity-70 group-hover:opacity-100 transition-opacity'>
+            <EditButton onClick={onEdit} variant='income' />
+            <DeleteButton onClick={onDelete} variant='income' />
+          </div>
         </div>
       </div>
     </div>
@@ -183,13 +160,13 @@ export default function IncomeManagement({
       <div className='space-y-8'>
         <div className='space-y-8 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-8'>
           {/* Pascal's Income Section */}
-          <div className='space-y-4'>
-            <div className='flex items-center justify-between mb-4'>
-              <h3 className='text-lg font-semibold text-gray-700 flex items-center gap-2'>
+          <div className='bg-gradient-to-r from-blue-500/10 to-blue-600/10 border border-blue-200/50 rounded-xl p-4 space-y-4 backdrop-blur'>
+            <div className='flex items-center justify-between'>
+              <h3 className='text-lg font-semibold text-blue-700 flex items-center gap-2'>
                 <span>👨‍💼</span>
                 Pascal Einkommen
               </h3>
-              <div className='text-sm text-gray-500'>
+              <div className='text-sm text-blue-600 font-medium'>
                 {pascalIncomes.length > 0 && (
                   <span>Gesamt: {formatCurrencyFixed(pascalTotal)}</span>
                 )}
@@ -197,9 +174,9 @@ export default function IncomeManagement({
             </div>
 
             {pascalIncomes.length === 0 ? (
-              <div className='text-center py-6 lg:py-8 bg-white rounded-lg border-2 border-dashed border-blue-200'>
-                <div className='text-3xl lg:text-4xl mb-3'>�‍�💼</div>
-                <p className='text-gray-500 text-sm lg:text-base'>
+              <div className='text-center py-6 lg:py-8 bg-white/50 rounded-lg border border-dashed border-blue-300/50'>
+                <div className='text-3xl lg:text-4xl mb-3'>👨‍💼</div>
+                <p className='text-blue-600 text-sm lg:text-base'>
                   Keine Einkommensquellen für Pascal
                 </p>
               </div>
@@ -219,13 +196,13 @@ export default function IncomeManagement({
           </div>
 
           {/* Caro's Income Section */}
-          <div className='space-y-4'>
-            <div className='flex items-center justify-between mb-4'>
-              <h3 className='text-lg font-semibold text-gray-700 flex items-center gap-2'>
+          <div className='bg-gradient-to-r from-emerald-500/10 to-green-600/10 border border-emerald-200/50 rounded-xl p-4 space-y-4 backdrop-blur'>
+            <div className='flex items-center justify-between'>
+              <h3 className='text-lg font-semibold text-emerald-700 flex items-center gap-2'>
                 <span>👩‍💼</span>
                 Caro Einkommen
               </h3>
-              <div className='text-sm text-gray-500'>
+              <div className='text-sm text-emerald-600 font-medium'>
                 {caroIncomes.length > 0 && (
                   <span>Gesamt: {formatCurrencyFixed(caroTotal)}</span>
                 )}
@@ -233,9 +210,9 @@ export default function IncomeManagement({
             </div>
 
             {caroIncomes.length === 0 ? (
-              <div className='text-center py-6 lg:py-8 bg-white rounded-lg border-2 border-dashed border-emerald-200'>
-                <div className='text-3xl lg:text-4xl mb-3'>�‍�💼</div>
-                <p className='text-gray-500 text-sm lg:text-base'>
+              <div className='text-center py-6 lg:py-8 bg-white/50 rounded-lg border border-dashed border-emerald-300/50'>
+                <div className='text-3xl lg:text-4xl mb-3'>👩‍💼</div>
+                <p className='text-emerald-600 text-sm lg:text-base'>
                   Keine Einkommensquellen für Caro
                 </p>
               </div>

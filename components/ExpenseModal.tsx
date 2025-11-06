@@ -30,12 +30,15 @@ export default function ExpenseModal({
   isExpenseFormValid,
 }: ExpenseModalProps) {
   const handleUpdateForm = (field: string, value: string | Payer) => {
-    onUpdateExpenseForm(field as 'beschreibung' | 'betrag' | 'bezahlt_von', value);
+    onUpdateExpenseForm(
+      field as 'beschreibung' | 'betrag' | 'bezahlt_von',
+      value
+    );
   };
 
   return (
     <FormModal
-      type="expense"
+      type='expense'
       isOpen={isOpen}
       onClose={onClose}
       isEditing={!!editingExpense}

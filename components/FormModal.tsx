@@ -138,7 +138,7 @@ export default function FormModal({
   isFormValid,
 }: FormModalProps) {
   const config = FORM_CONFIGS[type];
-  
+
   const handleSave = async () => {
     if (isFormValid()) {
       await onSave();
@@ -244,7 +244,12 @@ export default function FormModal({
               </label>
               <select
                 value={formData.thirdField as string}
-                onChange={(e) => onUpdateForm(config.fields.thirdField.fieldName, e.target.value as ThirdFieldValue)}
+                onChange={(e) =>
+                  onUpdateForm(
+                    config.fields.thirdField.fieldName,
+                    e.target.value as ThirdFieldValue
+                  )
+                }
                 className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-all text-sm sm:text-base ${colors.borderColor} ${colors.ringColor}`}
               >
                 {config.fields.thirdField.options.map((option) => (

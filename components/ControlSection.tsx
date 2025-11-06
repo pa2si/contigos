@@ -47,7 +47,9 @@ const ControlDetails = ({
           <div className='flex justify-between py-1'>
             <span className='text-gray-700'>🏦 Ahorros (Sparen):</span>
             <span className='font-bold text-gray-900 tabular-nums'>
-              {formatCurrencyFixed(results.ahorros_betrag + results.investieren)}
+              {formatCurrencyFixed(
+                results.ahorros_betrag + results.investieren
+              )}
             </span>
           </div>
           <div className='flex justify-between py-1 ml-6'>
