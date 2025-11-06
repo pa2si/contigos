@@ -46,7 +46,7 @@ const IncomeRow = ({
       <div className='flex flex-col sm:hidden gap-2'>
         {/* Income Display with integrated actions */}
         <div
-          className={`px-3 py-1.5 rounded-lg ${classes.amountBg} flex items-center justify-between`}
+          className={`px-3 py-1 rounded-lg ${classes.amountBg} flex items-center justify-between`}
         >
           <div className='flex-1'>
             <div className='font-medium text-sm'>{income.beschreibung}</div>
@@ -64,7 +64,7 @@ const IncomeRow = ({
       {/* Desktop Layout - Horizontal */}
       <div className='hidden sm:block'>
         <div
-          className={`px-3 py-1.5 rounded-lg ${classes.amountBg} flex items-center justify-between hover:shadow-sm transition-shadow`}
+          className={`px-3 py-1 rounded-lg ${classes.amountBg} flex items-center justify-between hover:shadow-sm transition-shadow`}
         >
           <div className='flex-1'>
             <div className='font-medium text-sm'>{income.beschreibung}</div>
