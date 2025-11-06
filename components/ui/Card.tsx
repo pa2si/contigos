@@ -10,9 +10,10 @@ interface CardProps extends PropsWithChildren {
 }
 
 const variantClasses: Record<Variant, string> = {
-  blue: 'bg-gradient-to-r from-blue-500/10 to-blue-600/10 border border-blue-200/50 rounded-xl p-4 space-y-4 backdrop-blur',
+  // Match the Übersicht card backgrounds (pastel 50 -> 100)
+  blue: 'bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-4 space-y-4 backdrop-blur',
   green:
-    'bg-gradient-to-r from-emerald-500/10 to-green-600/10 border border-emerald-200/50 rounded-xl p-4 space-y-4 backdrop-blur',
+    'bg-gradient-to-r from-emerald-50 to-green-100 rounded-xl border border-emerald-100 p-4 space-y-4 backdrop-blur',
   summary:
     'p-4 lg:p-6 bg-gradient-to-r from-blue-50 to-emerald-50 rounded-lg border border-blue-200',
 };
