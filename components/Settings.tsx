@@ -208,37 +208,67 @@ export default function Settings({
           <div className='p-4 sm:p-6'>
             {activeTab === 'overview' && (
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6'>
-                <InputCard
-                  title='Pascal Einkommen'
-                  value={pascalTotal}
-                  icon='👨‍💼'
-                  description={`${pascalIncomes.length} Einkommensquelle${
-                    pascalIncomes.length !== 1 ? 'n' : ''
-                  }`}
-                  color='blue'
-                  isReadOnly={true}
-                />
-                <InputCard
-                  title='Caro Einkommen'
-                  value={caroTotal}
-                  icon='👩‍💼'
-                  description={`${caroIncomes.length} Einkommensquelle${
-                    caroIncomes.length !== 1 ? 'n' : ''
-                  }`}
-                  color='green'
-                  isReadOnly={true}
-                />
-                <InputCard
-                  title='Rest vom Vormonat'
-                  value={settings.restgeld_vormonat}
-                  onChange={(value) =>
-                    onSettingsChange('restgeld_vormonat', value)
-                  }
-                  onBlur={onSettingsBlur}
-                  icon='💰'
-                  description='Übrig gebliebenes Geld vom letzten Monat'
-                  color='amber'
-                />
+                {/* Pascal overview card (match Einkommen UI) */}
+                <div className='bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-4 space-y-3'>
+                  <div className='flex items-center justify-between'>
+                    <h3 className='text-lg font-semibold text-blue-700 flex items-center gap-2'>
+                      <span>👨‍💼</span>
+                      Pascal Einkommen
+                    </h3>
+                    <div className='text-sm text-blue-600 font-medium'>
+                      {pascalIncomes.length > 0 && (
+                        <span>Gesamt: {formatCurrency(pascalTotal)}</span>
+                      )}
+                    </div>
+                  </div>
+                  <div className='text-2xl font-bold text-gray-800'>
+                    {formatCurrency(pascalTotal)}
+                  </div>
+                  <div className='text-sm text-gray-500'>
+                    {pascalIncomes.length} Einkommensquelle
+                    {pascalIncomes.length !== 1 ? 'n' : ''}
+                  </div>
+                </div>
+
+                {/* Caro overview card (match Einkommen UI) */}
+                <div className='bg-gradient-to-r from-green-50 to-emerald-100 rounded-xl border border-emerald-100 p-4 space-y-3'>
+                  <div className='flex items-center justify-between'>
+                    <h3 className='text-lg font-semibold text-emerald-700 flex items-center gap-2'>
+                      <span>👩‍💼</span>
+                      Caro Einkommen
+                    </h3>
+                    <div className='text-sm text-emerald-600 font-medium'>
+                      {caroIncomes.length > 0 && (
+                        <span>Gesamt: {formatCurrency(caroTotal)}</span>
+                      )}
+                    </div>
+                  </div>
+                  <div className='text-2xl font-bold text-gray-800'>
+                    {formatCurrency(caroTotal)}
+                  </div>
+                  <div className='text-sm text-gray-500'>
+                    {caroIncomes.length} Einkommensquelle
+                    {caroIncomes.length !== 1 ? 'n' : ''}
+                  </div>
+                </div>
+
+                {/* Rest vom Vormonat - keep Input style but align visually */}
+                <div className='bg-white p-3 sm:p-4 rounded-xl border border-gray-100'>
+                  <div className='flex items-start sm:items-center gap-2 sm:gap-3 mb-3'>
+                    <span className='text-xl sm:text-2xl shrink-0'>💰</span>
+                    <div className='min-w-0 flex-1'>
+                      <h3 className='font-semibold text-gray-900 text-sm sm:text-base truncate'>
+                        Rest vom Vormonat
+                      </h3>
+                      <p className='text-xs sm:text-sm text-gray-500 wrap-break-word'>
+                        Übrig gebliebenes Geld vom letzten Monat
+                      </p>
+                    </div>
+                  </div>
+                  <div className='w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg font-semibold text-base sm:text-lg border-2 border-amber-200 text-amber-900 transition-colors'>
+                    {formatCurrency(settings.restgeld_vormonat)}
+                  </div>
+                </div>
               </div>
             )}
 
