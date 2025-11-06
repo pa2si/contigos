@@ -278,35 +278,56 @@ export default function Settings({
 
             {activeTab === 'budget' && (
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6'>
-                <InputCard
-                  title='Comida (Lebensmittel)'
-                  value={settings.comida_betrag}
-                  onChange={(value) => onSettingsChange('comida_betrag', value)}
-                  onBlur={onSettingsBlur}
-                  icon='🛒'
-                  description='Monatliches Budget für Lebensmittel'
-                  color='green'
-                />
-                <InputCard
-                  title='Ahorros (Sparen)'
-                  value={settings.ahorros_betrag}
-                  onChange={(value) =>
-                    onSettingsChange('ahorros_betrag', value)
-                  }
-                  onBlur={onSettingsBlur}
-                  icon='💎'
-                  description='Monatlicher Sparbetrag'
-                  color='purple'
-                />
-                <InputCard
-                  title='Investieren'
-                  value={settings.investieren}
-                  onChange={(value) => onSettingsChange('investieren', value)}
-                  onBlur={onSettingsBlur}
-                  icon='📊'
-                  description='Monatliches Investment Budget'
-                  color='blue'
-                />
+                {/* Comida (Lebensmittel) - card style matching Einkommen */}
+                <div className='bg-gradient-to-r from-emerald-50 to-green-100 rounded-xl border border-emerald-100 p-4 space-y-3'>
+                  <div className='flex items-center justify-between'>
+                    <h3 className='text-lg font-semibold text-emerald-700 flex items-center gap-2'>
+                      <span>🛒</span>
+                      Comida (Lebensmittel)
+                    </h3>
+                    <div className='text-sm text-emerald-600 font-medium'>
+                      <span>{formatCurrency(settings.comida_betrag)}</span>
+                    </div>
+                  </div>
+                  <div className='text-2xl font-bold text-gray-800'>
+                    {formatCurrency(settings.comida_betrag)}
+                  </div>
+                  <div className='text-sm text-gray-500'>Monatliches Budget für Lebensmittel</div>
+                </div>
+
+                {/* Ahorros (Sparen) - card style matching Einkommen */}
+                <div className='bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-100 p-4 space-y-3'>
+                  <div className='flex items-center justify-between'>
+                    <h3 className='text-lg font-semibold text-purple-700 flex items-center gap-2'>
+                      <span>💎</span>
+                      Ahorros (Sparen)
+                    </h3>
+                    <div className='text-sm text-purple-600 font-medium'>
+                      <span>{formatCurrency(settings.ahorros_betrag)}</span>
+                    </div>
+                  </div>
+                  <div className='text-2xl font-bold text-gray-800'>
+                    {formatCurrency(settings.ahorros_betrag)}
+                  </div>
+                  <div className='text-sm text-gray-500'>Monatlicher Sparbetrag</div>
+                </div>
+
+                {/* Investieren - card style matching Einkommen */}
+                <div className='bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-4 space-y-3'>
+                  <div className='flex items-center justify-between'>
+                    <h3 className='text-lg font-semibold text-blue-700 flex items-center gap-2'>
+                      <span>📊</span>
+                      Investieren
+                    </h3>
+                    <div className='text-sm text-blue-600 font-medium'>
+                      <span>{formatCurrency(settings.investieren)}</span>
+                    </div>
+                  </div>
+                  <div className='text-2xl font-bold text-gray-800'>
+                    {formatCurrency(settings.investieren)}
+                  </div>
+                  <div className='text-sm text-gray-500'>Monatliches Investment Budget</div>
+                </div>
               </div>
             )}
 
