@@ -22,14 +22,20 @@ const IncomeRow = ({
 }) => {
   const colorClasses = {
     blue: {
-      container: 'bg-blue-50 border border-blue-100',
+      // Use the same pastel gradient tone as Übersicht overview cards
+      // pastel gradient similar to Budget cards (soft, low-contrast) so rows tie visually to the section
+      container:
+        'bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-100 p-2 shadow-md hover:shadow-lg transition-shadow duration-150',
       text: 'text-blue-700',
       amount: 'text-blue-700',
       amountBg: 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow',
       glow: 'hover:shadow-blue-200',
     },
     green: {
-      container: 'bg-emerald-50 border border-emerald-100',
+      // Green pastel matching Übersicht
+      // pastel gradient similar to Budget cards (soft, low-contrast) so rows tie visually to the section
+      container:
+        'bg-gradient-to-r from-emerald-50 to-green-100 rounded-lg border border-emerald-100 p-2 shadow-md hover:shadow-lg transition-shadow duration-150',
       text: 'text-emerald-700',
       amount: 'text-emerald-700',
       amountBg:
@@ -48,7 +54,7 @@ const IncomeRow = ({
           className={`px-3 py-2 rounded-lg ${classes.container} flex items-center justify-between`}
         >
           <div className='flex-1 pr-3'>
-            <div className='font-medium text-sm leading-tight'>
+            <div className='font-semibold text-sm leading-tight'>
               {income.beschreibung}
             </div>
             <div className='text-xs text-gray-500 mt-0.5'>{income.quelle}</div>
@@ -73,7 +79,7 @@ const IncomeRow = ({
           className={`px-4 py-3 rounded-lg ${classes.container} flex items-center justify-between hover:shadow-sm transition-shadow`}
         >
           <div className='flex-1 pr-4'>
-            <div className='font-medium text-sm'>{income.beschreibung}</div>
+            <div className='font-semibold text-sm'>{income.beschreibung}</div>
             <div className='text-xs text-gray-500 mt-0.5'>{income.quelle}</div>
           </div>
           <div className='flex items-center gap-3'>
