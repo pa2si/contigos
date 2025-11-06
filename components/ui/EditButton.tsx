@@ -21,7 +21,7 @@ export default function EditButton({
 
   const colorClasses =
     variant === 'income'
-      ? 'text-white/70 hover:text-white cursor-pointer transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed'
+      ? 'text-gray-600 hover:text-gray-800 cursor-pointer transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed'
       : 'text-gray-500 hover:text-blue-600 cursor-pointer transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
 
   return (
