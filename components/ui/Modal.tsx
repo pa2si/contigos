@@ -69,7 +69,12 @@ export default function Modal({
         aria-labelledby='modal-title'
       >
         {/* Header - allow caller to override header class to tint by person */}
-        <div className={headerClass || 'flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-2xl'}>
+        <div
+          className={
+            headerClass ||
+            'flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-2xl'
+          }
+        >
           <h2
             id='modal-title'
             className='text-lg sm:text-xl font-semibold text-gray-900 flex items-center gap-2'
