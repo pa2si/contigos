@@ -6,6 +6,7 @@ import { formatCurrencyFixed } from '@/lib/utils';
 import EditButton from '@/components/ui/EditButton';
 import DeleteButton from '@/components/ui/DeleteButton';
 import IncomeModal from '@/components/IncomeModal';
+import Card from '@/components/ui/Card';
 
 // Clean Income Row Component - Mobile Responsive
 const IncomeRow = ({
@@ -136,7 +137,7 @@ export default function IncomeManagement({
       <div className='space-y-8'>
         <div className='space-y-8 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-8'>
           {/* Pascal's Income Section */}
-          <div className='bg-gradient-to-r from-blue-500/10 to-blue-600/10 border border-blue-200/50 rounded-xl p-4 space-y-4 backdrop-blur'>
+          <Card variant='blue'>
             <div className='flex items-center justify-between'>
               <h3 className='text-lg font-semibold text-blue-700 flex items-center gap-2'>
                 <span>👨‍💼</span>
@@ -169,10 +170,10 @@ export default function IncomeManagement({
                 ))}
               </div>
             )}
-          </div>
+          </Card>
 
           {/* Caro's Income Section */}
-          <div className='bg-gradient-to-r from-emerald-500/10 to-green-600/10 border border-emerald-200/50 rounded-xl p-4 space-y-4 backdrop-blur'>
+          <Card variant='green'>
             <div className='flex items-center justify-between'>
               <h3 className='text-lg font-semibold text-emerald-700 flex items-center gap-2'>
                 <span>👩‍💼</span>
@@ -205,12 +206,12 @@ export default function IncomeManagement({
                 ))}
               </div>
             )}
-          </div>
+          </Card>
         </div>
 
         {/* Summary Section */}
         {(pascalIncomes.length > 0 || caroIncomes.length > 0) && (
-          <div className='p-4 lg:p-6 bg-gradient-to-r from-blue-50 to-emerald-50 rounded-lg border border-blue-200'>
+          <Card variant='summary'>
             <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3'>
               <div className='flex items-center gap-2'>
                 <span className='text-xl'>📊</span>
@@ -228,7 +229,7 @@ export default function IncomeManagement({
                 </div>
               </div>
             </div>
-          </div>
+          </Card>
         )}
       </div>
 
