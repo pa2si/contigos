@@ -1,7 +1,9 @@
 'use client';
 
 import { Payer, IncomeSource } from '@prisma/client';
+import { useState } from 'react';
 import { Partner } from '@/types';
+import { ButtonSpinner } from '@/components/LoadingSpinner';
 import Modal from '@/components/ui/Modal';
 
 type FormType = 'expense' | 'income' | 'private-expense';
@@ -138,11 +140,19 @@ export default function FormModal({
   isFormValid,
 }: FormModalProps) {
   const config = FORM_CONFIGS[type];
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSave = async () => {
-    if (isFormValid()) {
+    if (!isFormValid() || isSubmitting) return;
+
+    setIsSubmitting(true);
+    try {
       await onSave();
       onClose();
+    } catch (error) {
+      console.error('Error saving form:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -205,7 +215,7 @@ export default function FormModal({
           {isEditing ? config.title.edit : config.title.add}
         </>
       }
-      headerClass={`flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r ${colors.headerFrom} ${colors.headerTo} rounded-t-2xl`}
+  headerClass={`flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-linear-to-r ${colors.headerFrom} ${colors.headerTo} rounded-t-2xl`}
       size='lg'
     >
       <div className='p-4 sm:p-6' onKeyDown={handleKeyDown}>
@@ -273,11 +283,17 @@ export default function FormModal({
         <div className='flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8 pt-6 border-t border-gray-200'>
           <button
             onClick={handleSave}
-            disabled={!isFormValid()}
-            className={`flex-1 sm:flex-none px-6 py-3 bg-gradient-to-r text-white rounded-xl font-medium disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 flex items-center justify-center gap-2 text-sm sm:text-base ${colors.buttonFrom} ${colors.buttonTo} ${colors.buttonHoverFrom} ${colors.buttonHoverTo}`}
+            disabled={!isFormValid() || isSubmitting}
+            className={`flex-1 sm:flex-none px-6 py-3 bg-linear-to-r text-white rounded-xl font-medium disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 flex items-center justify-center gap-2 text-sm sm:text-base ${colors.buttonFrom} ${colors.buttonTo} ${colors.buttonHoverFrom} ${colors.buttonHoverTo}`}
           >
-            <span>{isEditing ? '💾' : config.button.icon}</span>
-            {isEditing ? config.button.edit : config.button.add}
+            {isSubmitting ? (
+              <ButtonSpinner message={isEditing ? 'Speichern...' : 'Hinzufügen...'} />
+            ) : (
+              <>
+                <span>{isEditing ? '💾' : config.button.icon}</span>
+                {isEditing ? config.button.edit : config.button.add}
+              </>
+            )}
           </button>
 
           <button
