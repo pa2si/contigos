@@ -31,11 +31,11 @@ export class ApiService {
       ...data,
       p1_einkommen: Number(data.p1_einkommen) || 0,
       p2_einkommen: Number(data.p2_einkommen) || 0,
-      restgeld_vormonat: Number(data.restgeld_vormonat) || 0,
-      comida_betrag: Number(data.comida_betrag) || 0,
-      ahorros_betrag: Number(data.ahorros_betrag) || 0,
-      tagesgeldkonto_betrag: Number(data.tagesgeldkonto_betrag) || 0,
-      investieren: Number(data.investieren) || 0,
+      restgeld_gk_vormonat: Number(data.restgeld_gk_vormonat) || 0,
+      budget_lebensmittel: Number(data.budget_lebensmittel) || 0,
+      sparen_tagesgeld: Number(data.sparen_tagesgeld) || 0,
+      tagesgeldkonto_aktuell: Number(data.tagesgeldkonto_aktuell) || 0,
+      sparen_depot: Number(data.sparen_depot) || 0,
     };
   }
 
@@ -48,11 +48,11 @@ export class ApiService {
     const dataToSend = {
       p1_einkommen: Number(settings.p1_einkommen) || 0,
       p2_einkommen: Number(settings.p2_einkommen) || 0,
-      restgeld_vormonat: Number(settings.restgeld_vormonat) || 0,
-      comida_betrag: Number(settings.comida_betrag) || 0,
-      ahorros_betrag: Number(settings.ahorros_betrag) || 0,
-      tagesgeldkonto_betrag: Number(settings.tagesgeldkonto_betrag) || 0,
-      investieren: Number(settings.investieren) || 0,
+      restgeld_gk_vormonat: Number(settings.restgeld_gk_vormonat) || 0,
+      budget_lebensmittel: Number(settings.budget_lebensmittel) || 0,
+      sparen_tagesgeld: Number(settings.sparen_tagesgeld) || 0,
+      tagesgeldkonto_aktuell: Number(settings.tagesgeldkonto_aktuell) || 0,
+      sparen_depot: Number(settings.sparen_depot) || 0,
     };
 
     const response = await fetch('/api/settings', {

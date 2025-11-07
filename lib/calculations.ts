@@ -28,13 +28,13 @@ export function calculateFinancialResults(
   const p2_einkommen = safeIncomes
     .filter((income) => income.quelle === 'Partner2')
     .reduce((sum, income) => sum + (Number(income.betrag) || 0), 0);
-  const restgeld_vormonat = Number(settings.restgeld_vormonat) || 0;
+  const restgeld_gk_vormonat = Number(settings.restgeld_gk_vormonat) || 0;
 
   // Fixed costs from settings (treated as shared account expenses)
-  const comida_betrag = Number(settings.comida_betrag) || 0;
-  const ahorros_betrag = Number(settings.ahorros_betrag) || 0;
-  const investieren = Number(settings.investieren) || 0;
-  const tagesgeldkonto_betrag = Number(settings.tagesgeldkonto_betrag) || 0;
+  const budget_lebensmittel = Number(settings.budget_lebensmittel) || 0;
+  const sparen_tagesgeld = Number(settings.sparen_tagesgeld) || 0;
+  const sparen_depot = Number(settings.sparen_depot) || 0;
+  const tagesgeldkonto_aktuell = Number(settings.tagesgeldkonto_aktuell) || 0;
 
   // Step 1: Total income
   const gesamteinkommen = p1_einkommen + p2_einkommen;
@@ -54,7 +54,7 @@ export function calculateFinancialResults(
     0
   );
   const gesamtkosten =
-    comida_betrag + ahorros_betrag + investieren + sum_dyn_expenses;
+    budget_lebensmittel + sparen_tagesgeld + sparen_depot + sum_dyn_expenses;
 
   // Step 5 & 6: Total cost share per partner
   const p1_gesamtanteil_kosten = gesamtkosten * p1_anteil_ratio;
@@ -75,11 +75,11 @@ export function calculateFinancialResults(
     .reduce((sum, exp) => sum + (Number(exp.betrag) || 0), 0);
 
   const bedarf_gk =
-    comida_betrag + ahorros_betrag + investieren + gk_dyn_expenses;
+    budget_lebensmittel + sparen_tagesgeld + sparen_depot + gk_dyn_expenses;
 
   // Step 10 & 11: Previous month remainder allocation
-  const p1_anteil_restgeld = restgeld_vormonat * p1_anteil_ratio;
-  const p2_anteil_restgeld = restgeld_vormonat * p2_anteil_ratio;
+  const p1_anteil_restgeld = restgeld_gk_vormonat * p1_anteil_ratio;
+  const p2_anteil_restgeld = restgeld_gk_vormonat * p2_anteil_ratio;
 
   // Step 12 & 13: Final transfer amounts
   // (Share of total costs) - (already paid directly) - (share of previous remainder)
@@ -112,13 +112,13 @@ export function calculateFinancialResults(
     p2_private_expenses;
 
   // Step 16 & 17: Control calculations
-  const kontrolle_einzahlungNötig = bedarf_gk - restgeld_vormonat;
+  const kontrolle_einzahlungNötig = bedarf_gk - restgeld_gk_vormonat;
   const kontrolle_summeÜberweisungen =
     finale_überweisung_p1 + finale_überweisung_p2;
 
   // Step 18: Savings calculations
-  const aktuelles_tagesgeldkonto = tagesgeldkonto_betrag;
-  const neues_tagesgeldkonto = tagesgeldkonto_betrag + ahorros_betrag;
+  const aktuelles_tagesgeldkonto = tagesgeldkonto_aktuell;
+  const neues_tagesgeldkonto = tagesgeldkonto_aktuell + sparen_tagesgeld;
 
   return {
     gesamteinkommen,
@@ -141,9 +141,9 @@ export function calculateFinancialResults(
     aktuelles_tagesgeldkonto,
     neues_tagesgeldkonto,
     // Individual breakdown components
-    comida_betrag,
-    ahorros_betrag,
-    investieren,
+    budget_lebensmittel,
+    sparen_tagesgeld,
+    sparen_depot,
     gk_dyn_expenses,
   };
 }
@@ -172,9 +172,9 @@ function createEmptyResults(): CalculationResults {
     verbleibt_p2: 0,
     aktuelles_tagesgeldkonto: 0,
     neues_tagesgeldkonto: 0,
-    comida_betrag: 0,
-    ahorros_betrag: 0,
-    investieren: 0,
+    budget_lebensmittel: 0,
+    sparen_tagesgeld: 0,
+    sparen_depot: 0,
     gk_dyn_expenses: 0,
   };
 }

@@ -126,9 +126,9 @@ export default function ExpenseManagement({
   );
   const totalExpenses =
     dynamicExpensesTotal +
-    settings.comida_betrag +
-    settings.ahorros_betrag +
-    settings.investieren;
+    settings.budget_lebensmittel +
+    settings.sparen_tagesgeld +
+    settings.sparen_depot;
 
   return (
     <div className='bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-lg border border-gray-100 mb-6 overflow-hidden'>
@@ -233,23 +233,23 @@ export default function ExpenseManagement({
               </div>
               <div className='space-y-2'>
                 <ExpenseRow
-                  title='Comida (Lebensmittel)'
-                  amount={settings.comida_betrag}
+                  title='Lebensmittel (Budget)'
+                  amount={settings.budget_lebensmittel}
                   description='Monatliche Ausgabe für Lebensmittel'
                   type='fixed'
                   isFixed={true}
                 />
                 <ExpenseRow
-                  title='Ahorros (Sparen)'
-                  amount={settings.ahorros_betrag}
-                  description='Monatlicher Sparbetrag'
+                  title='Sparen (Tagesgeld)'
+                  amount={settings.sparen_tagesgeld}
+                  description='Monatlicher Sparbetrag für Tagesgeld'
                   type='fixed'
                   isFixed={true}
                 />
                 <ExpenseRow
-                  title='Investieren'
-                  amount={settings.investieren}
-                  description='Monatliches Investment Budget'
+                  title='Sparen (Depot)'
+                  amount={settings.sparen_depot}
+                  description='Monatliches Investment Budget / Depot'
                   type='fixed'
                   isFixed={true}
                 />
@@ -318,9 +318,9 @@ export default function ExpenseManagement({
                       </div>
                       <div className='text-sm text-red-500'>
                         {formatCurrency(
-                          settings.comida_betrag +
-                            settings.ahorros_betrag +
-                            settings.investieren
+                          settings.budget_lebensmittel +
+                            settings.sparen_tagesgeld +
+                            settings.sparen_depot
                         )}{' '}
                         budget + {formatCurrency(dynamicExpensesTotal)} geteilt
                       </div>

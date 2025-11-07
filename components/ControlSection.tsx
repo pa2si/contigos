@@ -39,29 +39,29 @@ const ControlDetails = ({
         </h4>
         <div className='space-y-2 text-sm'>
           <div className='flex justify-between py-1'>
-            <span className='text-gray-700'>💰 Comida (Essen):</span>
+            <span className='text-gray-700'>💰 Lebensmittel (Budget):</span>
             <span className='font-bold text-gray-900 tabular-nums'>
-              {formatCurrencyFixed(results.comida_betrag)}
+              {formatCurrencyFixed(results.budget_lebensmittel)}
             </span>
           </div>
           <div className='flex justify-between py-1'>
-            <span className='text-gray-700'>🏦 Ahorros (Sparen):</span>
+            <span className='text-gray-700'>🏦 Sparen (gesamt):</span>
             <span className='font-bold text-gray-900 tabular-nums'>
               {formatCurrencyFixed(
-                results.ahorros_betrag + results.investieren
+                results.sparen_tagesgeld + results.sparen_depot
               )}
             </span>
           </div>
           <div className='flex justify-between py-1 ml-6'>
             <span className='text-gray-600 text-sm'>↳ Tagesgeldkonto:</span>
             <span className='font-medium text-gray-800 tabular-nums text-sm'>
-              {formatCurrencyFixed(results.ahorros_betrag)}
+              {formatCurrencyFixed(results.sparen_tagesgeld)}
             </span>
           </div>
           <div className='flex justify-between py-1 ml-6'>
             <span className='text-gray-600 text-sm'>↳ Depot:</span>
             <span className='font-medium text-gray-800 tabular-nums text-sm'>
-              {formatCurrencyFixed(results.investieren)}
+              {formatCurrencyFixed(results.sparen_depot)}
             </span>
           </div>
           <div className='flex justify-between py-1'>
@@ -89,7 +89,7 @@ const ControlDetails = ({
             Restgeld Vormonat:
           </span>
           <span className='font-semibold text-gray-800'>
-            -{formatCurrencyFixed(settings.restgeld_vormonat)}
+            -{formatCurrencyFixed(settings.restgeld_gk_vormonat)}
           </span>
         </div>
 

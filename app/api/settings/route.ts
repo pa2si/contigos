@@ -13,11 +13,11 @@ export async function GET() {
           id: 1, // Force singleton pattern
           p1_einkommen: 2215,
           p2_einkommen: 1600,
-          restgeld_vormonat: 0,
-          comida_betrag: 1200,
-          ahorros_betrag: 0,
-          tagesgeldkonto_betrag: 0,
-          investieren: 0,
+          restgeld_gk_vormonat: 0,
+          budget_lebensmittel: 1200,
+          sparen_tagesgeld: 0,
+          tagesgeldkonto_aktuell: 0,
+          sparen_depot: 0,
         },
       });
     }
@@ -39,22 +39,22 @@ export async function PUT(request: NextRequest) {
     const {
       p1_einkommen,
       p2_einkommen,
-      restgeld_vormonat,
-      comida_betrag,
-      ahorros_betrag,
-      tagesgeldkonto_betrag,
-      investieren,
+      restgeld_gk_vormonat,
+      budget_lebensmittel,
+      sparen_tagesgeld,
+      tagesgeldkonto_aktuell,
+      sparen_depot,
     } = body;
 
     // Validate input
     if (
       typeof p1_einkommen !== 'number' ||
       typeof p2_einkommen !== 'number' ||
-      typeof restgeld_vormonat !== 'number' ||
-      typeof comida_betrag !== 'number' ||
-      typeof ahorros_betrag !== 'number' ||
-      typeof tagesgeldkonto_betrag !== 'number' ||
-      typeof investieren !== 'number'
+      typeof restgeld_gk_vormonat !== 'number' ||
+      typeof budget_lebensmittel !== 'number' ||
+      typeof sparen_tagesgeld !== 'number' ||
+      typeof tagesgeldkonto_aktuell !== 'number' ||
+      typeof sparen_depot !== 'number'
     ) {
       return NextResponse.json(
         { error: 'Invalid input: all fields must be numbers' },
@@ -68,21 +68,21 @@ export async function PUT(request: NextRequest) {
       update: {
         p1_einkommen,
         p2_einkommen,
-        restgeld_vormonat,
-        comida_betrag,
-        ahorros_betrag,
-        tagesgeldkonto_betrag,
-        investieren,
+        restgeld_gk_vormonat,
+        budget_lebensmittel,
+        sparen_tagesgeld,
+        tagesgeldkonto_aktuell,
+        sparen_depot,
       },
       create: {
         id: 1,
         p1_einkommen,
         p2_einkommen,
-        restgeld_vormonat,
-        comida_betrag,
-        ahorros_betrag,
-        tagesgeldkonto_betrag,
-        investieren,
+        restgeld_gk_vormonat,
+        budget_lebensmittel,
+        sparen_tagesgeld,
+        tagesgeldkonto_aktuell,
+        sparen_depot,
       },
     });
 

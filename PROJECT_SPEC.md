@@ -45,7 +45,7 @@ enum Payer {
 - Fields:
   - `p1_einkommen` (Float, default: 2215)
   - `p2_einkommen` (Float, default: 1600)
-  - `restgeld_vormonat` (Float, default: 0)
+  - `restgeld_gk_vormonat` (Float, default: 0)
 
 #### Expense Model
 
@@ -69,7 +69,7 @@ enum Payer {
 - Three number input fields:
   - Partner 1 Einkommen
   - Partner 2 Einkommen
-  - Restgeld Vormonat
+  - Restgeld GK Vormonat
 
 #### 2. Ausgabenliste (Expense List)
 
@@ -91,7 +91,7 @@ enum Payer {
 ##### KARTE 2: KONTROLLE GK
 
 - Bedarf Gemeinschaftskonto: `[Bedarf_GK]`
-- Restgeld Vormonat: `[restgeld_vormonat]`
+- Restgeld GK Vormonat: `[restgeld_gk_vormonat]`
 - Benötigte neue Einzahlung: `[Kontrolle_EinzahlungNötig]`
 - Summe der Überweisungen: `[Kontrolle_SummeÜberweisungen]`
 
@@ -122,15 +122,15 @@ enum Payer {
 
 9. **Bedarf_GK** = Sum of all `betrag` where `bezahlt_von == Gemeinschaftskonto`
 
-10. **P1_AnteilRestgeld** = `restgeld_vormonat * P1_AnteilProzent`
+10. **P1_AnteilRestgeld** = `restgeld_gk_vormonat * P1_AnteilProzent`
 
-11. **P2_AnteilRestgeld** = `restgeld_vormonat * P2_AnteilProzent`
+11. **P2_AnteilRestgeld** = `restgeld_gk_vormonat * P2_AnteilProzent`
 
 12. **FINALE_ÜBERWEISUNG_P1** = `P1_GesamtanteilKosten - P1_Direktzahlungen - P1_AnteilRestgeld`
 
 13. **FINALE_ÜBERWEISUNG_P2** = `P2_GesamtanteilKosten - P2_Direktzahlungen - P2_AnteilRestgeld`
 
-14. **Kontrolle_EinzahlungNötig** = `Bedarf_GK - restgeld_vormonat`
+14. **Kontrolle_EinzahlungNötig** = `Bedarf_GK - restgeld_gk_vormonat`
 
 15. **Kontrolle_SummeÜberweisungen** = `FINALE_ÜBERWEISUNG_P1 + FINALE_ÜBERWEISUNG_P2`
 

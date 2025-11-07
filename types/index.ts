@@ -8,11 +8,11 @@ export interface Settings {
   id: number;
   p1_einkommen: number;
   p2_einkommen: number;
-  restgeld_vormonat: number;
-  comida_betrag: number;
-  ahorros_betrag: number;
-  tagesgeldkonto_betrag: number;
-  investieren: number;
+  restgeld_gk_vormonat: number;
+  budget_lebensmittel: number;
+  sparen_tagesgeld: number;
+  tagesgeldkonto_aktuell: number;
+  sparen_depot: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -48,11 +48,11 @@ export interface PrivateExpense {
 export interface SettingsUpdateRequest {
   p1_einkommen: number;
   p2_einkommen: number;
-  restgeld_vormonat: number;
-  comida_betrag: number;
-  ahorros_betrag: number;
-  tagesgeldkonto_betrag: number;
-  investieren: number;
+  restgeld_gk_vormonat: number;
+  budget_lebensmittel: number;
+  sparen_tagesgeld: number;
+  tagesgeldkonto_aktuell: number;
+  sparen_depot: number;
 }
 
 export interface ExpenseCreateRequest {
@@ -119,9 +119,9 @@ export interface CalculationResults {
   neues_tagesgeldkonto: number;
 
   // Individual breakdown components
-  comida_betrag: number;
-  ahorros_betrag: number;
-  investieren: number;
+  budget_lebensmittel: number;
+  sparen_tagesgeld: number;
+  sparen_depot: number;
   gk_dyn_expenses: number;
 }
 

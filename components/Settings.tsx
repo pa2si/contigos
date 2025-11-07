@@ -284,7 +284,7 @@ export default function Settings({
                     </div>
                   </div>
                   <div className='w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg font-semibold text-base sm:text-lg border-2 border-amber-200 text-amber-900 transition-colors'>
-                    {formatCurrency(settings.restgeld_vormonat)}
+                    {formatCurrency(settings.restgeld_gk_vormonat)}
                   </div>
                 </div>
               </div>
@@ -297,9 +297,11 @@ export default function Settings({
             {activeTab === 'budget' && (
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6'>
                 <InputCard
-                  title='Comida (Lebensmittel)'
-                  value={settings.comida_betrag}
-                  onChange={(value) => onSettingsChange('comida_betrag', value)}
+                  title='Lebensmittel (Budget)'
+                  value={settings.budget_lebensmittel}
+                  onChange={(value) =>
+                    onSettingsChange('budget_lebensmittel', value)
+                  }
                   onBlur={onSettingsBlur}
                   icon='🛒'
                   description='Monatliches Budget für Lebensmittel'
@@ -307,10 +309,10 @@ export default function Settings({
                   surface='pastel'
                 />
                 <InputCard
-                  title='Ahorros (Sparen)'
-                  value={settings.ahorros_betrag}
+                  title='Sparen (Tagesgeld)'
+                  value={settings.sparen_tagesgeld}
                   onChange={(value) =>
-                    onSettingsChange('ahorros_betrag', value)
+                    onSettingsChange('sparen_tagesgeld', value)
                   }
                   onBlur={onSettingsBlur}
                   icon='💎'
@@ -319,9 +321,9 @@ export default function Settings({
                   surface='pastel'
                 />
                 <InputCard
-                  title='Investieren'
-                  value={settings.investieren}
-                  onChange={(value) => onSettingsChange('investieren', value)}
+                  title='Sparen (Depot)'
+                  value={settings.sparen_depot}
+                  onChange={(value) => onSettingsChange('sparen_depot', value)}
                   onBlur={onSettingsBlur}
                   icon='📊'
                   description='Monatliches Investment Budget'
@@ -348,11 +350,11 @@ export default function Settings({
                           Sparen
                         </h4>
                         <div className='text-sm text-purple-600 font-medium'>
-                          {formatCurrency(settings.ahorros_betrag)}
+                          {formatCurrency(settings.sparen_tagesgeld)}
                         </div>
                       </div>
                       <div className='text-2xl font-bold text-gray-800'>
-                        {formatCurrency(settings.ahorros_betrag)}
+                        {formatCurrency(settings.sparen_tagesgeld)}
                       </div>
                       <div className='text-sm text-gray-500'>pro Monat</div>
                     </div>
@@ -365,11 +367,11 @@ export default function Settings({
                           Investieren
                         </h4>
                         <div className='text-sm text-blue-600 font-medium'>
-                          {formatCurrency(settings.investieren)}
+                          {formatCurrency(settings.sparen_depot)}
                         </div>
                       </div>
                       <div className='text-2xl font-bold text-gray-800'>
-                        {formatCurrency(settings.investieren)}
+                        {formatCurrency(settings.sparen_depot)}
                       </div>
                       <div className='text-sm text-gray-500'>pro Monat</div>
                     </div>
@@ -383,8 +385,8 @@ export default function Settings({
                       </span>
                       <span className='text-lg font-bold text-green-700'>
                         {formatCurrency(
-                          Number(settings.ahorros_betrag) +
-                            Number(settings.investieren)
+                          Number(settings.sparen_tagesgeld) +
+                            Number(settings.sparen_depot)
                         )}
                       </span>
                     </div>
@@ -394,9 +396,9 @@ export default function Settings({
                 <div className='grid grid-cols-1 gap-4 sm:gap-6'>
                   <InputCard
                     title='Tagesgeldkonto'
-                    value={settings.tagesgeldkonto_betrag}
+                    value={settings.tagesgeldkonto_aktuell}
                     onChange={(value) =>
-                      onSettingsChange('tagesgeldkonto_betrag', value)
+                      onSettingsChange('tagesgeldkonto_aktuell', value)
                     }
                     onBlur={onSettingsBlur}
                     icon='🏦'
@@ -421,8 +423,8 @@ export default function Settings({
                           Sparen
                         </span>
                         <span className='text-sm text-gray-600'>
-                          {formatCurrency(settings.tagesgeldkonto_betrag)} /{' '}
-                          {formatCurrency(settings.ahorros_betrag)} Monatsziel
+                          {formatCurrency(settings.tagesgeldkonto_aktuell)} /{' '}
+                          {formatCurrency(settings.sparen_tagesgeld)} Monatsziel
                         </span>
                       </div>
                       <div className='bg-gray-200 rounded-full h-2'>
@@ -430,10 +432,10 @@ export default function Settings({
                           className='bg-gradient-to-r from-purple-500 to-purple-600 h-2 rounded-full transition-all duration-500'
                           style={{
                             width:
-                              settings.ahorros_betrag > 0
+                              settings.sparen_tagesgeld > 0
                                 ? `${Math.min(
-                                    (settings.tagesgeldkonto_betrag /
-                                      settings.ahorros_betrag) *
+                                    (settings.tagesgeldkonto_aktuell /
+                                      settings.sparen_tagesgeld) *
                                       100,
                                     100
                                   )}%`
@@ -452,7 +454,7 @@ export default function Settings({
                           Investieren
                         </span>
                         <span className='text-sm text-gray-600'>
-                          0 € / {formatCurrency(settings.investieren)}{' '}
+                          0 € / {formatCurrency(settings.sparen_depot)}{' '}
                           Monatsziel
                         </span>
                       </div>
@@ -472,10 +474,10 @@ export default function Settings({
                         Gesamtfortschritt diesen Monat:
                       </span>
                       <span className='font-bold text-gray-900'>
-                        {formatCurrency(settings.tagesgeldkonto_betrag)} /{' '}
+                        {formatCurrency(settings.tagesgeldkonto_aktuell)} /{' '}
                         {formatCurrency(
-                          Number(settings.ahorros_betrag) +
-                            Number(settings.investieren)
+                          Number(settings.sparen_tagesgeld) +
+                            Number(settings.sparen_depot)
                         )}
                       </span>
                     </div>

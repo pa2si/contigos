@@ -32,11 +32,11 @@ export function useSettingsOperations(
       await ApiService.updateSettings({
         p1_einkommen: settings.p1_einkommen,
         p2_einkommen: settings.p2_einkommen,
-        restgeld_vormonat: settings.restgeld_vormonat,
-        comida_betrag: settings.comida_betrag,
-        ahorros_betrag: settings.ahorros_betrag,
-        tagesgeldkonto_betrag: settings.tagesgeldkonto_betrag,
-        investieren: settings.investieren,
+        restgeld_gk_vormonat: settings.restgeld_gk_vormonat,
+        budget_lebensmittel: settings.budget_lebensmittel,
+        sparen_tagesgeld: settings.sparen_tagesgeld,
+        tagesgeldkonto_aktuell: settings.tagesgeldkonto_aktuell,
+        sparen_depot: settings.sparen_depot,
       });
     } catch (error) {
       console.error('Error saving settings:', error);
@@ -415,11 +415,11 @@ export function useAppData() {
     id: 1,
     p1_einkommen: 3000,
     p2_einkommen: 2500,
-    restgeld_vormonat: 0,
-    comida_betrag: 0,
-    ahorros_betrag: 0,
-    tagesgeldkonto_betrag: 0,
-    investieren: 0,
+    restgeld_gk_vormonat: 0,
+    budget_lebensmittel: 0,
+    sparen_tagesgeld: 0,
+    tagesgeldkonto_aktuell: 0,
+    sparen_depot: 0,
     createdAt: new Date(),
     updatedAt: new Date(),
   });
