@@ -21,7 +21,11 @@ export default function Summary({
   return (
     <>
       {/* CONTROL SECTION */}
-      <ControlSection results={results} settings={settings} selectedMonth={selectedMonth} />
+      <ControlSection
+        results={results}
+        settings={settings}
+        selectedMonth={selectedMonth}
+      />
 
       {/* GIROKONTO SECTION */}
       <GirokontoSection

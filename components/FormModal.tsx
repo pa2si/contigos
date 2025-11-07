@@ -235,7 +235,7 @@ export default function FormModal({
           {isEditing ? config.title.edit : config.title.add}
         </>
       }
-  headerClass={`flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-linear-to-r ${colors.headerFrom} ${colors.headerTo} rounded-t-2xl`}
+      headerClass={`flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-linear-to-r ${colors.headerFrom} ${colors.headerTo} rounded-t-2xl`}
       size='lg'
     >
       <div className='p-4 sm:p-6' onKeyDown={handleKeyDown}>
@@ -307,7 +307,9 @@ export default function FormModal({
             className={`flex-1 sm:flex-none px-6 py-3 bg-linear-to-r text-white rounded-xl font-medium disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 flex items-center justify-center gap-2 text-sm sm:text-base ${colors.buttonFrom} ${colors.buttonTo} ${colors.buttonHoverFrom} ${colors.buttonHoverTo}`}
           >
             {isSubmitting ? (
-              <ButtonSpinner message={isEditing ? 'Speichern...' : 'Hinzufügen...'} />
+              <ButtonSpinner
+                message={isEditing ? 'Speichern...' : 'Hinzufügen...'}
+              />
             ) : (
               <>
                 <span>{isEditing ? '💾' : config.button.icon}</span>

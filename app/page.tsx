@@ -26,6 +26,7 @@ import Settings from '@/components/Settings';
 import IncomeManagement from '@/components/IncomeManagement';
 
 import Summary from '@/components/Summary';
+import MonthNav from '@/components/MonthNav';
 import ExpenseManagement from '@/components/ExpenseManagement';
 import ConfirmationModal from '@/components/ConfirmationModal';
 import TabLayout from '@/components/TabLayout';
@@ -118,6 +119,31 @@ export default function HomePage() {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
   });
+
+  // Helpers to change month
+  const setMonthFromDate = (d: Date) =>
+    setSelectedMonth(
+      `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+    );
+
+  const prevMonth = () => {
+    const [y, m] = selectedMonth.split('-').map(Number);
+    const d = new Date(y, m - 1 - 1, 1);
+    setMonthFromDate(d);
+  };
+
+  const nextMonth = () => {
+    const [y, m] = selectedMonth.split('-').map(Number);
+    const d = new Date(y, m - 1 + 1, 1);
+    setMonthFromDate(d);
+  };
+
+  const [selY, selM] = selectedMonth.split('-').map(Number);
+  const selectedMonthLabel = new Date(selY, selM - 1).toLocaleString('de-DE', {
+    month: 'long',
+    year: 'numeric',
+  });
+  // Month navigator uses a single pill-style UI
 
   // Modal state for confirmations
   const [confirmModal, setConfirmModal] = useState<{
@@ -257,14 +283,36 @@ export default function HomePage() {
       <div className='min-h-screen bg-gray-50 p-6'>
         <div className='max-w-4xl mx-auto'>
           {/* Month selector (skeleton) */}
-          <div className='mb-6'>
-            <select
+          <div className='mb-6 flex items-center justify-center gap-3'>
+            <button
               disabled
-              value={selectedMonth}
-              className='w-full md:w-64 px-3 py-2 rounded-lg border border-gray-200 bg-white'
+              aria-label='Vorheriger Monat'
+              className='p-2 rounded-lg bg-white/20 text-white disabled:opacity-50'
             >
-              <option>{selectedMonth}</option>
-            </select>
+              <svg className='w-5 h-5' viewBox='0 0 20 20' fill='currentColor'>
+                <path
+                  fillRule='evenodd'
+                  d='M12.293 16.293a1 1 0 010-1.414L15.586 11H5a1 1 0 110-2h10.586l-3.293-3.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z'
+                  clipRule='evenodd'
+                />
+              </svg>
+            </button>
+            <div className='px-4 py-2 bg-white rounded-lg text-gray-700 font-medium'>
+              {selectedMonthLabel}
+            </div>
+            <button
+              disabled
+              aria-label='Nächster Monat'
+              className='p-2 rounded-lg bg-white/20 text-white disabled:opacity-50'
+            >
+              <svg className='w-5 h-5' viewBox='0 0 20 20' fill='currentColor'>
+                <path
+                  fillRule='evenodd'
+                  d='M7.707 3.707a1 1 0 010 1.414L4.414 9H15a1 1 0 110 2H4.414l3.293 3.293a1 1 0 11-1.414 1.414l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 0z'
+                  clipRule='evenodd'
+                />
+              </svg>
+            </button>
           </div>
 
           {/* Loading Skeleton */}
@@ -320,34 +368,12 @@ export default function HomePage() {
   return (
     <div className='min-h-screen bg-gray-50 p-6'>
       <div className='max-w-4xl mx-auto'>
-        {/* Month selector */}
-        <div className='mb-6'>
-          <select
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
-            className='w-full md:w-64 px-3 py-2 rounded-lg border border-gray-200 bg-white'
-          >
-            {(() => {
-              // show +/- 3 months around current month
-              const opts: string[] = [];
-              const base = new Date();
-              for (let i = -3; i <= 3; i++) {
-                const d = new Date(base.getFullYear(), base.getMonth() + i, 1);
-                const val = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-                const label = d.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
-                opts.push(JSON.stringify({ val, label }));
-              }
-              return opts.map((s) => {
-                const o = JSON.parse(s);
-                return (
-                  <option key={o.val} value={o.val}>
-                    {o.label}
-                  </option>
-                );
-              });
-            })()}
-          </select>
-        </div>
+        {/* Pill-style month selector (extracted to component) */}
+        <MonthNav
+          label={selectedMonthLabel}
+          onPrev={prevMonth}
+          onNext={nextMonth}
+        />
 
         {/* Tabbed Interface */}
         <TabLayout
