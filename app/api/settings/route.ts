@@ -16,6 +16,7 @@ export async function GET() {
           restgeld_gk_vormonat: 0,
           budget_lebensmittel: 1200,
           sparen_tagesgeld: 0,
+          gemeinschaftskonto_aktuell: 0,
           tagesgeldkonto_aktuell: 0,
           sparen_depot: 0,
         },
@@ -42,6 +43,7 @@ export async function PUT(request: NextRequest) {
       restgeld_gk_vormonat,
       budget_lebensmittel,
       sparen_tagesgeld,
+      gemeinschaftskonto_aktuell,
       tagesgeldkonto_aktuell,
       sparen_depot,
     } = body;
@@ -53,6 +55,7 @@ export async function PUT(request: NextRequest) {
       typeof restgeld_gk_vormonat !== 'number' ||
       typeof budget_lebensmittel !== 'number' ||
       typeof sparen_tagesgeld !== 'number' ||
+      typeof gemeinschaftskonto_aktuell !== 'number' ||
       typeof tagesgeldkonto_aktuell !== 'number' ||
       typeof sparen_depot !== 'number'
     ) {
@@ -71,6 +74,7 @@ export async function PUT(request: NextRequest) {
         restgeld_gk_vormonat,
         budget_lebensmittel,
         sparen_tagesgeld,
+        gemeinschaftskonto_aktuell,
         tagesgeldkonto_aktuell,
         sparen_depot,
       },
@@ -81,6 +85,7 @@ export async function PUT(request: NextRequest) {
         restgeld_gk_vormonat,
         budget_lebensmittel,
         sparen_tagesgeld,
+        gemeinschaftskonto_aktuell,
         tagesgeldkonto_aktuell,
         sparen_depot,
       },

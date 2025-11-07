@@ -16,6 +16,7 @@ model Settings {
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
   sparen_tagesgeld     Float    @default(0)
+  gemeinschaftskonto_aktuell Float   @default(0)
   budget_lebensmittel  Float    @default(1200)
   tagesgeldkonto_aktuell Float   @default(0)
   sparen_depot         Float    @default(0)

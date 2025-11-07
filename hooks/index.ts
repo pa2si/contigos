@@ -35,6 +35,7 @@ export function useSettingsOperations(
         restgeld_gk_vormonat: settings.restgeld_gk_vormonat,
         budget_lebensmittel: settings.budget_lebensmittel,
         sparen_tagesgeld: settings.sparen_tagesgeld,
+        gemeinschaftskonto_aktuell: settings.gemeinschaftskonto_aktuell,
         tagesgeldkonto_aktuell: settings.tagesgeldkonto_aktuell,
         sparen_depot: settings.sparen_depot,
       });
@@ -418,6 +419,7 @@ export function useAppData() {
     restgeld_gk_vormonat: 0,
     budget_lebensmittel: 0,
     sparen_tagesgeld: 0,
+    gemeinschaftskonto_aktuell: 0,
     tagesgeldkonto_aktuell: 0,
     sparen_depot: 0,
     createdAt: new Date(),

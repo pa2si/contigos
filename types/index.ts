@@ -12,6 +12,7 @@ export interface Settings {
   budget_lebensmittel: number;
   sparen_tagesgeld: number;
   tagesgeldkonto_aktuell: number;
+  gemeinschaftskonto_aktuell: number;
   sparen_depot: number;
   createdAt: Date;
   updatedAt: Date;
@@ -52,6 +53,7 @@ export interface SettingsUpdateRequest {
   budget_lebensmittel: number;
   sparen_tagesgeld: number;
   tagesgeldkonto_aktuell: number;
+  gemeinschaftskonto_aktuell: number;
   sparen_depot: number;
 }
 

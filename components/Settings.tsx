@@ -393,7 +393,20 @@ export default function Settings({
                   </div>
                 </div>
 
-                <div className='grid grid-cols-1 gap-4 sm:gap-6'>
+                <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6'>
+                  <InputCard
+                    title='Gemeinschaftskonto'
+                    value={settings.gemeinschaftskonto_aktuell}
+                    onChange={(value) =>
+                      onSettingsChange('gemeinschaftskonto_aktuell', value)
+                    }
+                    onBlur={onSettingsBlur}
+                    icon='👥'
+                    description='Aktueller Stand des Gemeinschaftskontos'
+                    color='amber'
+                    surface='pastel'
+                  />
+
                   <InputCard
                     title='Tagesgeldkonto'
                     value={settings.tagesgeldkonto_aktuell}
