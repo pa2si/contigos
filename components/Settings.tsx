@@ -305,23 +305,7 @@ export default function Settings({
                   </div>
                 </div>
 
-                {/* Rest vom Vormonat - keep Input style but align visually */}
-                <div className='bg-white p-3 sm:p-4 rounded-xl border border-gray-100 h-full flex flex-col justify-between'>
-                  <div className='flex items-start sm:items-center gap-2 sm:gap-3 mb-3'>
-                    <span className='text-xl sm:text-2xl shrink-0'>💰</span>
-                    <div className='min-w-0 flex-1'>
-                      <h3 className='font-semibold text-gray-900 text-sm sm:text-base truncate'>
-                        Rest vom Vormonat
-                      </h3>
-                      <p className='text-xs sm:text-sm text-gray-500 wrap-break-word'>
-                        Übrig gebliebenes Geld vom letzten Monat
-                      </p>
-                    </div>
-                  </div>
-                  <div className='w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg font-semibold text-base sm:text-lg border-2 border-amber-200 text-amber-900 transition-colors'>
-                    {formatCurrency(settings.restgeld_gk_vormonat)}
-                  </div>
-                </div>
+                {/* Rest vom Vormonat was moved to Budget tab as an editable input */}
               </div>
             )}
 
@@ -330,65 +314,108 @@ export default function Settings({
             )}
 
             {activeTab === 'budget' && (
-              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6'>
-                <InputCard
-                  title='Lebensmittel (Budget)'
-                  value={settings.budget_lebensmittel}
-                  onChange={(value) =>
-                    onSettingsChange('budget_lebensmittel', value)
-                  }
-                  onBlur={onSettingsBlur}
-                  icon='🛒'
-                  description='Monatliches Budget für Lebensmittel'
-                  color='green'
-                  surface='pastel'
-                />
-                <InputCard
-                  title='Sparen (Tagesgeld)'
-                  value={settings.sparen_tagesgeld}
-                  onChange={(value) =>
-                    onSettingsChange('sparen_tagesgeld', value)
-                  }
-                  onBlur={onSettingsBlur}
-                  icon='💎'
-                  description='Monatlicher Sparbetrag'
-                  color='purple'
-                  surface='pastel'
-                />
-                <InputCard
-                  title='Sparen (Depot)'
-                  value={settings.sparen_depot}
-                  onChange={(value) => onSettingsChange('sparen_depot', value)}
-                  onBlur={onSettingsBlur}
-                  icon='📊'
-                  description='Monatliches Investment Budget'
-                  color='blue'
-                  surface='pastel'
-                />
-                <InputCard
-                  title='Gemeinschaftskonto'
-                  value={settings.gemeinschaftskonto_aktuell}
-                  onChange={(value) =>
-                    onSettingsChange('gemeinschaftskonto_aktuell', value)
-                  }
-                  onBlur={onSettingsBlur}
-                  icon='👥'
-                  description='Aktueller Stand des Gemeinschaftskontos'
-                  color='amber'
-                  surface='pastel'
-                />
-                <InputCard
-                  title='Tagesgeldkonto'
-                  value={settings.tagesgeldkonto_aktuell}
-                  onChange={(value) =>
-                    onSettingsChange('tagesgeldkonto_aktuell', value)
-                  }
-                  onBlur={onSettingsBlur}
-                  icon='🏦'
-                  description='Aktueller Stand deines Tagesgeldkontos'
-                  color='blue'
-                  surface='pastel'
-                />
+              <div className='space-y-6'>
+                {/* Group 1: Gemeinschaftskonto / comida */}
+                <div>
+                  <h3 className='text-sm font-semibold text-gray-700 mb-3'>
+                    Gemeinschaftskonto
+                  </h3>
+                  <div className='grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6'>
+                    <InputCard
+                      title='Comida'
+                      value={settings.budget_lebensmittel}
+                      onChange={(value) =>
+                        onSettingsChange('budget_lebensmittel', value)
+                      }
+                      onBlur={onSettingsBlur}
+                      icon='🛒'
+                      description='Monatliches Budget für Lebensmittel'
+                      color='green'
+                      surface='pastel'
+                    />
+
+                    <InputCard
+                      title='Comida vom Vormonat'
+                      value={settings.restgeld_gk_vormonat}
+                      onChange={(value) =>
+                        onSettingsChange('restgeld_gk_vormonat', value)
+                      }
+                      onBlur={onSettingsBlur}
+                      icon='�'
+                      description='Übrig gebliebenes Geld vom letzten Monat'
+                      color='green'
+                      surface='pastel'
+                    />
+
+                    <InputCard
+                      title='Gemeinschaftskonto'
+                      value={settings.gemeinschaftskonto_aktuell}
+                      onChange={(value) =>
+                        onSettingsChange('gemeinschaftskonto_aktuell', value)
+                      }
+                      onBlur={onSettingsBlur}
+                      icon='�'
+                      description='Aktueller Stand des Gemeinschaftskontos'
+                      color='green'
+                      surface='pastel'
+                    />
+                  </div>
+                </div>
+
+                {/* Group 2: Tagesgeldkonto */}
+                <div>
+                  <h3 className='text-sm font-semibold text-gray-700 mb-3'>
+                    Tagesgeldkonto
+                  </h3>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6'>
+                    <InputCard
+                      title='Sparen (Tagesgeld)'
+                      value={settings.sparen_tagesgeld}
+                      onChange={(value) =>
+                        onSettingsChange('sparen_tagesgeld', value)
+                      }
+                      onBlur={onSettingsBlur}
+                      icon='�'
+                      description='Monatlicher Sparbetrag'
+                      color='purple'
+                      surface='pastel'
+                    />
+
+                    <InputCard
+                      title='Tagesgeldkonto'
+                      value={settings.tagesgeldkonto_aktuell}
+                      onChange={(value) =>
+                        onSettingsChange('tagesgeldkonto_aktuell', value)
+                      }
+                      onBlur={onSettingsBlur}
+                      icon='🏦'
+                      description='Aktueller Stand deines Tagesgeldkontos'
+                      color='purple'
+                      surface='pastel'
+                    />
+                  </div>
+                </div>
+
+                {/* Group 3: Depot */}
+                <div>
+                  <h3 className='text-sm font-semibold text-gray-700 mb-3'>
+                    Depot
+                  </h3>
+                  <div className='grid grid-cols-1 md:grid-cols-1 gap-4 sm:gap-6'>
+                    <InputCard
+                      title='Sparen (Depot)'
+                      value={settings.sparen_depot}
+                      onChange={(value) =>
+                        onSettingsChange('sparen_depot', value)
+                      }
+                      onBlur={onSettingsBlur}
+                      icon='📊'
+                      description='Monatliches Investment Budget'
+                      color='blue'
+                      surface='pastel'
+                    />
+                  </div>
+                </div>
               </div>
             )}
 
