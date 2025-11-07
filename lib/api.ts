@@ -52,7 +52,8 @@ export class ApiService {
       restgeld_gk_vormonat: Number(settings.restgeld_gk_vormonat) || 0,
       budget_lebensmittel: Number(settings.budget_lebensmittel) || 0,
       sparen_tagesgeld: Number(settings.sparen_tagesgeld) || 0,
-      gemeinschaftskonto_aktuell: Number(settings.gemeinschaftskonto_aktuell) || 0,
+      gemeinschaftskonto_aktuell:
+        Number(settings.gemeinschaftskonto_aktuell) || 0,
       tagesgeldkonto_aktuell: Number(settings.tagesgeldkonto_aktuell) || 0,
       sparen_depot: Number(settings.sparen_depot) || 0,
     };

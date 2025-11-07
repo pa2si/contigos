@@ -64,7 +64,7 @@ const InputCard = ({
     surface === 'pastel'
       ? pastelWrappers[color] ||
         'bg-white p-3 sm:p-4 rounded-xl border border-gray-100'
-  : 'bg-white p-3 sm:p-4 rounded-xl border border-gray-100 hover:shadow-md transition-shadow duration-200 h-full flex flex-col justify-between';
+      : 'bg-white p-3 sm:p-4 rounded-xl border border-gray-100 hover:shadow-md transition-shadow duration-200 h-full flex flex-col justify-between';
 
   return (
     <div className={wrapperClass}>
