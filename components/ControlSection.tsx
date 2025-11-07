@@ -133,14 +133,20 @@ export default function ControlSection({
 
     const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
 
-    const isCurrentMonth = year === today.getFullYear() && monthIndex === today.getMonth();
-    const remainingDays = isCurrentMonth ? daysInMonth - today.getDate() + 1 : daysInMonth;
+    const isCurrentMonth =
+      year === today.getFullYear() && monthIndex === today.getMonth();
+    const remainingDays = isCurrentMonth
+      ? daysInMonth - today.getDate() + 1
+      : daysInMonth;
     const perDay = remainingDays > 0 ? balance / remainingDays : 0;
 
     return { perDay, remainingDays, daysInMonth, year, monthIndex };
   })();
 
-  const monthLabel = new Date(perDayInfo.year, perDayInfo.monthIndex).toLocaleString('de-DE', {
+  const monthLabel = new Date(
+    perDayInfo.year,
+    perDayInfo.monthIndex
+  ).toLocaleString('de-DE', {
     month: 'long',
     year: 'numeric',
   });
