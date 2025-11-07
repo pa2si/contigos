@@ -51,20 +51,20 @@ const InputCard = ({
   };
 
   const pastelWrappers: Record<string, string> = {
-    blue: 'bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-3 sm:p-4',
+    blue: 'bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-3 sm:p-4 h-full flex flex-col justify-between',
     green:
-      'bg-gradient-to-r from-emerald-50 to-green-100 rounded-xl border border-emerald-100 p-3 sm:p-4',
+      'bg-gradient-to-r from-emerald-50 to-green-100 rounded-xl border border-emerald-100 p-3 sm:p-4 h-full flex flex-col justify-between',
     purple:
-      'bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-100 p-3 sm:p-4',
+      'bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-100 p-3 sm:p-4 h-full flex flex-col justify-between',
     amber:
-      'bg-gradient-to-r from-amber-50 to-yellow-100 rounded-xl border border-amber-100 p-3 sm:p-4',
+      'bg-gradient-to-r from-amber-50 to-yellow-100 rounded-xl border border-amber-100 p-3 sm:p-4 h-full flex flex-col justify-between',
   };
 
   const wrapperClass =
     surface === 'pastel'
       ? pastelWrappers[color] ||
         'bg-white p-3 sm:p-4 rounded-xl border border-gray-100'
-      : 'bg-white p-3 sm:p-4 rounded-xl border border-gray-100 hover:shadow-md transition-shadow duration-200';
+  : 'bg-white p-3 sm:p-4 rounded-xl border border-gray-100 hover:shadow-md transition-shadow duration-200 h-full flex flex-col justify-between';
 
   return (
     <div className={wrapperClass}>
@@ -227,7 +227,7 @@ export default function Settings({
             {activeTab === 'overview' && (
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6'>
                 {/* Pascal overview card (match Einkommen UI) */}
-                <div className='bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-4 space-y-3'>
+                <div className='bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-4 space-y-3 h-full flex flex-col justify-between'>
                   <div className='flex items-center justify-between'>
                     <h3 className='text-lg font-semibold text-blue-700 flex items-center gap-2'>
                       <span>👨‍💼</span>
@@ -249,7 +249,7 @@ export default function Settings({
                 </div>
 
                 {/* Caro overview card (match Einkommen UI) */}
-                <div className='bg-gradient-to-r from-green-50 to-emerald-100 rounded-xl border border-emerald-100 p-4 space-y-3'>
+                <div className='bg-gradient-to-r from-green-50 to-emerald-100 rounded-xl border border-emerald-100 p-4 space-y-3 h-full flex flex-col justify-between'>
                   <div className='flex items-center justify-between'>
                     <h3 className='text-lg font-semibold text-emerald-700 flex items-center gap-2'>
                       <span>👩‍💼</span>
@@ -271,7 +271,7 @@ export default function Settings({
                 </div>
 
                 {/* Rest vom Vormonat - keep Input style but align visually */}
-                <div className='bg-white p-3 sm:p-4 rounded-xl border border-gray-100'>
+                <div className='bg-white p-3 sm:p-4 rounded-xl border border-gray-100 h-full flex flex-col justify-between'>
                   <div className='flex items-start sm:items-center gap-2 sm:gap-3 mb-3'>
                     <span className='text-xl sm:text-2xl shrink-0'>💰</span>
                     <div className='min-w-0 flex-1'>
@@ -343,7 +343,7 @@ export default function Settings({
                   </h3>
                   <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                     {/* Sparen card - Einkommen style */}
-                    <div className='bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-100 p-4 space-y-3'>
+                    <div className='bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-100 p-4 space-y-3 h-full flex flex-col justify-between'>
                       <div className='flex items-center justify-between'>
                         <h4 className='text-lg font-semibold text-purple-700 flex items-center gap-2'>
                           <span>💎</span>
@@ -360,7 +360,7 @@ export default function Settings({
                     </div>
 
                     {/* Investieren card - Einkommen style */}
-                    <div className='bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-4 space-y-3'>
+                    <div className='bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-4 space-y-3 h-full flex flex-col justify-between'>
                       <div className='flex items-center justify-between'>
                         <h4 className='text-lg font-semibold text-blue-700 flex items-center gap-2'>
                           <span>📊</span>
