@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Settings as SettingsType, Income } from '@/types';
 import { formatCurrency } from '@/lib/utils';
 
@@ -66,32 +66,37 @@ const InputCard = ({
         'bg-white p-3 sm:p-4 rounded-xl border border-gray-100'
       : 'bg-white p-3 sm:p-4 rounded-xl border border-gray-100 hover:shadow-md transition-shadow duration-200 h-full flex flex-col justify-between';
 
-  // local display state so we can clear a default '0' on focus
-  const [displayValue, setDisplayValue] = useState<string>(
-    value !== undefined && value !== null ? String(value) : ''
-  );
+  // local state to track if the input is focused and the user's in-progress value
+  const [isFocusedLocal, setIsFocusedLocal] = useState(false);
+  const [localValue, setLocalValue] = useState<string>('');
 
-  useEffect(() => {
-    setDisplayValue(value !== undefined && value !== null ? String(value) : '');
-  }, [value]);
+  // derived display value: when not focused show the external `value`, when focused show the local in-progress value
+  const displayValue = isFocusedLocal
+    ? localValue
+    : value !== undefined && value !== null
+    ? String(value)
+    : '';
 
   const handleFocus = () => {
-    if (!isReadOnly && displayValue === '0') {
-      setDisplayValue('');
-    }
+    if (isReadOnly) return;
+    setIsFocusedLocal(true);
+    // initialize localValue when focusing: if the shown value is '0', start with empty so typing replaces it
+    const current = value !== undefined && value !== null ? String(value) : '';
+    setLocalValue(current === '0' ? '' : current);
   };
 
   const handleChange = (val: string) => {
-    setDisplayValue(val);
+    setLocalValue(val);
     onChange?.(val);
   };
 
   const handleBlur = async () => {
-    // if user left input empty, restore to '0' and notify parent
-    if (!isReadOnly && (!displayValue || displayValue.trim() === '')) {
-      setDisplayValue('0');
+    if (isReadOnly) return;
+    // if user left input empty, notify parent with '0'
+    if (!localValue || localValue.trim() === '') {
       onChange?.('0');
     }
+    setIsFocusedLocal(false);
     if (onBlur) await onBlur();
   };
 
