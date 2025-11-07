@@ -8,18 +8,20 @@ import SavingsSection from './SavingsSection';
 interface SummaryProps {
   results: CalculationResults;
   settings: Settings;
+  selectedMonth?: string;
   onNavigateToPrivateExpenses?: () => void;
 }
 
 export default function Summary({
   results,
   settings,
+  selectedMonth,
   onNavigateToPrivateExpenses,
 }: SummaryProps) {
   return (
     <>
       {/* CONTROL SECTION */}
-      <ControlSection results={results} settings={settings} />
+      <ControlSection results={results} settings={settings} selectedMonth={selectedMonth} />
 
       {/* GIROKONTO SECTION */}
       <GirokontoSection

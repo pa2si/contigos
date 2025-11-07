@@ -113,6 +113,11 @@ export default function HomePage() {
   // Tab navigation state
   const [activeTab, setActiveTab] = useState('gemeinsam');
   const [privateExpensesExpanded, setPrivateExpensesExpanded] = useState(false);
+  // Month selector state (format YYYY-MM)
+  const [selectedMonth, setSelectedMonth] = useState(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  });
 
   // Modal state for confirmations
   const [confirmModal, setConfirmModal] = useState<{
@@ -251,10 +256,15 @@ export default function HomePage() {
     return (
       <div className='min-h-screen bg-gray-50 p-6'>
         <div className='max-w-4xl mx-auto'>
-          {/* Header */}
-          <div className='text-center mb-8'>
-            <h1 className='text-4xl font-bold text-gray-900 mb-2'>Contigos</h1>
-            <p className='text-gray-600'>Presupuesto mensual contigos</p>
+          {/* Month selector (skeleton) */}
+          <div className='mb-6'>
+            <select
+              disabled
+              value={selectedMonth}
+              className='w-full md:w-64 px-3 py-2 rounded-lg border border-gray-200 bg-white'
+            >
+              <option>{selectedMonth}</option>
+            </select>
           </div>
 
           {/* Loading Skeleton */}
@@ -310,10 +320,33 @@ export default function HomePage() {
   return (
     <div className='min-h-screen bg-gray-50 p-6'>
       <div className='max-w-4xl mx-auto'>
-        {/* Header */}
-        <div className='text-center mb-8'>
-          <h1 className='text-4xl font-bold text-gray-900 mb-2'>Contigos</h1>
-          <p className='text-gray-600'>Presupuesto mensual contigos</p>
+        {/* Month selector */}
+        <div className='mb-6'>
+          <select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            className='w-full md:w-64 px-3 py-2 rounded-lg border border-gray-200 bg-white'
+          >
+            {(() => {
+              // show +/- 3 months around current month
+              const opts: string[] = [];
+              const base = new Date();
+              for (let i = -3; i <= 3; i++) {
+                const d = new Date(base.getFullYear(), base.getMonth() + i, 1);
+                const val = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+                const label = d.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
+                opts.push(JSON.stringify({ val, label }));
+              }
+              return opts.map((s) => {
+                const o = JSON.parse(s);
+                return (
+                  <option key={o.val} value={o.val}>
+                    {o.label}
+                  </option>
+                );
+              });
+            })()}
+          </select>
         </div>
 
         {/* Tabbed Interface */}
@@ -351,6 +384,7 @@ export default function HomePage() {
               <Summary
                 results={results}
                 settings={settings}
+                selectedMonth={selectedMonth}
                 onNavigateToPrivateExpenses={handleNavigateToPrivateExpenses}
               />
 

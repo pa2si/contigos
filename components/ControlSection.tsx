@@ -7,6 +7,7 @@ import { formatCurrencyFixed, formatPercentage } from '@/lib/utils';
 interface ControlSectionProps {
   results: CalculationResults;
   settings: Settings;
+  selectedMonth?: string; // format YYYY-MM
 }
 
 // Control Details Component (embedded)
@@ -110,13 +111,44 @@ const ControlDetails = ({
 export default function ControlSection({
   results,
   settings,
+  selectedMonth,
 }: ControlSectionProps) {
   const [controlExpanded, setControlExpanded] = useState(false);
+
+  // Compute per-day available amount based on settings.gemeinschaftskonto_aktuell
+  const perDayInfo = (() => {
+    const balance = Number(settings.gemeinschaftskonto_aktuell || 0);
+    const today = new Date();
+    let year: number;
+    let monthIndex: number; // 0-based
+
+    if (selectedMonth) {
+      const [y, m] = selectedMonth.split('-').map(Number);
+      year = y;
+      monthIndex = m - 1;
+    } else {
+      year = today.getFullYear();
+      monthIndex = today.getMonth();
+    }
+
+    const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+
+    const isCurrentMonth = year === today.getFullYear() && monthIndex === today.getMonth();
+    const remainingDays = isCurrentMonth ? daysInMonth - today.getDate() + 1 : daysInMonth;
+    const perDay = remainingDays > 0 ? balance / remainingDays : 0;
+
+    return { perDay, remainingDays, daysInMonth, year, monthIndex };
+  })();
+
+  const monthLabel = new Date(perDayInfo.year, perDayInfo.monthIndex).toLocaleString('de-DE', {
+    month: 'long',
+    year: 'numeric',
+  });
 
   return (
     <div className='relative'>
       {/* Enhanced Simple Design */}
-      <div className='bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-lg shadow-lg overflow-hidden mb-6'>
+      <div className='bg-linear-to-r from-blue-500 to-green-500 text-white rounded-lg shadow-lg overflow-hidden mb-6'>
         <div className='p-6'>
           <div className='flex items-center justify-center gap-3 mb-4'>
             <div className='bg-white/20 p-2 rounded-xl backdrop-blur'>
@@ -137,6 +169,20 @@ export default function ControlSection({
             <h2 className='text-2xl font-bold text-center'>
               Kontrolle Gemeinschaftskonto
             </h2>
+          </div>
+          {/* Per-day available amount based on gemeinschaftskonto_aktuell */}
+          <div className='text-center mb-4'>
+            <div className='inline-block bg-white/20 px-4 py-3 rounded-lg'>
+              <div className='text-sm opacity-95'>
+                Verfügbar pro Tag ({monthLabel}):
+              </div>
+              <div className='text-2xl font-bold mt-1'>
+                {formatCurrencyFixed(perDayInfo.perDay)}
+              </div>
+              <div className='text-sm opacity-90 mt-1'>
+                {perDayInfo.remainingDays} Tage verbleibend
+              </div>
+            </div>
           </div>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
             <div className='text-center p-4 bg-white/20 rounded-lg backdrop-blur'>
