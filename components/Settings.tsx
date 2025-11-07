@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Settings as SettingsType, Income } from '@/types';
 import { formatCurrency } from '@/lib/utils';
 
@@ -66,6 +66,35 @@ const InputCard = ({
         'bg-white p-3 sm:p-4 rounded-xl border border-gray-100'
       : 'bg-white p-3 sm:p-4 rounded-xl border border-gray-100 hover:shadow-md transition-shadow duration-200 h-full flex flex-col justify-between';
 
+  // local display state so we can clear a default '0' on focus
+  const [displayValue, setDisplayValue] = useState<string>(
+    value !== undefined && value !== null ? String(value) : ''
+  );
+
+  useEffect(() => {
+    setDisplayValue(value !== undefined && value !== null ? String(value) : '');
+  }, [value]);
+
+  const handleFocus = () => {
+    if (!isReadOnly && displayValue === '0') {
+      setDisplayValue('');
+    }
+  };
+
+  const handleChange = (val: string) => {
+    setDisplayValue(val);
+    onChange?.(val);
+  };
+
+  const handleBlur = async () => {
+    // if user left input empty, restore to '0' and notify parent
+    if (!isReadOnly && (!displayValue || displayValue.trim() === '')) {
+      setDisplayValue('0');
+      onChange?.('0');
+    }
+    if (onBlur) await onBlur();
+  };
+
   return (
     <div className={wrapperClass}>
       <div className='flex items-start sm:items-center gap-2 sm:gap-3 mb-3'>
@@ -93,9 +122,10 @@ const InputCard = ({
           </span>
           <input
             type='number'
-            value={value}
-            onChange={(e) => onChange?.(e.target.value)}
-            onBlur={onBlur}
+            value={displayValue}
+            onFocus={handleFocus}
+            onChange={(e) => handleChange(e.target.value)}
+            onBlur={handleBlur}
             className={`w-full pl-6 sm:pl-8 pr-3 sm:pr-4 py-2 sm:py-3 rounded-lg border-2 transition-colors font-semibold text-base sm:text-lg ${colorClasses[color]}`}
             placeholder='0.00'
             step='0.01'
