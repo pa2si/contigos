@@ -325,7 +325,7 @@ export default function Settings({
             )}
 
             {activeTab === 'budget' && (
-              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6'>
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6'>
                 <InputCard
                   title='Lebensmittel (Budget)'
                   value={settings.budget_lebensmittel}
@@ -357,6 +357,30 @@ export default function Settings({
                   onBlur={onSettingsBlur}
                   icon='📊'
                   description='Monatliches Investment Budget'
+                  color='blue'
+                  surface='pastel'
+                />
+                <InputCard
+                  title='Gemeinschaftskonto'
+                  value={settings.gemeinschaftskonto_aktuell}
+                  onChange={(value) =>
+                    onSettingsChange('gemeinschaftskonto_aktuell', value)
+                  }
+                  onBlur={onSettingsBlur}
+                  icon='👥'
+                  description='Aktueller Stand des Gemeinschaftskontos'
+                  color='amber'
+                  surface='pastel'
+                />
+                <InputCard
+                  title='Tagesgeldkonto'
+                  value={settings.tagesgeldkonto_aktuell}
+                  onChange={(value) =>
+                    onSettingsChange('tagesgeldkonto_aktuell', value)
+                  }
+                  onBlur={onSettingsBlur}
+                  icon='🏦'
+                  description='Aktueller Stand deines Tagesgeldkontos'
                   color='blue'
                   surface='pastel'
                 />
