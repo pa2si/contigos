@@ -1,7 +1,7 @@
 'use client';
 
 import { Payer, IncomeSource } from '@prisma/client';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Partner } from '@/types';
 import { ButtonSpinner } from '@/components/LoadingSpinner';
 import Modal from '@/components/ui/Modal';
@@ -141,6 +141,26 @@ export default function FormModal({
 }: FormModalProps) {
   const config = FORM_CONFIGS[type];
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const descriptionRef = useRef<HTMLInputElement | null>(null);
+
+  // Focus description input when modal opens, but avoid auto-focusing on
+  // touch devices (iOS Safari auto-zooms smaller inputs on focus).
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Detect coarse pointers (touch devices). This is a reasonable heuristic
+    // to avoid focusing on phones/tablets which otherwise trigger zoom.
+    const isTouchDevice =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+    if (!isTouchDevice) {
+      // Small timeout to ensure modal is mounted and visible before focusing
+      const t = setTimeout(() => descriptionRef.current?.focus(), 50);
+      return () => clearTimeout(t);
+    }
+  }, [isOpen]);
 
   const handleSave = async () => {
     if (!isFormValid() || isSubmitting) return;
@@ -227,12 +247,12 @@ export default function FormModal({
               📝 Beschreibung
             </label>
             <input
+              ref={descriptionRef}
               type='text'
               value={formData.beschreibung}
               onChange={(e) => onUpdateForm('beschreibung', e.target.value)}
               placeholder={config.fields.description.placeholder}
               className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-all text-sm sm:text-base ${colors.borderColor} ${colors.ringColor}`}
-              autoFocus
             />
           </div>
 
