@@ -177,7 +177,11 @@ export default function FormModal({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && e.ctrlKey && isFormValid()) {
+    // Allow submitting the form with Enter (or Ctrl+Enter for power users).
+    // We avoid Submit on Shift+Enter which is sometimes used for newlines elsewhere.
+    if (e.key === 'Enter' && !e.shiftKey && isFormValid()) {
+      // Prevent default to avoid accidental focus/submit side-effects
+      e.preventDefault();
       handleSave();
     }
   };
