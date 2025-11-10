@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Settings as SettingsType, Income } from '@/types';
 import { formatCurrency } from '@/lib/utils';
 
@@ -18,8 +18,22 @@ interface SettingsProps {
 
 type SettingsTab = 'overview' | 'income' | 'budget' | 'savings';
 
-// Move InputCard component outside of render
-const InputCard = ({
+// InputCard component (moved outside of Settings render)
+type InputCardSurface = 'white' | 'pastel';
+
+interface InputCardProps {
+  title: string;
+  value: number | string;
+  onChange?: (value: string) => void;
+  icon: string;
+  description: string;
+  color?: 'blue' | 'green' | 'purple' | 'amber';
+  isReadOnly?: boolean;
+  onBlur?: () => Promise<void>;
+  surface?: InputCardSurface;
+}
+
+const InputCard: React.FC<InputCardProps> = ({
   title,
   value,
   onChange,
@@ -29,16 +43,6 @@ const InputCard = ({
   isReadOnly = false,
   onBlur,
   surface = 'white',
-}: {
-  title: string;
-  value: number | string;
-  onChange?: (value: string) => void;
-  icon: string;
-  description: string;
-  color?: 'blue' | 'green' | 'purple' | 'amber';
-  isReadOnly?: boolean;
-  onBlur?: () => Promise<void>;
-  surface?: 'white' | 'pastel';
 }) => {
   const colorClasses = {
     blue: 'border-blue-200 bg-blue-50 text-blue-900 focus:border-blue-500 focus:ring-blue-500',
@@ -60,7 +64,7 @@ const InputCard = ({
       'bg-gradient-to-r from-amber-50 to-yellow-100 rounded-xl border border-amber-100 p-3 sm:p-4 h-full flex flex-col justify-between',
   };
 
-  const wrapperClass =
+    const wrapperClass =
     surface === 'pastel'
       ? pastelWrappers[color] ||
         'bg-white p-3 sm:p-4 rounded-xl border border-gray-100'
@@ -103,12 +107,12 @@ const InputCard = ({
   return (
     <div className={wrapperClass}>
       <div className='flex items-start sm:items-center gap-2 sm:gap-3 mb-3'>
-        <span className='text-xl sm:text-2xl flex-shrink-0'>{icon}</span>
+  <span className='text-xl sm:text-2xl shrink-0'>{icon}</span>
         <div className='min-w-0 flex-1'>
           <h3 className='font-semibold text-gray-900 text-sm sm:text-base truncate'>
             {title}
           </h3>
-          <p className='text-xs sm:text-sm text-gray-500 break-words'>
+          <p className='text-xs sm:text-sm text-gray-500 wrap-break-word'>
             {description}
           </p>
         </div>
@@ -163,16 +167,16 @@ export default function Settings({
   ];
 
   return (
-    <div className='bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-lg border border-gray-100 mb-6 overflow-hidden'>
+  <div className='bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-lg border border-gray-100 mb-6 overflow-hidden'>
       {/* Modern Header */}
       <div
-        className='p-4 sm:p-6 cursor-pointer hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-300'
+  className='p-4 sm:p-6 cursor-pointer hover:bg-linear-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-300'
         onClick={() => setSettingsExpanded(!settingsExpanded)}
       >
         <div className='flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4'>
           {/* Title Section */}
           <div className='flex items-center gap-3 sm:gap-4'>
-            <div className='bg-gradient-to-br from-blue-500 to-purple-600 p-2 sm:p-3 rounded-xl text-white shadow-lg flex-shrink-0'>
+            <div className='bg-linear-to-br from-blue-500 to-purple-600 p-2 sm:p-3 rounded-xl text-white shadow-lg shrink-0'>
               <svg
                 className='w-5 h-5 sm:w-6 sm:h-6'
                 fill='none'
@@ -194,10 +198,10 @@ export default function Settings({
               </svg>
             </div>
             <div className='min-w-0'>
-              <h2 className='text-xl sm:text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent'>
+              <h2 className='text-xl sm:text-2xl font-bold bg-linear-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent'>
                 Einstellungen
               </h2>
-              <p className='text-sm sm:text-base text-gray-500 mt-1 break-words'>
+              <p className='text-sm sm:text-base text-gray-500 mt-1 wrap-break-word'>
                 Verwalte deine Finanzen und Budgets
               </p>
             </div>
@@ -214,7 +218,7 @@ export default function Settings({
               </div>
             </div>
             <div
-              className={`transform transition-transform duration-300 p-2 rounded-full bg-gray-100 flex-shrink-0 ${
+              className={`transform transition-transform duration-300 p-2 rounded-full bg-gray-100 shrink-0 ${
                 settingsExpanded ? 'rotate-180' : ''
               }`}
             >
@@ -262,7 +266,7 @@ export default function Settings({
             {activeTab === 'overview' && (
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6'>
                 {/* Pascal overview card (match Einkommen UI) */}
-                <div className='bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-4 space-y-3 h-full flex flex-col justify-between'>
+                <div className='bg-linear-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-4 space-y-3 h-full flex flex-col justify-between'>
                   <div className='flex items-center justify-between'>
                     <h3 className='text-lg font-semibold text-blue-700 flex items-center gap-2'>
                       <span>👨‍💼</span>
@@ -284,7 +288,7 @@ export default function Settings({
                 </div>
 
                 {/* Caro overview card (match Einkommen UI) */}
-                <div className='bg-gradient-to-r from-green-50 to-emerald-100 rounded-xl border border-emerald-100 p-4 space-y-3 h-full flex flex-col justify-between'>
+                <div className='bg-linear-to-r from-green-50 to-emerald-100 rounded-xl border border-emerald-100 p-4 space-y-3 h-full flex flex-col justify-between'>
                   <div className='flex items-center justify-between'>
                     <h3 className='text-lg font-semibold text-emerald-700 flex items-center gap-2'>
                       <span>👩‍💼</span>
@@ -429,7 +433,7 @@ export default function Settings({
                   </h3>
                   <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                     {/* Sparen card - Einkommen style */}
-                    <div className='bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-100 p-4 space-y-3 h-full flex flex-col justify-between'>
+                    <div className='bg-linear-to-r from-purple-50 to-purple-100 rounded-xl border border-purple-100 p-4 space-y-3 h-full flex flex-col justify-between'>
                       <div className='flex items-center justify-between'>
                         <h4 className='text-lg font-semibold text-purple-700 flex items-center gap-2'>
                           <span>💎</span>
@@ -446,7 +450,7 @@ export default function Settings({
                     </div>
 
                     {/* Investieren card - Einkommen style */}
-                    <div className='bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-4 space-y-3 h-full flex flex-col justify-between'>
+                    <div className='bg-linear-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-100 p-4 space-y-3 h-full flex flex-col justify-between'>
                       <div className='flex items-center justify-between'>
                         <h4 className='text-lg font-semibold text-blue-700 flex items-center gap-2'>
                           <span>📊</span>
@@ -463,7 +467,7 @@ export default function Settings({
                     </div>
                   </div>
 
-                  <div className='mt-4 p-3 bg-gradient-to-r from-green-50 to-green-100 rounded-xl border border-green-100'>
+                  <div className='mt-4 p-3 bg-linear-to-r from-green-50 to-green-100 rounded-xl border border-green-100'>
                     <div className='flex items-center justify-between'>
                       <span className='text-sm font-medium text-green-900 flex items-center gap-2'>
                         <span>🎯</span>

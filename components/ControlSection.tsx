@@ -33,7 +33,7 @@ const ControlDetails = ({
     {/* Content Grid */}
     <div className='space-y-4'>
       {/* Calculation Breakdown */}
-      <div className='bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200'>
+      <div className='bg-linear-to-br from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200'>
         <h4 className='font-semibold text-blue-800 mb-3 flex items-center gap-2'>
           <span>🧮</span>
           Berechnung Gemeinschaftskonto Bedarf
