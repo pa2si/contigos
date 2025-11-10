@@ -64,7 +64,7 @@ const InputCard: React.FC<InputCardProps> = ({
       'bg-gradient-to-r from-amber-50 to-yellow-100 rounded-xl border border-amber-100 p-3 sm:p-4 h-full flex flex-col justify-between',
   };
 
-    const wrapperClass =
+  const wrapperClass =
     surface === 'pastel'
       ? pastelWrappers[color] ||
         'bg-white p-3 sm:p-4 rounded-xl border border-gray-100'
@@ -107,7 +107,7 @@ const InputCard: React.FC<InputCardProps> = ({
   return (
     <div className={wrapperClass}>
       <div className='flex items-start sm:items-center gap-2 sm:gap-3 mb-3'>
-  <span className='text-xl sm:text-2xl shrink-0'>{icon}</span>
+        <span className='text-xl sm:text-2xl shrink-0'>{icon}</span>
         <div className='min-w-0 flex-1'>
           <h3 className='font-semibold text-gray-900 text-sm sm:text-base truncate'>
             {title}
@@ -167,10 +167,10 @@ export default function Settings({
   ];
 
   return (
-  <div className='bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-lg border border-gray-100 mb-6 overflow-hidden'>
+    <div className='bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-lg border border-gray-100 mb-6 overflow-hidden'>
       {/* Modern Header */}
       <div
-  className='p-4 sm:p-6 cursor-pointer hover:bg-linear-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-300'
+        className='p-4 sm:p-6 cursor-pointer hover:bg-linear-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-300'
         onClick={() => setSettingsExpanded(!settingsExpanded)}
       >
         <div className='flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4'>
