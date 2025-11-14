@@ -1,25 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import {
-  useSettingsOperations,
-  useExpensesOperations,
-  useExpenseForm,
-  useIncomeOperations,
-  useIncomeForm,
-  useAppData,
-  useFinancialCalculations,
-  usePartnerIncomes,
-  usePrivateExpenseOperations,
-  usePrivateExpenseForm,
-} from '@/hooks';
-import {
-  parseNumber,
-  validateExpenseForm,
-  validateIncomeForm,
-} from '@/lib/utils';
-import { PrivateExpense } from '@/types';
-import { ApiService } from '@/lib/api';
+import { useHomePage } from '@/hooks';
 
 // Import our new components
 import Settings from '@/components/Settings';
@@ -34,249 +15,61 @@ import PrivateExpenses from '@/components/PrivateExpenses';
 import PageSkeleton from '@/components/PageSkeleton';
 
 export default function HomePage() {
-  // Local loading state for data fetching
-  const [isDataLoaded, setIsDataLoaded] = useState(false);
-
-  // Combined data management hook (prevents infinite loops)
   const {
+    isDataLoaded,
     settings,
-    setSettings,
     expenses,
-    setExpenses,
     incomes,
-    setIncomes,
-    loadData,
-  } = useAppData();
-
-  // Settings operations hook
-  const { updateSettings, saveSettings } = useSettingsOperations(
-    settings,
-    setSettings
-  );
-
-  // Expenses operations hook
-  const { createExpense, editExpense, deleteExpense } = useExpensesOperations(
-    expenses,
-    setExpenses
-  );
-
-  // Income operations hook
-  const { createIncome, editIncome, deleteIncome } = useIncomeOperations(
-    incomes,
-    setIncomes
-  );
-
-  // Partner-specific income data
-  const { pascalIncomes, caroIncomes, pascalTotal, caroTotal } =
-    usePartnerIncomes(incomes);
-
-  // Form state hooks
-  const {
+    pascalIncomes,
+    caroIncomes,
+    pascalTotal,
+    caroTotal,
     showAddExpense,
     editingExpense,
     expenseForm,
-    resetForm: resetExpenseForm,
+    resetExpenseForm,
     startAddExpense,
     startEditExpense,
-    updateForm: updateExpenseForm,
-    isFormValid: isExpenseFormValid,
-  } = useExpenseForm();
-
-  const {
+    updateExpenseForm,
+    isExpenseFormValid,
     showAddIncome,
     editingIncome,
     incomeForm,
-    resetForm: resetIncomeForm,
+    resetIncomeForm,
     startAddIncome,
     startEditIncome,
-    updateForm: updateIncomeForm,
-  } = useIncomeForm();
-
-  // Private expenses state
-  const [privateExpenses, setPrivateExpenses] = useState<PrivateExpense[]>([]);
-
-  // Private expense operations
-  const { createPrivateExpense, editPrivateExpense, deletePrivateExpense } =
-    usePrivateExpenseOperations(privateExpenses, setPrivateExpenses);
-
-  // Private expense form management
-  const {
+    updateIncomeForm,
+    privateExpenses,
+    createPrivateExpense,
+    editPrivateExpense,
+    deletePrivateExpense,
     privateExpenseForm,
     updatePrivateExpenseForm,
     resetPrivateExpenseForm,
     isPrivateExpenseFormValid,
-  } = usePrivateExpenseForm();
-
-  // Private expense UI state
-  const [showAddPrivateExpense, setShowAddPrivateExpense] = useState(false);
-  const [editingPrivateExpense, setEditingPrivateExpense] =
-    useState<PrivateExpense | null>(null);
-
-  // Tab navigation state
-  const [activeTab, setActiveTab] = useState('gemeinsam');
-  const [privateExpensesExpanded, setPrivateExpensesExpanded] = useState(false);
-  // Month selector state (format YYYY-MM)
-  const [selectedMonth, setSelectedMonth] = useState(() => {
-    const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-  });
-
-  // Helpers to change month
-  const setMonthFromDate = (d: Date) =>
-    setSelectedMonth(
-      `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
-    );
-
-  const prevMonth = () => {
-    const [y, m] = selectedMonth.split('-').map(Number);
-    const d = new Date(y, m - 1 - 1, 1);
-    setMonthFromDate(d);
-  };
-
-  const nextMonth = () => {
-    const [y, m] = selectedMonth.split('-').map(Number);
-    const d = new Date(y, m - 1 + 1, 1);
-    setMonthFromDate(d);
-  };
-
-  const [selY, selM] = selectedMonth.split('-').map(Number);
-  const selectedMonthLabel = new Date(selY, selM - 1).toLocaleString('de-DE', {
-    month: 'long',
-    year: 'numeric',
-  });
-  // Month navigator uses a single pill-style UI
-
-  // Modal state for confirmations
-  const [confirmModal, setConfirmModal] = useState<{
-    isOpen: boolean;
-    title: string;
-    message: string;
-    onConfirm: () => void;
-    isDestructive: boolean;
-  }>({
-    isOpen: false,
-    title: '',
-    message: '',
-    onConfirm: () => {},
-    isDestructive: false,
-  });
-
-  // UI state is now managed by individual components
-
-  // Financial calculations
-  const results = useFinancialCalculations(
-    settings,
-    expenses,
-    incomes,
-    privateExpenses
-  );
-
-  // Load data on component mount (only once)
-  useEffect(() => {
-    const loadAllData = async () => {
-      try {
-        await loadData();
-        // Load private expenses
-        const expenses = await ApiService.getPrivateExpenses();
-        setPrivateExpenses(expenses);
-      } catch (error) {
-        console.error('Error loading data:', error);
-      } finally {
-        setIsDataLoaded(true);
-      }
-    };
-
-    loadAllData();
-  }, [loadData]);
-
-  // Event handlers
-  const handleSettingsChange = (
-    field: keyof typeof settings,
-    value: string
-  ) => {
-    const numericValue = parseNumber(value);
-    updateSettings({ [field]: numericValue });
-  };
-
-  const handleSettingsBlur = async () => {
-    try {
-      await saveSettings();
-    } catch (error) {
-      console.error('Error saving settings:', error);
-    }
-  };
-
-  const handleNavigateToPrivateExpenses = () => {
-    setActiveTab('privat');
-    setPrivateExpensesExpanded(true); // Auto-expand the private expenses section
-  };
-
-  const handleSaveExpense = async () => {
-    if (!validateExpenseForm(expenseForm)) return;
-
-    try {
-      if (editingExpense) {
-        await editExpense(editingExpense.id, expenseForm);
-      } else {
-        await createExpense(expenseForm);
-      }
-      resetExpenseForm();
-    } catch (error) {
-      console.error('Error saving expense:', error);
-    }
-  };
-
-  const handleDeleteExpense = async (expenseId: number) => {
-    setConfirmModal({
-      isOpen: true,
-      title: 'Ausgabe löschen',
-      message: 'Möchten Sie diese Ausgabe wirklich löschen?',
-      onConfirm: async () => {
-        try {
-          await deleteExpense(expenseId);
-          setConfirmModal((prev) => ({ ...prev, isOpen: false }));
-        } catch (error) {
-          console.error('Error deleting expense:', error);
-          setConfirmModal((prev) => ({ ...prev, isOpen: false }));
-        }
-      },
-      isDestructive: true,
-    });
-  };
-
-  // Income handlers
-  const handleSaveIncome = async () => {
-    if (!validateIncomeForm(incomeForm)) return;
-
-    try {
-      if (editingIncome) {
-        await editIncome(editingIncome.id, incomeForm);
-      } else {
-        await createIncome(incomeForm);
-      }
-      resetIncomeForm();
-    } catch (error) {
-      console.error('Error saving income:', error);
-    }
-  };
-
-  const handleDeleteIncome = async (incomeId: number) => {
-    setConfirmModal({
-      isOpen: true,
-      title: 'Einkommensposition löschen',
-      message: 'Möchten Sie diese Einkommensposition wirklich löschen?',
-      onConfirm: async () => {
-        try {
-          await deleteIncome(incomeId);
-          setConfirmModal((prev) => ({ ...prev, isOpen: false }));
-        } catch (error) {
-          console.error('Error deleting income:', error);
-          setConfirmModal((prev) => ({ ...prev, isOpen: false }));
-        }
-      },
-      isDestructive: true,
-    });
-  };
+    showAddPrivateExpense,
+    setShowAddPrivateExpense,
+    editingPrivateExpense,
+    setEditingPrivateExpense,
+    activeTab,
+    setActiveTab,
+    privateExpensesExpanded,
+    setPrivateExpensesExpanded,
+    prevMonth,
+    nextMonth,
+    selectedMonth,
+    selectedMonthLabel,
+    confirmModal,
+    setConfirmModal,
+    results,
+    handleSettingsChange,
+    handleSettingsBlur,
+    handleNavigateToPrivateExpenses,
+    handleSaveExpense,
+    handleDeleteExpense,
+    handleSaveIncome,
+    handleDeleteIncome,
+  } = useHomePage();
 
   // Show loading skeleton while data is being fetched
   if (!isDataLoaded) {
