@@ -72,7 +72,7 @@ export default function Modal({
         <div
           className={
             headerClass ||
-            'flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-2xl'
+            'flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 bg-linear-to-r from-blue-50 to-indigo-50 rounded-t-2xl'
           }
         >
           <h2
