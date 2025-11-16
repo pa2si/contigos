@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import {
   Settings,
   Expense,
@@ -310,32 +310,19 @@ export function useIncomeOperations(
  * Custom hook for managing partner-specific income lists and totals
  */
 export function usePartnerIncomes(incomes: Income[]) {
-  const pascalIncomes = useMemo(
-    () => incomes.filter((income) => income.quelle === 'Partner1'),
-    [incomes]
+  'use memo'
+  const pascalIncomes = incomes.filter((income) => income.quelle === 'Partner1');
+
+  const caroIncomes = incomes.filter((income) => income.quelle === 'Partner2');
+
+  const pascalTotal = pascalIncomes.reduce(
+    (sum, income) => sum + (Number(income.betrag) || 0),
+    0
   );
 
-  const caroIncomes = useMemo(
-    () => incomes.filter((income) => income.quelle === 'Partner2'),
-    [incomes]
-  );
-
-  const pascalTotal = useMemo(
-    () =>
-      pascalIncomes.reduce(
-        (sum, income) => sum + (Number(income.betrag) || 0),
-        0
-      ),
-    [pascalIncomes]
-  );
-
-  const caroTotal = useMemo(
-    () =>
-      caroIncomes.reduce(
-        (sum, income) => sum + (Number(income.betrag) || 0),
-        0
-      ),
-    [caroIncomes]
+  const caroTotal = caroIncomes.reduce(
+    (sum, income) => sum + (Number(income.betrag) || 0),
+    0
   );
 
   return {
@@ -501,14 +488,14 @@ export function useFinancialCalculations(
   incomes: Income[],
   privateExpenses: PrivateExpense[] = []
 ): CalculationResults {
-  return useMemo(() => {
-    return calculateFinancialResults(
-      settings,
-      expenses,
-      incomes,
-      privateExpenses
-    );
-  }, [settings, expenses, incomes, privateExpenses]);
+  'use memo'
+
+  return calculateFinancialResults(
+    settings,
+    expenses,
+    incomes,
+    privateExpenses
+  );
 }
 
 /**

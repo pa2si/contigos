@@ -96,7 +96,9 @@ const ExpenseRow = ({
             <DeleteButton onClick={onDelete!} />
           </div>
         ) : (
-          <div className='w-12'></div> // Placeholder for consistent alignment
+          <div className='w-12'>
+            {/* Placeholder for consistent alignment */}
+          </div>
         )}
       </div>
     </div>
@@ -131,16 +133,16 @@ export default function ExpenseManagement({
     settings.sparen_depot;
 
   return (
-    <div className='bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-lg border border-gray-100 mb-6 overflow-hidden'>
+    <div className='bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-lg border border-gray-100 mb-6 overflow-hidden'>
       {/* Modern Header */}
       <div
-        className='p-4 sm:p-6 cursor-pointer hover:bg-gradient-to-r hover:from-red-50 hover:to-rose-50 transition-all duration-300'
+        className='p-4 sm:p-6 cursor-pointer hover:bg-linear-to-r hover:from-red-50 hover:to-rose-50 transition-all duration-300'
         onClick={() => setExpensesExpanded(!expensesExpanded)}
       >
         <div className='flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4'>
           {/* Title Section */}
           <div className='flex items-center gap-3 sm:gap-4'>
-            <div className='bg-gradient-to-br from-red-500 to-rose-600 p-2 sm:p-3 rounded-xl text-white shadow-lg flex-shrink-0'>
+            <div className='bg-linear-to-br from-red-500 to-rose-600 p-2 sm:p-3 rounded-xl text-white shadow-lg shrink-0'>
               <svg
                 className='w-5 h-5 sm:w-6 sm:h-6'
                 fill='none'
@@ -156,10 +158,10 @@ export default function ExpenseManagement({
               </svg>
             </div>
             <div className='min-w-0'>
-              <h2 className='text-xl sm:text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent'>
+              <h2 className='text-xl sm:text-2xl font-bold bg-linear-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent'>
                 Ausgaben Verwaltung
               </h2>
-              <p className='text-sm sm:text-base text-gray-500 mt-1 break-words'>
+              <p className='text-sm sm:text-base text-gray-500 mt-1 wrap-break-word'>
                 Verwalte deine monatlichen Ausgaben und Kosten
               </p>
             </div>
@@ -176,7 +178,7 @@ export default function ExpenseManagement({
               </div>
             </div>
             <div
-              className={`transform transition-transform duration-300 p-2 rounded-full bg-gray-100 flex-shrink-0 ${
+              className={`transform transition-transform duration-300 p-2 rounded-full bg-gray-100 shrink-0 ${
                 expensesExpanded ? 'rotate-180' : ''
               }`}
             >
@@ -213,7 +215,7 @@ export default function ExpenseManagement({
               </div>
               <button
                 onClick={onStartAddExpense}
-                className='bg-gradient-to-r from-red-500 to-rose-600 text-white px-4 py-2 rounded-lg font-medium hover:from-red-600 hover:to-rose-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 flex items-center gap-2'
+                className='bg-linear-to-r from-red-500 to-rose-600 text-white px-4 py-2 rounded-lg font-medium hover:from-red-600 hover:to-rose-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 flex items-center gap-2'
               >
                 <span className='text-lg'>➕</span>
                 Ausgabe hinzufügen
@@ -304,7 +306,7 @@ export default function ExpenseManagement({
 
               {/* Summary Row */}
               {expenses.length > 0 && (
-                <div className='mt-6 p-4 bg-gradient-to-r from-red-50 to-rose-50 rounded-lg border border-red-200'>
+                <div className='mt-6 p-4 bg-linear-to-r from-red-50 to-rose-50 rounded-lg border border-red-200'>
                   <div className='flex items-center justify-between'>
                     <div className='flex items-center gap-2'>
                       <span className='text-lg'>📊</span>

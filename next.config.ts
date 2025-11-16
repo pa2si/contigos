@@ -1,7 +1,11 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  reactCompiler: true,
+  // Use annotation mode so we can opt-in with the `'use memo'` directive
+  // This keeps builds fast and lets us selectively annotate hooks/components.
+  reactCompiler: {
+    compilationMode: 'annotation',
+  },
 
   // Security headers (additional to proxy.ts)
   async headers() {
