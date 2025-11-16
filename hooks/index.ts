@@ -310,8 +310,10 @@ export function useIncomeOperations(
  * Custom hook for managing partner-specific income lists and totals
  */
 export function usePartnerIncomes(incomes: Income[]) {
-  'use memo'
-  const pascalIncomes = incomes.filter((income) => income.quelle === 'Partner1');
+  'use memo';
+  const pascalIncomes = incomes.filter(
+    (income) => income.quelle === 'Partner1'
+  );
 
   const caroIncomes = incomes.filter((income) => income.quelle === 'Partner2');
 
@@ -488,7 +490,7 @@ export function useFinancialCalculations(
   incomes: Income[],
   privateExpenses: PrivateExpense[] = []
 ): CalculationResults {
-  'use memo'
+  'use memo';
 
   return calculateFinancialResults(
     settings,
