@@ -104,16 +104,16 @@ export default function GirokontoSection({
   const totalAmount = results.verbleibt_p1 + results.verbleibt_p2;
 
   return (
-    <div className='bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-lg border border-gray-100 mb-6 overflow-hidden'>
+    <div className='bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-lg border border-gray-100 mb-6 overflow-hidden'>
       {/* Modern Header */}
       <div
-        className='p-4 sm:p-6 cursor-pointer hover:bg-gradient-to-r hover:from-blue-50 hover:to-green-50 transition-all duration-300'
+        className='p-4 sm:p-6 cursor-pointer hover:bg-linear-to-r hover:from-blue-50 hover:to-green-50 transition-all duration-300'
         onClick={() => setSectionExpanded(!sectionExpanded)}
       >
         <div className='flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4'>
           {/* Title Section */}
           <div className='flex items-center gap-3 sm:gap-4'>
-            <div className='bg-gradient-to-br from-green-500 to-blue-600 p-2 sm:p-3 rounded-xl text-white shadow-lg flex-shrink-0'>
+            <div className='bg-linear-to-br from-green-500 to-blue-600 p-2 sm:p-3 rounded-xl text-white shadow-lg shrink-0'>
               <svg
                 className='w-5 h-5 sm:w-6 sm:h-6'
                 fill='none'
@@ -129,10 +129,10 @@ export default function GirokontoSection({
               </svg>
             </div>
             <div className='min-w-0'>
-              <h2 className='text-xl sm:text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent'>
+              <h2 className='text-xl sm:text-2xl font-bold bg-linear-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent'>
                 Geld zur freien Verfügung
               </h2>
-              <p className='text-sm sm:text-base text-gray-500 mt-1 break-words'>
+              <p className='text-sm sm:text-base text-gray-500 mt-1 wrap-break-word'>
                 Verfügbares Budget nach allen Ausgaben
               </p>
             </div>
@@ -149,7 +149,7 @@ export default function GirokontoSection({
               </div>
             </div>
             <div
-              className={`transform transition-transform duration-300 p-2 rounded-full bg-gray-100 flex-shrink-0 ${
+              className={`transform transition-transform duration-300 p-2 rounded-full bg-gray-100 shrink-0 ${
                 sectionExpanded ? 'rotate-180' : ''
               }`}
             >
