@@ -107,7 +107,7 @@ export default function GirokontoSection({
     <div className='bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-lg border border-gray-100 mb-6 overflow-hidden'>
       {/* Modern Header */}
       <div
-        className='p-4 sm:p-6 cursor-pointer hover:bg-gradient-to-r hover:from-green-50 hover:to-blue-50 transition-all duration-300'
+        className='p-4 sm:p-6 cursor-pointer hover:bg-gradient-to-r hover:from-blue-50 hover:to-green-50 transition-all duration-300'
         onClick={() => setSectionExpanded(!sectionExpanded)}
       >
         <div className='flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4'>
