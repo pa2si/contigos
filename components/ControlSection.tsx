@@ -31,51 +31,51 @@ const ControlDetails = ({
     </div>
 
     {/* Content Grid */}
-    <div className='space-y-6'>
+    <div className='space-y-4'>
       {/* Calculation Breakdown */}
-      <div>
-        <h4 className='font-semibold text-white mb-3 flex items-center gap-2 px-1'>
+      <div className='bg-white/80 backdrop-blur-md p-4 rounded-xl border border-white/20 shadow-sm'>
+        <h4 className='font-semibold text-gray-900 mb-3 flex items-center gap-2'>
           <span>🧮</span>
           Berechnung Gemeinschaftskonto Bedarf
         </h4>
-        <div className='space-y-2 text-sm px-1'>
+        <div className='space-y-2 text-sm'>
           <div className='flex justify-between py-1'>
-            <span className='text-white/90'>💰 Lebensmittel (Budget):</span>
-            <span className='font-bold text-white tabular-nums'>
+            <span className='text-gray-600'>💰 Lebensmittel (Budget):</span>
+            <span className='font-bold text-gray-900 tabular-nums'>
               {formatCurrencyFixed(results.budget_lebensmittel)}
             </span>
           </div>
           <div className='flex justify-between py-1'>
-            <span className='text-white/90'>🏦 Sparen (gesamt):</span>
-            <span className='font-bold text-white tabular-nums'>
+            <span className='text-gray-600'>🏦 Sparen (gesamt):</span>
+            <span className='font-bold text-gray-900 tabular-nums'>
               {formatCurrencyFixed(
                 results.sparen_tagesgeld + results.sparen_depot
               )}
             </span>
           </div>
           <div className='flex justify-between py-1 ml-6'>
-            <span className='text-white/70 text-sm'>↳ Tagesgeldkonto:</span>
-            <span className='font-medium text-white/90 tabular-nums text-sm'>
+            <span className='text-gray-500 text-sm'>↳ Tagesgeldkonto:</span>
+            <span className='font-medium text-gray-700 tabular-nums text-sm'>
               {formatCurrencyFixed(results.sparen_tagesgeld)}
             </span>
           </div>
           <div className='flex justify-between py-1 ml-6'>
-            <span className='text-white/70 text-sm'>↳ Depot:</span>
-            <span className='font-medium text-white/90 tabular-nums text-sm'>
+            <span className='text-gray-500 text-sm'>↳ Depot:</span>
+            <span className='font-medium text-gray-700 tabular-nums text-sm'>
               {formatCurrencyFixed(results.sparen_depot)}
             </span>
           </div>
           <div className='flex justify-between py-1'>
-            <span className='text-white/90'>🧾 Weitere Ausgaben (GK):</span>
-            <span className='font-bold text-white tabular-nums'>
+            <span className='text-gray-600'>🧾 Weitere Ausgaben (GK):</span>
+            <span className='font-bold text-gray-900 tabular-nums'>
               {formatCurrencyFixed(results.gk_dyn_expenses)}
             </span>
           </div>
         </div>
-        <div className='border-t border-white/20 pt-3 mt-3 mx-1'>
-          <div className='flex justify-between items-center py-2'>
-            <span className='font-semibold text-white'>Gesamt Bedarf:</span>
-            <span className='font-bold text-white'>
+        <div className='border-t border-black/5 pt-3 mt-3'>
+          <div className='flex justify-between items-center py-2 px-3 bg-white/50 rounded-lg'>
+            <span className='font-semibold text-gray-900'>Gesamt Bedarf:</span>
+            <span className='font-bold text-blue-600'>
               {formatCurrencyFixed(results.bedarf_gk)}
             </span>
           </div>
@@ -83,23 +83,23 @@ const ControlDetails = ({
       </div>
 
       {/* Adjustment & Result */}
-      <div className='space-y-2'>
-        <div className='flex justify-between items-center py-2 px-1'>
-          <span className='font-medium text-white/90 flex items-center gap-2'>
+      <div className='space-y-3'>
+        <div className='flex justify-between items-center py-2 px-3 bg-white/80 backdrop-blur-md rounded-lg border border-white/20 shadow-sm'>
+          <span className='font-medium text-gray-700 flex items-center gap-2'>
             <span>💴</span>
             Restgeld Vormonat:
           </span>
-          <span className='font-semibold text-white'>
+          <span className='font-semibold text-gray-900'>
             -{formatCurrencyFixed(settings.restgeld_gk_vormonat)}
           </span>
         </div>
 
-        <div className='flex justify-between items-center py-2 px-1'>
-          <span className='font-medium text-white/90 flex items-center gap-2'>
+        <div className='flex justify-between items-center py-2 px-3 bg-white/80 backdrop-blur-md rounded-lg border border-white/20 shadow-sm'>
+          <span className='font-medium text-gray-700 flex items-center gap-2'>
             <span>✨</span>
             Benötigte Einzahlung:
           </span>
-          <span className='font-semibold text-white'>
+          <span className='font-semibold text-emerald-600'>
             {formatCurrencyFixed(results.kontrolle_einzahlungNötig)}
           </span>
         </div>
