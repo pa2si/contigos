@@ -42,6 +42,8 @@ const ExpenseRow = ({
   onEdit,
   onDelete,
   isFixed = false,
+  badgeLabel,
+  showIcon = true,
 }: {
   title: string;
   amount: number;
@@ -50,6 +52,8 @@ const ExpenseRow = ({
   onEdit?: () => void;
   onDelete?: () => void;
   isFixed?: boolean;
+  badgeLabel?: string;
+  showIcon?: boolean;
 }) => {
   return (
     <div
@@ -59,25 +63,29 @@ const ExpenseRow = ({
     >
       {/* Left Side - Icon and Title */}
       <div className='flex items-center gap-2 flex-1 min-w-0'>
-        <div
-          className={`p-1.5 rounded-lg shrink-0 ${
-            type === 'fixed' ? 'bg-blue-100' : 'bg-gray-100'
-          }`}
-        >
-          <span className='text-sm'>{type === 'fixed' ? '📌' : '🛒'}</span>
-        </div>
+        {showIcon && (
+          <div
+            className={`p-1.5 rounded-lg shrink-0 ${
+              type === 'fixed' ? 'bg-blue-100' : 'bg-gray-100'
+            }`}
+          >
+            <span className='text-sm'>{type === 'fixed' ? '📌' : '🛒'}</span>
+          </div>
+        )}
         <div className='min-w-0 flex-1'>
-          <div className='flex items-center gap-2'>
-            <h3 className='font-medium text-gray-900 text-sm truncate'>
+          <div className='flex flex-wrap items-center gap-x-2 gap-y-1'>
+            <h3 className='font-medium text-gray-900 text-sm leading-snug'>
               {title}
             </h3>
             {isFixed && (
               <span className='bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded-full text-xs font-medium shrink-0'>
-                Fix
+                {badgeLabel || 'Fix'}
               </span>
             )}
           </div>
-          <p className='text-xs text-gray-500 truncate'>{description}</p>
+          <p className='text-xs text-gray-500 leading-snug mt-0.5'>
+            {description}
+          </p>
         </div>
       </div>
 
@@ -105,6 +113,72 @@ const ExpenseRow = ({
   );
 };
 
+const PayerSummary = ({
+  expenses,
+  settings,
+}: {
+  expenses: Expense[];
+  settings: Settings;
+}) => {
+  const sums = expenses.reduce(
+    (acc, expense) => {
+      acc[expense.bezahlt_von] =
+        (acc[expense.bezahlt_von] || 0) + expense.betrag;
+      return acc;
+    },
+    { Partner1: 0, Partner2: 0, Gemeinschaftskonto: 0 } as Record<
+      string,
+      number
+    >
+  );
+
+  // Add fixed expenses to Gemeinschaftskonto
+  sums.Gemeinschaftskonto +=
+    settings.budget_lebensmittel +
+    settings.sparen_tagesgeld +
+    settings.sparen_depot;
+
+  if (expenses.length === 0) return null;
+
+  return (
+    <div>
+      <h4 className='text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2 px-1'>
+        <span>💳</span>
+        Ausgaben nach Konto
+      </h4>
+      <div className='space-y-2'>
+        <ExpenseRow
+          title="Abgang von Pascal's Konto"
+          amount={sums.Partner1}
+          description='Summe aller Ausgaben von Pascal'
+          type='fixed'
+          isFixed={true}
+          badgeLabel='Summe'
+          showIcon={false}
+        />
+        <ExpenseRow
+          title="Abgang von Caro's Konto"
+          amount={sums.Partner2}
+          description='Summe aller Ausgaben von Caro'
+          type='fixed'
+          isFixed={true}
+          badgeLabel='Summe'
+          showIcon={false}
+        />
+        <ExpenseRow
+          title='Abgang von Gemeinschaftskonto'
+          amount={sums.Gemeinschaftskonto}
+          description='Summe aller Ausgaben vom Gemeinschaftskonto'
+          type='fixed'
+          isFixed={true}
+          badgeLabel='Summe'
+          showIcon={false}
+        />
+      </div>
+    </div>
+  );
+};
+
 export default function ExpenseManagement({
   expenses,
   settings,
@@ -120,6 +194,7 @@ export default function ExpenseManagement({
   isExpenseFormValid,
 }: ExpenseManagementProps) {
   const [expensesExpanded, setExpensesExpanded] = useState(false);
+  const [showSummaryDetails, setShowSummaryDetails] = useState(false);
 
   // Calculate total expenses (dynamic + fixed from settings)
   const dynamicExpensesTotal = expenses.reduce(
@@ -306,28 +381,63 @@ export default function ExpenseManagement({
 
               {/* Summary Row */}
               {expenses.length > 0 && (
-                <div className='mt-6 p-4 bg-linear-to-r from-red-50 to-rose-50 rounded-lg border border-red-200'>
-                  <div className='flex items-center justify-between'>
-                    <div className='flex items-center gap-2'>
-                      <span className='text-lg'>📊</span>
-                      <span className='font-semibold text-gray-700'>
-                        Gesamtsumme aller Ausgaben
+                <div className='mt-6 bg-linear-to-r from-red-50 to-rose-50 rounded-lg border border-red-200 overflow-hidden'>
+                  <div className='p-4'>
+                    <div className='flex items-center justify-between'>
+                      <div className='flex items-center gap-2'>
+                        <span className='text-lg'>📊</span>
+                        <span className='font-semibold text-gray-700'>
+                          Gesamtsumme aller Ausgaben
+                        </span>
+                      </div>
+                      <div className='text-right'>
+                        <div className='text-2xl font-bold text-red-600'>
+                          {formatCurrency(totalExpenses)}
+                        </div>
+                        <div className='text-sm text-red-500'>
+                          {formatCurrency(
+                            settings.budget_lebensmittel +
+                              settings.sparen_tagesgeld +
+                              settings.sparen_depot
+                          )}{' '}
+                          budget + {formatCurrency(dynamicExpensesTotal)}{' '}
+                          geteilt
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => setShowSummaryDetails(!showSummaryDetails)}
+                      className='mt-4 w-full flex items-center justify-center gap-2 text-sm text-red-600 hover:text-red-700 font-medium py-2 rounded-md hover:bg-red-100/50 transition-colors cursor-pointer'
+                    >
+                      <span>
+                        {showSummaryDetails
+                          ? 'Details verbergen'
+                          : 'Details anzeigen'}
                       </span>
-                    </div>
-                    <div className='text-right'>
-                      <div className='text-2xl font-bold text-red-600'>
-                        {formatCurrency(totalExpenses)}
-                      </div>
-                      <div className='text-sm text-red-500'>
-                        {formatCurrency(
-                          settings.budget_lebensmittel +
-                            settings.sparen_tagesgeld +
-                            settings.sparen_depot
-                        )}{' '}
-                        budget + {formatCurrency(dynamicExpensesTotal)} geteilt
-                      </div>
-                    </div>
+                      <svg
+                        className={`w-4 h-4 transform transition-transform duration-200 ${
+                          showSummaryDetails ? 'rotate-180' : ''
+                        }`}
+                        fill='none'
+                        stroke='currentColor'
+                        viewBox='0 0 24 24'
+                      >
+                        <path
+                          strokeLinecap='round'
+                          strokeLinejoin='round'
+                          strokeWidth={2}
+                          d='M19 9l-7 7-7-7'
+                        />
+                      </svg>
+                    </button>
                   </div>
+
+                  {showSummaryDetails && (
+                    <div className='border-t border-red-100 bg-white/50 p-4'>
+                      <PayerSummary expenses={expenses} settings={settings} />
+                    </div>
+                  )}
                 </div>
               )}
             </div>
