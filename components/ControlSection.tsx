@@ -21,61 +21,61 @@ const ControlDetails = ({
   <div className='p-4 sm:p-6'>
     {/* Simplified Header */}
     <div className='mb-4'>
-      <h3 className='text-lg font-semibold text-gray-900 flex items-center gap-2 mb-2'>
+      <h3 className='text-lg font-semibold text-white flex items-center gap-2 mb-2'>
         <span className='text-xl'>📊</span>
         Detailierte Berechnung
       </h3>
-      <p className='text-sm text-gray-600'>
+      <p className='text-sm text-white/80'>
         Aufschlüsselung der Gemeinschaftskonto-Berechnung
       </p>
     </div>
 
     {/* Content Grid */}
-    <div className='space-y-4'>
+    <div className='space-y-6'>
       {/* Calculation Breakdown */}
-      <div className='bg-linear-to-br from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200'>
-        <h4 className='font-semibold text-blue-800 mb-3 flex items-center gap-2'>
+      <div>
+        <h4 className='font-semibold text-white mb-3 flex items-center gap-2 px-1'>
           <span>🧮</span>
           Berechnung Gemeinschaftskonto Bedarf
         </h4>
-        <div className='space-y-2 text-sm'>
+        <div className='space-y-2 text-sm px-1'>
           <div className='flex justify-between py-1'>
-            <span className='text-gray-700'>💰 Lebensmittel (Budget):</span>
-            <span className='font-bold text-gray-900 tabular-nums'>
+            <span className='text-white/90'>💰 Lebensmittel (Budget):</span>
+            <span className='font-bold text-white tabular-nums'>
               {formatCurrencyFixed(results.budget_lebensmittel)}
             </span>
           </div>
           <div className='flex justify-between py-1'>
-            <span className='text-gray-700'>🏦 Sparen (gesamt):</span>
-            <span className='font-bold text-gray-900 tabular-nums'>
+            <span className='text-white/90'>🏦 Sparen (gesamt):</span>
+            <span className='font-bold text-white tabular-nums'>
               {formatCurrencyFixed(
                 results.sparen_tagesgeld + results.sparen_depot
               )}
             </span>
           </div>
           <div className='flex justify-between py-1 ml-6'>
-            <span className='text-gray-600 text-sm'>↳ Tagesgeldkonto:</span>
-            <span className='font-medium text-gray-800 tabular-nums text-sm'>
+            <span className='text-white/70 text-sm'>↳ Tagesgeldkonto:</span>
+            <span className='font-medium text-white/90 tabular-nums text-sm'>
               {formatCurrencyFixed(results.sparen_tagesgeld)}
             </span>
           </div>
           <div className='flex justify-between py-1 ml-6'>
-            <span className='text-gray-600 text-sm'>↳ Depot:</span>
-            <span className='font-medium text-gray-800 tabular-nums text-sm'>
+            <span className='text-white/70 text-sm'>↳ Depot:</span>
+            <span className='font-medium text-white/90 tabular-nums text-sm'>
               {formatCurrencyFixed(results.sparen_depot)}
             </span>
           </div>
           <div className='flex justify-between py-1'>
-            <span className='text-gray-700'>🧾 Weitere Ausgaben (GK):</span>
-            <span className='font-bold text-gray-900 tabular-nums'>
+            <span className='text-white/90'>🧾 Weitere Ausgaben (GK):</span>
+            <span className='font-bold text-white tabular-nums'>
               {formatCurrencyFixed(results.gk_dyn_expenses)}
             </span>
           </div>
         </div>
-        <div className='border-t border-blue-300 pt-3 mt-3'>
-          <div className='flex justify-between items-center py-2 px-3 bg-blue-200/50 rounded-lg'>
-            <span className='font-semibold text-blue-800'>Gesamt Bedarf:</span>
-            <span className='font-bold text-blue-800'>
+        <div className='border-t border-white/20 pt-3 mt-3 mx-1'>
+          <div className='flex justify-between items-center py-2'>
+            <span className='font-semibold text-white'>Gesamt Bedarf:</span>
+            <span className='font-bold text-white'>
               {formatCurrencyFixed(results.bedarf_gk)}
             </span>
           </div>
@@ -83,23 +83,23 @@ const ControlDetails = ({
       </div>
 
       {/* Adjustment & Result */}
-      <div className='space-y-3'>
-        <div className='flex justify-between items-center py-2 px-3 bg-gray-50 rounded-lg'>
-          <span className='font-medium text-gray-700 flex items-center gap-2'>
+      <div className='space-y-2'>
+        <div className='flex justify-between items-center py-2 px-1'>
+          <span className='font-medium text-white/90 flex items-center gap-2'>
             <span>💴</span>
             Restgeld Vormonat:
           </span>
-          <span className='font-semibold text-gray-800'>
+          <span className='font-semibold text-white'>
             -{formatCurrencyFixed(settings.restgeld_gk_vormonat)}
           </span>
         </div>
 
-        <div className='flex justify-between items-center py-2 px-3 bg-gray-50 rounded-lg'>
-          <span className='font-medium text-gray-700 flex items-center gap-2'>
+        <div className='flex justify-between items-center py-2 px-1'>
+          <span className='font-medium text-white/90 flex items-center gap-2'>
             <span>✨</span>
             Benötigte Einzahlung:
           </span>
-          <span className='font-semibold text-emerald-600'>
+          <span className='font-semibold text-white'>
             {formatCurrencyFixed(results.kontrolle_einzahlungNötig)}
           </span>
         </div>
@@ -216,33 +216,34 @@ export default function ControlSection({
           </div>
 
           {/* Collapsible Control Section Toggle Button */}
-          <div className='flex justify-center mt-6'>
-            <button
-              onClick={() => setControlExpanded(!controlExpanded)}
-              className='bg-white/20 hover:bg-white/30 backdrop-blur border border-white/30 rounded-full px-6 py-3 text-white font-medium transition-all duration-200 flex items-center gap-2 hover:scale-105'
+          <button
+            onClick={() => setControlExpanded(!controlExpanded)}
+            className='mt-6 w-full flex items-center justify-center gap-2 text-sm text-white/90 hover:text-white font-medium py-2 rounded-md hover:bg-white/10 transition-colors cursor-pointer'
+          >
+            <span>
+              {controlExpanded ? 'Details verbergen' : 'Details anzeigen'}
+            </span>
+            <svg
+              className={`w-4 h-4 transform transition-transform duration-200 ${
+                controlExpanded ? 'rotate-180' : ''
+              }`}
+              fill='none'
+              stroke='currentColor'
+              viewBox='0 0 24 24'
             >
-              <span className='text-lg'>📊</span>
-              <span>Kontrolle & Details</span>
-              <svg
-                className={`w-4 h-4 transition-transform duration-300 ${
-                  controlExpanded ? 'rotate-180' : ''
-                }`}
-                fill='currentColor'
-                viewBox='0 0 20 20'
-              >
-                <path
-                  fillRule='evenodd'
-                  d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'
-                  clipRule='evenodd'
-                />
-              </svg>
-            </button>
-          </div>
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth={2}
+                d='M19 9l-7 7-7-7'
+              />
+            </svg>
+          </button>
         </div>
 
         {/* Integrated Control Details */}
         {controlExpanded && (
-          <div className='border-t border-white/20 bg-white/95 animate-in slide-in-from-top duration-300'>
+          <div className='border-t border-white/20 bg-white/5 animate-in slide-in-from-top duration-300'>
             <ControlDetails settings={settings} results={results} />
           </div>
         )}
