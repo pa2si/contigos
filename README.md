@@ -11,7 +11,7 @@ A Next.js 16 web application for couples to calculate fair financial contributio
 - **Next.js 16** with App Router
 - **React 19.2**
 - **Tailwind CSS** for styling
-- **Supabase** for database
+- **Neon Postgres** for database
 - **Prisma** as ORM
 - **TypeScript** for type safety
 
@@ -39,11 +39,40 @@ npm install
 
 # Set up environment variables
 cp .env.local.example .env.local
-# Edit .env.local with your Supabase credentials
+# Edit .env.local with the Neon connection strings from the Vercel integration.
+# DATABASE_URL must use Neon’s pooled connection URL.
+# DIRECT_URL must use Neon’s direct, non-pooled connection URL.
+
+# Apply the existing Prisma migration history to the new database
+npx prisma migrate deploy
 
 # Run development server
 npm run dev
 ```
+
+## Migrate Existing Data to Neon
+
+For a new, empty Neon database, copy the existing PostgreSQL schema and data
+before replacing your local connection strings. Use direct (non-pooled) URLs for
+both databases:
+
+```bash
+export OLD_DIRECT_URL='your_supabase_direct_postgres_url'
+export NEON_DIRECT_URL='your_neon_direct_postgres_url'
+
+pg_dump --format=custom --no-owner --no-acl --dbname="$OLD_DIRECT_URL" --file=contigos.backup
+pg_restore --clean --if-exists --no-owner --no-acl --dbname="$NEON_DIRECT_URL" contigos.backup
+```
+
+Then set `DATABASE_URL` and `DIRECT_URL` in `.env.local` to the Neon URLs and
+add those same variables to the Vercel project. Confirm the migration history
+and schema with:
+
+```bash
+npx prisma migrate status
+```
+
+Keep `contigos.backup` private and delete it after verifying the deployment.
 
 ## 📖 How It Works
 

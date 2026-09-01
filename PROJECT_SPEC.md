@@ -17,7 +17,7 @@ A full-stack web application for couples to calculate fair financial contributio
 
 ### Database
 
-- **Supabase** (PostgreSQL)
+- **Neon Postgres**
 - Project name: "contigos"
 
 ### ORM
@@ -162,7 +162,7 @@ enum Payer {
 ## Development Plan
 
 1. **Initialize Git Repository**
-2. **Setup Supabase Database Connection**
+2. **Setup Neon Database Connection**
 3. **Setup Prisma ORM**
 4. **Configure Database Schema**
 5. **Create API Routes**
