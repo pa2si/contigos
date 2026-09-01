@@ -1,7 +1,7 @@
 'use client';
 
 import { Income } from '@/types';
-import { IncomeSource } from '@prisma/client';
+import type { IncomeSource } from '@/generated/prisma/client';
 import { formatCurrencyFixed } from '@/lib/utils';
 import EditButton from '@/components/ui/EditButton';
 import DeleteButton from '@/components/ui/DeleteButton';
@@ -112,7 +112,7 @@ interface IncomeManagementProps {
   onStartEditIncome: (income: Income) => void;
   onUpdateIncomeForm: (
     field: 'beschreibung' | 'betrag' | 'quelle',
-    value: string | IncomeSource
+    value: string | IncomeSource,
   ) => void;
   onSaveIncome: () => Promise<void>;
   onResetIncomeForm: () => void;
@@ -132,21 +132,21 @@ export default function IncomeManagement({
   onResetIncomeForm,
 }: IncomeManagementProps) {
   const pascalIncomes = incomes.filter(
-    (income) => income.quelle === 'Partner1'
+    (income) => income.quelle === 'Partner1',
   );
   const caroIncomes = incomes.filter((income) => income.quelle === 'Partner2');
   const pascalTotal = pascalIncomes.reduce(
     (sum, income) => sum + Number(income.betrag),
-    0
+    0,
   );
   const caroTotal = caroIncomes.reduce(
     (sum, income) => sum + Number(income.betrag),
-    0
+    0,
   );
 
   const isIncomeFormValid = (): boolean => {
     return Boolean(
-      incomeForm.beschreibung.trim() && incomeForm.betrag && incomeForm.quelle
+      incomeForm.beschreibung.trim() && incomeForm.betrag && incomeForm.quelle,
     );
   };
 

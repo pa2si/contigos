@@ -1,7 +1,7 @@
 'use client';
 
 import { Income } from '@/types';
-import { IncomeSource } from '@prisma/client';
+import type { IncomeSource } from '@/generated/prisma/client';
 import FormModal from '@/components/FormModal';
 
 interface IncomeModalProps {
@@ -15,7 +15,7 @@ interface IncomeModalProps {
   };
   onUpdateIncomeForm: (
     field: 'beschreibung' | 'betrag' | 'quelle',
-    value: string | IncomeSource
+    value: string | IncomeSource,
   ) => void;
   onSaveIncome: () => Promise<void>;
   isIncomeFormValid: () => boolean;

@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { Payer } from '@prisma/client';
+import { Payer } from '@/generated/prisma/client';
 
 // PUT /api/expenses/[id] - Update expense
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
@@ -14,7 +14,7 @@ export async function PUT(
     if (isNaN(expenseId)) {
       return NextResponse.json(
         { error: 'Invalid expense ID' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -25,14 +25,14 @@ export async function PUT(
     if (!beschreibung || typeof beschreibung !== 'string') {
       return NextResponse.json(
         { error: 'Description is required and must be a string' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (typeof betrag !== 'number' || betrag <= 0) {
       return NextResponse.json(
         { error: 'Amount must be a positive number' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -42,7 +42,7 @@ export async function PUT(
           error:
             'Invalid payer. Must be Partner1, Partner2, or Gemeinschaftskonto',
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -68,7 +68,7 @@ export async function PUT(
 
     return NextResponse.json(
       { error: 'Failed to update expense' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -76,7 +76,7 @@ export async function PUT(
 // DELETE /api/expenses/[id] - Delete expense
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
@@ -85,7 +85,7 @@ export async function DELETE(
     if (isNaN(expenseId)) {
       return NextResponse.json(
         { error: 'Invalid expense ID' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -106,7 +106,7 @@ export async function DELETE(
 
     return NextResponse.json(
       { error: 'Failed to delete expense' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

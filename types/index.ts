@@ -1,4 +1,4 @@
-import { Payer, IncomeSource } from '@prisma/client';
+import type { Payer, IncomeSource } from '@/generated/prisma/client';
 
 // Partner enum for private expenses
 export type Partner = 'Partner1' | 'Partner2';

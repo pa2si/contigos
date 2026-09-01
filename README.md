@@ -39,9 +39,9 @@ npm install
 
 # Set up environment variables
 cp .env.local.example .env.local
-# Edit .env.local with the Neon connection strings from the Vercel integration.
-# DATABASE_URL must use Neon’s pooled connection URL.
-# DIRECT_URL must use Neon’s direct, non-pooled connection URL.
+# Edit .env.local with the Vercel Postgres connection strings.
+# POSTGRES_PRISMA_URL uses the pooled URL for the application runtime.
+# POSTGRES_DATABASE_URL_UNPOOLED uses the direct, non-pooled URL for Prisma CLI migrations.
 
 # Apply the existing Prisma migration history to the new database
 npx prisma migrate deploy
@@ -64,9 +64,9 @@ pg_dump --format=custom --no-owner --no-acl --dbname="$OLD_DIRECT_URL" --file=co
 pg_restore --clean --if-exists --no-owner --no-acl --dbname="$NEON_DIRECT_URL" contigos.backup
 ```
 
-Then set `DATABASE_URL` and `DIRECT_URL` in `.env.local` to the Neon URLs and
-add those same variables to the Vercel project. Confirm the migration history
-and schema with:
+Then set `POSTGRES_PRISMA_URL` and `POSTGRES_DATABASE_URL_UNPOOLED` in
+`.env.local` to the Neon URLs. Vercel automatically supplies these variables
+to deployments. Confirm the migration history and schema with:
 
 ```bash
 npx prisma migrate status

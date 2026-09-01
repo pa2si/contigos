@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { Payer } from '@prisma/client';
+import { Payer } from '@/generated/prisma/client';
 
 // GET /api/expenses - Fetch all expenses
 export async function GET() {
@@ -14,7 +14,7 @@ export async function GET() {
     console.error('Error fetching expenses:', error);
     return NextResponse.json(
       { error: 'Failed to fetch expenses' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     if (!beschreibung || typeof beschreibung !== 'string') {
       return NextResponse.json(
         { error: 'Description is required and must be a string' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     if (sanitizedBeschreibung.length === 0) {
       return NextResponse.json(
         { error: 'Description cannot be empty' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
         {
           error: 'Amount must be a positive number between 0.01 and 1,000,000',
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
           error:
             'Invalid payer. Must be Partner1, Partner2, or Gemeinschaftskonto',
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
     console.error('Error creating expense:', error);
     return NextResponse.json(
       { error: 'Failed to create expense' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

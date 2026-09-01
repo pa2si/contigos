@@ -1,6 +1,6 @@
 'use client';
 
-import { Payer, IncomeSource } from '@prisma/client';
+import type { Payer, IncomeSource } from '@/generated/prisma/client';
 import { useState, useEffect, useRef } from 'react';
 import { Partner } from '@/types';
 import { ButtonSpinner } from '@/components/LoadingSpinner';
@@ -288,7 +288,7 @@ export default function FormModal({
                 onChange={(e) =>
                   onUpdateForm(
                     config.fields.thirdField.fieldName,
-                    e.target.value as ThirdFieldValue
+                    e.target.value as ThirdFieldValue,
                   )
                 }
                 className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-all text-sm sm:text-base ${colors.borderColor} ${colors.ringColor}`}
